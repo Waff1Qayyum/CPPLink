@@ -1,0 +1,295 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+            backgroundColor: Color.fromRGBO(250, 195, 44, 1),
+            centerTitle: true,
+            flexibleSpace: Container(
+                alignment: Alignment.center,
+                child: Container(
+                    alignment: Alignment
+                        .centerRight, // Align the button to the right side
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Add the action you want to perform when the button is clicked here.
+                        // For example, you can implement a sign-out function.
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF1720ED), // Background color
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(5), // Border radius
+                        ),
+                        minimumSize: Size(75, 30), // Button size
+                      ),
+                      child: Text(
+                        'Sign Out',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontFamily: 'Lexend',
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                        ),
+                      ),
+                    )))),
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              Main(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+////////////////////
+////////////////////////////////
+////////////////////////////////////////
+class Main extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20.0,
+        ),
+        Positioned(
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          child: Center(
+            child: SizedBox(
+              width: 324,
+              height: 47,
+              child: Text(
+                'Admin Homepage',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontFamily: 'Montagu Slab',
+                  fontWeight: FontWeight.w700,
+                  height: 0,
+                ),
+                textAlign: TextAlign.center, // Center align the text
+              ),
+            ),
+          ),
+        ),
+        ///////////////////////////////
+        SizedBox(
+          height: 20.0,
+        ),
+        ///////////////////////////////
+
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Container(
+            color: Colors.blue,
+            width: 151,
+            height: 150,
+            child: Image.asset(
+                './images/logo.jpeg'), // Replace 'your_image.png' with the actual image file name
+          ),
+        ]),
+
+        SizedBox(
+          height: 30.0,
+        ),
+        ////////////////////////
+        ///////////////////////
+        Row(children: [
+          ElevatedButton(
+            onPressed: () {
+              // Define the action to be executed when the button is pressed.
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  // Define the button's background color based on its state.
+                  if (states.contains(MaterialState.pressed)) {
+                    return Colors.transparent; // Change to the pressed color.
+                  }
+                  return Color.fromARGB(255, 255, 211, 51); // Default color.
+                },
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            child: Container(
+              width: 155,
+              height: 129,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Center(
+                child: Text(
+                  'Parcel Management',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Lexend',
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 35.0,
+          ),
+
+          ////////////////////////////
+          ElevatedButton(
+            onPressed: () {
+              // Define the action to be executed when the button is pressed.
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  // Define the button's background color based on its state.
+                  if (states.contains(MaterialState.pressed)) {
+                    return Colors.transparent; // Change to the pressed color.
+                  }
+                  return Color.fromARGB(255, 255, 211, 51); // Default color.
+                },
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            child: Container(
+              width: 155,
+              height: 129,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Center(
+                child: Text(
+                  'Rider Management',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Lexend',
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ]),
+        //////////////////////////////////
+        SizedBox(
+          height: 40.0,
+        ),
+        /////////////////////////////////
+        Row(children: [
+          ElevatedButton(
+            onPressed: () {
+              // Define the action to be executed when the button is pressed.
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  // Define the button's background color based on its state.
+                  if (states.contains(MaterialState.pressed)) {
+                    return Colors.transparent; // Change to the pressed color.
+                  }
+                  return Color.fromARGB(255, 255, 211, 51); // Default color.
+                },
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            child: Container(
+              width: 155,
+              height: 129,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Center(
+                child: Text(
+                  'View Feedback',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Lexend',
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 35.0,
+          ),
+
+          ////////////////////////////
+          ElevatedButton(
+            onPressed: () {
+              // Define the action to be executed when the button is pressed.
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  // Define the button's background color based on its state.
+                  if (states.contains(MaterialState.pressed)) {
+                    return Colors.transparent; // Change to the pressed color.
+                  }
+                  return Color.fromARGB(255, 255, 211, 51); // Default color.
+                },
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            child: Container(
+              width: 155,
+              height: 129,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Center(
+                child: Text(
+                  'View Customers Details',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Lexend',
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ]),
+        /////////////////////////////////////////////////
+        /////////////////////////////////
+      ],
+    );
+  }
+}
