@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parcelink/main.dart';
+import 'package:cpplink/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; //comment
 
 class LoginPage extends StatefulWidget {
