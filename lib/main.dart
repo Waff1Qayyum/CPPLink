@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:parcelink/customer_pages/customer_hompage.dart';
+import 'package:parcelink/login_page.dart';
+import 'package:parcelink/splash.dart';
+import 'package:parcelink/waffi_folder/register.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'customer_pages/customer_register.dart';
-import 'login_page.dart';
+// import 'login_page.dart';
 import 'splash.dart';
+// import 'waffi_folder/home.dart';
+// import 'waffi_folder/login.dart';
+// import 'waffi_folder/register.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -25,13 +32,12 @@ class MyApp extends StatelessWidget {
         '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
         '/login': (_) => const LoginPage(), //login_page
-        // '/account': (_) => const CustomerHomepage(),
-
+        '/custHome': (_) => const CustomerHomepage(),
+        // '/account': (_) => const AccountPage(),
 
 ////////////////for testing purpose//////////
         // '/login': (_) => const CustomerHomepage(), //check customer homepage
         // '/login': (_) => const AdminHomePage(), //check customer homepage
-
       },
     );
   }
