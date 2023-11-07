@@ -8,6 +8,73 @@ class CustomerRegisterPage extends StatefulWidget {
 }
 
 class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
+<<<<<<< Updated upstream
+=======
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  bool? emailUnique;
+  bool? phoneUnique;
+  bool? phoneValid;
+  final _formkey = GlobalKey<FormState>();
+  bool isLoading = false;
+
+  bool? _phoneValid() {
+    if (!RegExp(r'^\d{10,11}$').hasMatch(_phoneController.text)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+    Future<bool> _emailUnique() async {
+    final _email = await supabase
+        .from('user')
+        .select('email')
+        .eq('email', _emailController.text)
+        .limit(1);
+
+    if (_email.isNotEmpty && _email[0]['email'] != null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<bool> _phoneUnique() async {
+    final phoneNo = await supabase
+        .from('user')
+        .select('phone')
+        .eq('phone', _phoneController.text)
+        .limit(1);
+    if (phoneNo.isNotEmpty && phoneNo[0]['phone'] != null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+>>>>>>> Stashed changes
+
+  Future<void> _signUp() async {
+    try {
+      final res = await supabase.auth.signUp(
+          email: _emailController.text, password: _passwordController.text);
+      await supabase.from('user').insert({
+        'user_id': res.user!.id,
+        'name': _nameController.text,
+        'phone': _phoneController.text,
+        'email': _emailController.text
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Unexpected Error Occurred')));
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
