@@ -1,39 +1,43 @@
-import 'package:cpplink/pages/home.dart';
-import 'package:cpplink/pages/login.dart';
-import 'package:cpplink/pages/register.dart';
-import 'package:cpplink/pages/splashpage.dart';
 import 'package:flutter/material.dart';
+import 'package:parcelink/customer_pages/customer_hompage.dart';
+import 'package:parcelink/login_page.dart';
+import 'package:parcelink/splash.dart';
+import 'package:parcelink/waffi_folder/register.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'customer_pages/customer_register.dart';
+// import 'login_page.dart';
+import 'splash.dart';
+// import 'waffi_folder/home.dart';
+// import 'waffi_folder/login.dart';
+// import 'waffi_folder/register.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
-    url: 'https://mhntlvugfhjbfkyxvcrl.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnRsdnVnZmhqYmZreXh2Y3JsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTc5NTcwNjYsImV4cCI6MjAxMzUzMzA2Nn0._ilDLH92hazhcg56G-OSmpykLpc2lSnh4NzXW4zX0YA',
-  );
-  runApp(const MyApp());
+      url: 'https://bzscuwrolzmocdshaemx.supabase.co',
+      anonKey:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c2N1d3JvbHptb2Nkc2hhZW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkzNTE3MDksImV4cCI6MjAxNDkyNzcwOX0.iGlxlb_WNLjh2apj3u9DDkvfl7d8hChLgd2qrIj6JJk');
+  runApp(MyApp());
 }
 
 final supabase = Supabase.instance.client;
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
-      //for navigation to class in file.
+      title: 'CPP Link',
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
-        '/': (context) => const SplashPage(),
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/home': (context) => const HomePage(),
+        '/': (_) => const SplashPage(),
+        '/register': (_) => const CustomerRegisterPage(),
+        '/login': (_) => const LoginPage(), //login_page
+        '/custHome': (_) => const CustomerHomepage(),
+        // '/account': (_) => const AccountPage(),
+
+////////////////for testing purpose//////////
+        // '/login': (_) => const CustomerHomepage(), //check customer homepage
+        // '/login': (_) => const AdminHomePage(), //check customer homepage
       },
     );
   }
