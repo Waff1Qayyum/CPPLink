@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   bool? emailInvalid;
   bool? passwordInvalid;
+  bool? work;
 
   Future<bool?> _emailError() async {
     final data = await supabase
