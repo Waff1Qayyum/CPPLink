@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parcelink/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; //comment
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   bool? emailInvalid;
   bool? passwordInvalid;
+  bool? workornot;
 
   Future<bool?> _emailError() async {
     final data = await supabase
