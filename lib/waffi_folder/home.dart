@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parcelink/main.dart';
+import 'package:cpplink/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AccountPage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _AccountPageState extends State<AccountPage> {
       final checkData =
           await supabase.from('user').select().eq('user_id', userID).single();
 
-      if (checkData!=null) {
+      if (checkData != null) {
         _nameController.text = checkData['name'].toString();
         _phoneController.text = checkData['phone'].toString();
       } else {
@@ -42,7 +42,6 @@ class _AccountPageState extends State<AccountPage> {
         });
         _nameController.text = userName;
         _phoneController.text = userPhone;
-
       }
     } on PostgrestException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -93,11 +92,11 @@ class _AccountPageState extends State<AccountPage> {
         },
       ).eq('user_id', userID);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('successfully updated'),
-          ),
-        );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('successfully updated'),
+        ),
+      );
     } on PostgrestException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

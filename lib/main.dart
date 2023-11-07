@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:parcelink/customer_pages/customer_hompage.dart';
-import 'package:parcelink/login_page.dart';
-import 'package:parcelink/splash.dart';
-import 'package:parcelink/waffi_folder/register.dart';
+import 'package:cpplink/customer_pages/customer_hompage.dart';
+import 'package:cpplink/login_page.dart';
+import 'package:cpplink/splash.dart';
+import 'package:cpplink/waffi_folder/register.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'customer_pages/customer_register.dart';
 // import 'login_page.dart';
