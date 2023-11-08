@@ -1,6 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,8 +12,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-<<<<<<< Updated upstream
-=======
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -106,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
->>>>>>> Stashed changes
   @override
   void initState() {
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
@@ -302,7 +301,6 @@ class _LoginPageState extends State<LoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-<<<<<<< Updated upstream
                               shadows: [
                                 BoxShadow(
                                   color: Color(0x3F000000),
@@ -313,19 +311,6 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                             child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text('Sign In',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w700,
-                                  )),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Color(0xFFFFD233)),
-=======
-                              child: ElevatedButton(
                                 onPressed: () async {
                                   // setState(() {
                                   //   isLoading = true;
@@ -350,10 +335,8 @@ class _LoginPageState extends State<LoginPage> {
                                   backgroundColor: MaterialStateProperty.all(
                                       Color(0xFFFFD233)),
                                 ),
->>>>>>> Stashed changes
                               ),
-                            ),
-                          ),
+                            ), //container
 //////////////////////////////////////////
                         ],
                       )),
