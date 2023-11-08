@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'main.dart';
 
 class SplashPage extends StatefulWidget {
@@ -39,7 +38,8 @@ class _SplashPageState extends State<SplashPage> {
       } else if (checkRider.isNotEmpty) {
         print('User is a rider');
         Navigator.of(context).pushReplacementNamed('/rider_home');
-      } else if (checkCustomer.isNotEmpty) {
+      }
+      else if (checkCustomer.isNotEmpty) {
         print('User is a customer');
         Navigator.of(context).pushReplacementNamed('/customer_home');
       }
