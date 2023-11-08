@@ -1,3 +1,5 @@
+import 'package:cpplink/admin_pages/admin_homepage.dart';
+import 'package:cpplink/rider_pages/rider_homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'customer_pages/customer_register.dart';
@@ -12,11 +14,17 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+void  clearUserSession(){
+    supabase.auth.signOut();
+}
+
 final supabase = Supabase.instance.client;
+
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+  clearUserSession();
     return MaterialApp(
       title: 'CPP Link',
       debugShowCheckedModeBanner: false,
@@ -25,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
         '/login': (_) => const LoginPage(), //login_page
+<<<<<<< Updated upstream
         // '/account': (_) => const CustomerHomepage(),
 
 
@@ -32,6 +41,15 @@ class MyApp extends StatelessWidget {
         // '/login': (_) => const CustomerHomepage(), //check customer homepage
         // '/login': (_) => const AdminHomePage(), //check customer homepage
 
+=======
+        // '/custHome': (_) => const CustomerHomepage(),
+        // '/account': (_) => const AccountPage(),
+
+////////////////////users homepage////////////////
+        '/admin_home': (_) => const AdminHomePage(),
+        '/rider_home': (_) => const RiderHomePage(),
+        '/customer_home': (_) => const CustomerHomepage(),
+>>>>>>> Stashed changes
       },
     );
   }

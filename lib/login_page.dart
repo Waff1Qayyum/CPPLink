@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +10,117 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+<<<<<<< Updated upstream
+=======
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+  bool redirecting = false;
+  bool? emailInvalid;
+  bool? passwordInvalid;
+  bool? workornot;
+  late final StreamSubscription<AuthState> _authStateSubscription;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _authStateSubscription.cancel();
+    super.dispose();
+  }
+
+  Future<bool?> _emailError() async {
+    final checkAdmin = await supabase
+        .from('admin')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkRider = await supabase
+        .from('rider')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkCustomer = await supabase
+        .from('user')
+        .select('email')
+        .eq('email', _emailController.text);
+    if (checkAdmin.isNotEmpty || checkRider.isNotEmpty || checkCustomer.isNotEmpty) {
+      print("email okay");
+      return true;
+    } else {
+      print("error");
+      return false;
+    }
+  }
+
+  Future<bool?>? _passwordError() async {
+    try {
+      final response = await supabase.auth.signInWithPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      if (response.user!.id.isNotEmpty) {
+        print("pass okay");
+        return false;
+      } else {
+        print("pass not okay");
+        return true;
+      }
+    } catch (e) {
+      return true;
+    }
+  }
+
+  Future userLogin() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      await supabase.auth.signInWithPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      if (mounted) {
+        //login successfully
+        print("login successs");
+      }
+    } on AuthException catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Signin failed: ${error.message}'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Unexpected error occurred'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+>>>>>>> Stashed changes
+  @override
+  void initState() {
+    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (redirecting) return;
+      final session = data.session;
+      if (session != null) {
+        redirecting = true;
+        print("redirecting");
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -189,6 +302,7 @@ class _LoginPageState extends State<LoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
+<<<<<<< Updated upstream
                               shadows: [
                                 BoxShadow(
                                   color: Color(0x3F000000),
@@ -210,6 +324,33 @@ class _LoginPageState extends State<LoginPage> {
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     Color(0xFFFFD233)),
+=======
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  // setState(() {
+                                  //   isLoading = true;
+                                  // });
+                                  emailInvalid = await _emailError();
+                                  passwordInvalid = await _passwordError();
+                                  if (_formKey.currentState!.validate()) {
+                                    userLogin();
+                                  }
+                                },
+                                child: Text(
+                                    isLoading == false
+                                        ? 'Sign In'
+                                        : 'Loading..',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Color(0xFFFFD233)),
+                                ),
+>>>>>>> Stashed changes
                               ),
                             ),
                           ),
