@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CustomerHomepage extends StatefulWidget {
-  const CustomerHomepage({super.key});
+class RiderHomePage extends StatefulWidget {
+  const RiderHomePage({super.key});
 
   @override
-  State<CustomerHomepage> createState() => _CustomerHomepageState();
+  State<RiderHomePage> createState() => _RiderHomePageState();
 }
 
-class _CustomerHomepageState extends State<CustomerHomepage> {
+class _RiderHomePageState extends State<RiderHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +17,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
           backgroundColor: Color.fromRGBO(250, 195, 44, 1),
           centerTitle: true,
           title: Text(
-            'Customer Homepage',
+            'Rider Homepage',
             style: TextStyle(
               fontFamily: 'roboto',
               fontWeight: FontWeight.bold,

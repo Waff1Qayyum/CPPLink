@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:cpplink/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart'; //comment
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,20 +16,39 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool redirecting = false;
   bool? emailInvalid;
   bool? passwordInvalid;
   bool? workornot;
+  late final StreamSubscription<AuthState> _authStateSubscription;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _authStateSubscription.cancel();
+    super.dispose();
+  }
 
   Future<bool?> _emailError() async {
-    final data = await supabase
+    final checkAdmin = await supabase
+        .from('admin')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkRider = await supabase
+        .from('rider')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkCustomer = await supabase
         .from('user')
         .select('email')
-        .eq('email', _emailController.text)
-        .limit(1);
-    if (data.isNotEmpty && data[0] != null) {
-      return false;
-    } else {
+        .eq('email', _emailController.text);
+    if (checkAdmin.isNotEmpty || checkRider.isNotEmpty || checkCustomer.isNotEmpty) {
+      print("email okay");
       return true;
+    } else {
+      print("error");
+      return false;
     }
   }
 
@@ -37,9 +58,11 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      if (response.user?.id != null) {
+      if (response.user!.id.isNotEmpty) {
+        print("pass okay");
         return false;
       } else {
+        print("pass not okay");
         return true;
       }
     } catch (e) {
@@ -49,18 +72,52 @@ class _LoginPageState extends State<LoginPage> {
 
   Future userLogin() async {
     try {
-      final response = await supabase.auth.signInWithPassword(
-        email: _emailController.text,
+      setState(() {
+        isLoading = true;
+      });
+      await supabase.auth.signInWithPassword(
+        email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Unexpected Error Occured"),
-        backgroundColor: Colors.red[400],
-      ));
-      _emailController.clear();
-      _passwordController.clear();
+      if (mounted) {
+        //login successfully
+        print("login successs");
+      }
+    } on AuthException catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Signin failed: ${error.message}'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Unexpected error occurred'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
+  }
+
+  @override
+  void initState() {
+    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (redirecting) return;
+      final session = data.session;
+      if (session != null) {
+        redirecting = true;
+        print("redirecting");
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+    });
+    super.initState();
   }
 
   @override
@@ -109,179 +166,160 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: Padding(
                       padding: EdgeInsets.all(20),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            /////////////////////////////////////////////
-                            /// input email
-                            Column(
-                              children: [
-                                Container(
-                                  width: 263,
-                                  height: 37,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Color.fromARGB(56, 25, 25, 25),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromARGB(164, 117, 117, 117),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: TextFormField(
-                                    controller: _emailController,
-                                    textAlignVertical: TextAlignVertical.bottom,
-                                    decoration: InputDecoration(
-                                      hintText: "enter email",
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(255, 249,
-                                          249, 249), // Background color
-                                      border: OutlineInputBorder(
-                                        // Use OutlineInputBorder for rounded borders
-                                        borderRadius: BorderRadius.circular(
-                                            10), // This sets the rounded corners for the text field
-                                        borderSide: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                          width: 1.50,
-                                          color: Color(0xFFFFD233),
-                                        ),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.email,
-                                        color: Color(0xFFFFD233),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter an email';
-                                      } else if (emailInvalid == true) {
-                                        return 'Email do not exist';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-
-                            ///input password
-                            SizedBox(height: 20),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 263,
-                                  height: 37,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Color.fromARGB(56, 25, 25, 25),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromARGB(164, 117, 117, 117),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: TextFormField(
-                                    controller: _passwordController,
-                                    textAlignVertical: TextAlignVertical.bottom,
-                                    decoration: InputDecoration(
-                                      hintText: "enter password",
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(255, 249,
-                                          249, 249), // Background color
-                                      border: OutlineInputBorder(
-                                        // Use OutlineInputBorder for rounded borders
-                                        borderRadius: BorderRadius.circular(
-                                            10), // This sets the rounded corners for the text field
-                                        borderSide: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                          width: 1.50,
-                                          color: Color(0xFFFFD233),
-                                        ),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.password,
-                                        color: Color(0xFFFFD233),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter a password';
-                                      } else if (passwordInvalid == true &&
-                                          emailInvalid == false) {
-                                        return 'Wrong Password';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-
-                            SizedBox(height: 40),
-                            Container(
-                              width: 263,
-                              height: 37,
-                              decoration: ShapeDecoration(
-                                color: Color(0xFFFFD233),
-                                shape: RoundedRectangleBorder(
+                      child: Column(
+                        children: [
+/////////////////////////////////////////////
+                          /// input email
+                          Column(
+                            children: [
+                              Container(
+                                width: 263,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
                                   borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Color.fromARGB(56, 25, 25, 25),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(164, 117, 117, 117),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
                                 ),
-                                shadows: [
-                                  BoxShadow(
-                                    color: Color(0x3F000000),
-                                    blurRadius: 4,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                  )
-                                ],
+                                child: TextFormField(
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    hintText: "enter email",
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(
+                                        255, 249, 249, 249), // Background color
+                                    border: OutlineInputBorder(
+                                      // Use OutlineInputBorder for rounded borders
+                                      borderRadius: BorderRadius.circular(
+                                          10), // This sets the rounded corners for the text field
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 1.50,
+                                        color: Color(0xFFFFD233),
+                                      ),
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.email,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter an email';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+
+                          ///input password
+                          SizedBox(height: 20),
+                          Column(
+                            children: [
+                              Container(
+                                width: 263,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Color.fromARGB(56, 25, 25, 25),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(164, 117, 117, 117),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: TextFormField(
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    hintText: "enter password",
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(
+                                        255, 249, 249, 249), // Background color
+                                    border: OutlineInputBorder(
+                                      // Use OutlineInputBorder for rounded borders
+                                      borderRadius: BorderRadius.circular(
+                                          10), // This sets the rounded corners for the text field
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 1.50,
+                                        color: Color(0xFFFFD233),
+                                      ),
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.password,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter a password';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+
+                          SizedBox(height: 40),
+                          Container(
+                            width: 263,
+                            height: 37,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFFFFD233),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              child: ElevatedButton(
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0x3F000000),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: 0,
+                                )
+                              ],
+                            ),
+                            child: ElevatedButton(
                                 onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
+                                  // setState(() {
+                                  //   isLoading = true;
+                                  // });
                                   emailInvalid = await _emailError();
                                   passwordInvalid = await _passwordError();
                                   if (_formKey.currentState!.validate()) {
                                     userLogin();
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/custHome', (route) => false);
                                   }
-                                  ;
-                                  setState(() {
-                                    isLoading = false;
-                                  });
                                 },
                                 child: Text(
                                     isLoading == false
@@ -298,10 +336,9 @@ class _LoginPageState extends State<LoginPage> {
                                       Color(0xFFFFD233)),
                                 ),
                               ),
-                            ),
-                            //////////////////////////////////////////
-                          ],
-                        ),
+                            ), //container
+//////////////////////////////////////////
+                        ],
                       )),
                 ),
                 SizedBox(height: 40),
