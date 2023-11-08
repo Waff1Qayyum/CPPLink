@@ -22,13 +22,6 @@ class _SplashPageState extends State<SplashPage> {
       return;
     }
 
-<<<<<<< Updated upstream
-    final session = supabase.auth.currentSession; //check if user already sign in by checking the session
-    if (session != null) {
-      // Navigator.of(context).pushReplacementNamed('/account'); //
-    } else {
-      Navigator.of(context).pushReplacementNamed('/login'); //go to user login page
-=======
     final session = supabase.auth.currentSession;
     if (session != null) {
       final userID = supabase.auth.currentUser!.id;
@@ -52,7 +45,6 @@ class _SplashPageState extends State<SplashPage> {
       }
     } else {
       Navigator.of(context).pushReplacementNamed('/login');
->>>>>>> Stashed changes
     }
   }
 

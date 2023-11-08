@@ -1,9 +1,10 @@
-import 'package:cpplink/admin_pages/admin_homepage.dart';
-import 'package:cpplink/rider_pages/rider_homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'admin_pages/admin_homepage.dart';
+import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
 import 'login_page.dart';
+import 'rider_pages/rider_homepage.dart';
 import 'splash.dart';
 
 Future<void> main() async {
@@ -33,15 +34,6 @@ class MyApp extends StatelessWidget {
         '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
         '/login': (_) => const LoginPage(), //login_page
-<<<<<<< Updated upstream
-        // '/account': (_) => const CustomerHomepage(),
-
-
-////////////////for testing purpose//////////
-        // '/login': (_) => const CustomerHomepage(), //check customer homepage
-        // '/login': (_) => const AdminHomePage(), //check customer homepage
-
-=======
         // '/custHome': (_) => const CustomerHomepage(),
         // '/account': (_) => const AccountPage(),
 
@@ -49,7 +41,6 @@ class MyApp extends StatelessWidget {
         '/admin_home': (_) => const AdminHomePage(),
         '/rider_home': (_) => const RiderHomePage(),
         '/customer_home': (_) => const CustomerHomepage(),
->>>>>>> Stashed changes
       },
     );
   }

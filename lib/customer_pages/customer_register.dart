@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class CustomerRegisterPage extends StatefulWidget {
   const CustomerRegisterPage({super.key});
@@ -8,8 +9,6 @@ class CustomerRegisterPage extends StatefulWidget {
 }
 
 class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
-<<<<<<< Updated upstream
-=======
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -56,7 +55,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       return true;
     }
   }
->>>>>>> Stashed changes
 
   Future<void> _signUp() async {
     try {
