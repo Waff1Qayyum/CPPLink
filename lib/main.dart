@@ -2,6 +2,8 @@ import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'admin_pages/admin_homepage.dart';
+import 'customer_pages/customer_changeName.dart';
+import 'customer_pages/customer_changePassword.dart';
 import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
 import 'login_page.dart';
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
         // '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
         // '/login': (_) => const LoginPage(), //login_page
-        '/': (_) => const CustomerUpdateProfile(), //login_page
+        '/': (_) => const ChangeCustomerPassword(), //login_page
         // '/custHome': (_) => const CustomerHomepage(),
         // '/account': (_) => const AccountPage(),
 
