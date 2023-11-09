@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:cpplink/main.dart';
+import 'main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; //comment
 
 class LoginPage extends StatefulWidget {
@@ -14,20 +16,32 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool _redirecting = false;
   bool? emailInvalid;
   bool? passwordInvalid;
   bool? workornot;
+  late final StreamSubscription<AuthState>
+      _authStateSubscription; //use to monitor any changes on auth
 
   Future<bool?> _emailError() async {
-    final data = await supabase
+    final checkAdmin = await supabase
+        .from('admin')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkRider = await supabase
+        .from('rider')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkCustomer = await supabase
         .from('user')
         .select('email')
-        .eq('email', _emailController.text)
-        .limit(1);
-    if (data.isNotEmpty && data[0] != null) {
-      return false;
-    } else {
+        .eq('email', _emailController.text);
+    if (checkAdmin.isNotEmpty || checkRider.isNotEmpty || checkCustomer.isNotEmpty) {
+      print("email okay");
       return true;
+    } else {
+      print("error");
+      return false;
     }
   }
 
@@ -49,18 +63,50 @@ class _LoginPageState extends State<LoginPage> {
 
   Future userLogin() async {
     try {
-      final response = await supabase.auth.signInWithPassword(
-        email: _emailController.text,
+      setState(() {
+        isLoading = true;
+      });
+      await supabase.auth.signInWithPassword(
+        email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Unexpected Error Occured"),
-        backgroundColor: Colors.red[400],
-      ));
-      _emailController.clear();
-      _passwordController.clear();
+      if (mounted) {
+        //login successfully
+      }
+    } on AuthException catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Signin failed: ${error.message}'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Unexpected error occurred'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
+  }
+
+  @override
+  void initState() {
+    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (_redirecting) return;
+      final session = data.session;
+      if (session != null) {
+        _redirecting = true;
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+    });
+    super.initState();
   }
 
   @override
@@ -275,8 +321,6 @@ class _LoginPageState extends State<LoginPage> {
                                   passwordInvalid = await _passwordError();
                                   if (_formKey.currentState!.validate()) {
                                     userLogin();
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/custHome', (route) => false);
                                   }
                                   ;
                                   setState(() {
