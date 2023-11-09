@@ -1,0 +1,569 @@
+      // Figma Flutter Generator CpploginpageWidget - FRAME
+      Container(
+      width: 360,
+      height: 800,
+      decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(32),
+            topRight: Radius.circular(32),
+            bottomLeft: Radius.circular(32),
+            bottomRight: Radius.circular(32),
+          ),
+      color : Color.fromRGBO(255, 255, 255, 1),
+      border : Border.all(
+          color: Color.fromRGBO(51, 51, 51, 1),
+          width: 8,
+        ),
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 0,
+        left: 0,
+        child: Container(
+      decoration: BoxDecoration(
+          color : Color.fromRGBO(245, 245, 245, 1),
+  ),
+      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+
+        children: <Widget>[Container(
+      width: 360,
+      height: 37.5,
+      decoration: BoxDecoration(
+
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 0,
+        left: 0,
+        child: Container(
+        width: 360,
+        height: 37.5,
+        decoration: BoxDecoration(
+          color : Color.fromRGBO(255, 255, 255, 1),
+  )
+      )
+      ),Positioned(
+        top: 16.993896484375,
+        left: 22.237060546875,
+        child: SvgPicture.asset(
+        'assets/images/419.svg',
+        semanticsLabel: '419'
+      );
+      ),Positioned(
+        top: 11,
+        left: 247.5,
+        child: Container(
+      width: 88.5,
+      height: 24,
+
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 6.25,
+        left: 0,
+        child: SvgPicture.asset(
+        'assets/images/screenshot_20200924161348_nytimes1traced.svg',
+        semanticsLabel: 'screenshot_20200924161348_nytimes1traced'
+      );
+      ),Positioned(
+        top: 0,
+        left: 64.5,
+        child: Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color : Color.fromRGBO(255, 255, 255, 1),
+      border : Border.all(
+          color: Color.fromRGBO(51, 51, 51, 1),
+          width: 6,
+        ),
+      borderRadius : BorderRadius.all(Radius.elliptical(24, 24)),
+  )
+      )
+      ),
+        ]
+      )
+    )
+      ),
+        ]
+      )
+    ), SizedBox(height : 0),
+Container(
+      width: 360,
+      height: 723,
+      decoration: BoxDecoration(
+
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 313.5,
+        left: 32,
+        child: Container(
+        width: 296,
+        height: 224,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+      color : Color.fromRGBO(127, 127, 127, 0.12999999523162842),
+  )
+      )
+      ),Positioned(
+        top: -2.5,
+        left: 0,
+        child: Container(
+        width: 360,
+        height: 35,
+        decoration: BoxDecoration(
+          boxShadow : [BoxShadow(
+          color: Color.fromRGBO(0, 0, 0, 0.25),
+          offset: Offset(0,4),
+          blurRadius: 4
+      )],
+      color : Color.fromRGBO(255, 210, 51, 1),
+  )
+      )
+      ),Positioned(
+        top: 10.5,
+        left: 113,
+        child: Container(
+      width: 130,
+      height: 296,
+
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 0,
+        left: 0,
+        child: Container(
+      width: 130,
+      height: 296,
+
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 249,
+        left: 0,
+        child: Container(
+      width: 130,
+      height: 47,
+      decoration: BoxDecoration(
+
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: -7,
+        left: -13,
+        child: Text('SIGN IN', textAlign: TextAlign.left, style: TextStyle(
+        color: Color.fromRGBO(0, 0, 0, 1),
+        fontFamily: 'Montagu Slab',
+        fontSize: 32,
+        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        fontWeight: FontWeight.normal,
+        height: 1
+      ),)
+      ),
+        ]
+      )
+    )
+      ),Positioned(
+        top: 0,
+        left: 42,
+        child: Text('Login', textAlign: TextAlign.left, style: TextStyle(
+        color: Color.fromRGBO(255, 255, 255, 1),
+        fontFamily: 'Montagu Slab',
+        fontSize: 13,
+        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        fontWeight: FontWeight.normal,
+        height: 1
+      ),)
+      ),
+        ]
+      )
+    )
+      ),
+        ]
+      )
+    )
+      ),Positioned(
+        top: 335.5,
+        left: 49,
+        child: Container(
+        width: 263,
+        height: 37,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+      boxShadow : [BoxShadow(
+          color: Color.fromRGBO(0, 0, 0, 0.25),
+          offset: Offset(0,4),
+          blurRadius: 4
+      )],
+      color : Color.fromRGBO(255, 255, 255, 1),
+      border : Border.all(
+          color: Color.fromRGBO(148, 148, 148, 1),
+          width: 0.5,
+        ),
+  )
+      )
+      ),Positioned(
+        top: 347.5,
+        left: 62,
+        child: SvgPicture.asset(
+        'assets/images/vector.svg',
+        semanticsLabel: 'vector'
+      );
+      ),Positioned(
+        top: 391.5,
+        left: 49,
+        child: Container(
+        width: 263,
+        height: 37,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+      boxShadow : [BoxShadow(
+          color: Color.fromRGBO(0, 0, 0, 0.25),
+          offset: Offset(0,4),
+          blurRadius: 4
+      )],
+      color : Color.fromRGBO(255, 255, 255, 1),
+      border : Border.all(
+          color: Color.fromRGBO(148, 148, 148, 1),
+          width: 0.5,
+        ),
+  )
+      )
+      ),Positioned(
+        top: 402.5,
+        left: 63,
+        child: SvgPicture.asset(
+        'assets/images/vector.svg',
+        semanticsLabel: 'vector'
+      );
+      ),Positioned(
+        top: 402.5,
+        left: 85,
+        child: Text('NewPassword', textAlign: TextAlign.left, style: TextStyle(
+        color: Color.fromRGBO(0, 0, 0, 0.3400000035762787),
+        fontFamily: 'Lexend',
+        fontSize: 12,
+        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        fontWeight: FontWeight.normal,
+        height: 1
+      ),)
+      ),Positioned(
+        top: 460.5,
+        left: 49,
+        child: Container(
+        width: 263,
+        height: 37,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+      boxShadow : [BoxShadow(
+          color: Color.fromRGBO(0, 0, 0, 0.25),
+          offset: Offset(0,4),
+          blurRadius: 4
+      )],
+      color : Color.fromRGBO(255, 210, 51, 1),
+  )
+      )
+      ),Positioned(
+        top: 471.5,
+        left: 150,
+        child: Text('Sign In', textAlign: TextAlign.left, style: TextStyle(
+        color: Color.fromRGBO(255, 255, 255, 1),
+        fontFamily: 'Lexend',
+        fontSize: 15,
+        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        fontWeight: FontWeight.normal,
+        height: 1
+      ),)
+      ),Positioned(
+        top: 346.5,
+        left: 86,
+        child: Text('Email', textAlign: TextAlign.left, style: TextStyle(
+        color: Color.fromRGBO(0, 0, 0, 0.3400000035762787),
+        fontFamily: 'Lexend',
+        fontSize: 12,
+        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        fontWeight: FontWeight.normal,
+        height: 1
+      ),)
+      ),Positioned(
+        top: 635.5,
+        left: 63,
+        child: Container(
+      width: 226,
+      height: 16,
+
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 0,
+        left: 0,
+        child: Container(
+      width: 226,
+      height: 16,
+
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 0,
+        left: 0,
+        child: Text('Doesn’t have an account? ', textAlign: TextAlign.left, style: TextStyle(
+        color: Color.fromRGBO(0, 0, 0, 1),
+        fontFamily: 'Lexend',
+        fontSize: 12,
+        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        fontWeight: FontWeight.normal,
+        height: 1
+      ),)
+      ),Positioned(
+        top: 0,
+        left: 150,
+        child: Text('Register now', textAlign: TextAlign.left, style: TextStyle(
+        color: Color.fromRGBO(255, 210, 51, 1),
+        fontFamily: 'Lexend',
+        fontSize: 12,
+        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        fontWeight: FontWeight.normal,
+        height: 1
+      ),)
+      ),
+        ]
+      )
+    )
+      ),
+        ]
+      )
+    )
+      ),Positioned(
+        top: 54.5,
+        left: 90,
+        child: Container(
+        width: 180,
+        height: 171,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(19),
+            topRight: Radius.circular(19),
+            bottomLeft: Radius.circular(19),
+            bottomRight: Radius.circular(19),
+          ),
+      image : DecorationImage(
+          image: AssetImage('assets/images/Rectangle91.png'),
+          fit: BoxFit.fitWidth
+      ),
+  )
+      )
+      ),
+        ]
+      )
+    ),
+],
+      ),
+    )
+      ),Positioned(
+        top: 758,
+        left: 0,
+        child: Container(
+      width: 360,
+      height: 42,
+      decoration: BoxDecoration(
+          color : Color.fromRGBO(51, 51, 51, 1),
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 28.5,
+        left: 72,
+        child: Container(
+      width: 15,
+      height: 15,
+      decoration: BoxDecoration(
+          boxShadow : [BoxShadow(
+          color: Color.fromRGBO(255, 255, 255, 0.25),
+          offset: Offset(0,0),
+          blurRadius: 0.30000001192092896
+      )],
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 15,
+        left: 0,
+        child: Container(
+        width: 15,
+        height: 15,
+        decoration: BoxDecoration(
+          color : Color.fromRGBO(196, 196, 196, 1),
+  )
+      )
+      ),Positioned(
+        top: 1.2499923706054688,
+        left: 1.5625076293945312,
+        child: Container(
+        width: 1.875,
+        height: 12.5,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(1.099999189376831),
+            topRight: Radius.circular(1.099999189376831),
+            bottomLeft: Radius.circular(1.099999189376831),
+            bottomRight: Radius.circular(1.099999189376831),
+          ),
+      color : Color.fromRGBO(255, 255, 255, 1),
+  )
+      )
+      ),Positioned(
+        top: 1.2499923706054688,
+        left: 6.5625,
+        child: Container(
+        width: 1.875,
+        height: 12.5,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(1.099999189376831),
+            topRight: Radius.circular(1.099999189376831),
+            bottomLeft: Radius.circular(1.099999189376831),
+            bottomRight: Radius.circular(1.099999189376831),
+          ),
+      color : Color.fromRGBO(255, 255, 255, 1),
+  )
+      )
+      ),Positioned(
+        top: 1.2499923706054688,
+        left: 11.562492370605469,
+        child: Container(
+        width: 1.875,
+        height: 12.5,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(1.099999189376831),
+            topRight: Radius.circular(1.099999189376831),
+            bottomLeft: Radius.circular(1.099999189376831),
+            bottomRight: Radius.circular(1.099999189376831),
+          ),
+      color : Color.fromRGBO(255, 255, 255, 1),
+  )
+      )
+      ),
+        ]
+      )
+    )
+      ),Positioned(
+        top: 13.5,
+        left: 172.5,
+        child: Container(
+      width: 15,
+      height: 15,
+      decoration: BoxDecoration(
+          boxShadow : [BoxShadow(
+          color: Color.fromRGBO(255, 255, 255, 0.25),
+          offset: Offset(0,0),
+          blurRadius: 0.30000001192092896
+      )],
+      color : Color.fromRGBO(255, 255, 255, 1),
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 0,
+        left: 0,
+        child: Container(
+        width: 15,
+        height: 15,
+        decoration: BoxDecoration(
+          color : Color.fromRGBO(196, 196, 196, 1),
+  )
+      )
+      ),Positioned(
+        top: 14.374992370605469,
+        left: 0.68115234375,
+        child: Container(
+        width: 13.749992370605469,
+        height: 13.749992370605469,
+        decoration: BoxDecoration(
+          borderRadius : BorderRadius.only(
+            topLeft: Radius.circular(4.949996471405029),
+            topRight: Radius.circular(4.949996471405029),
+            bottomLeft: Radius.circular(4.949996471405029),
+            bottomRight: Radius.circular(4.949996471405029),
+          ),
+      border : Border.all(
+          color: Color.fromRGBO(255, 255, 255, 1),
+          width: 1.875,
+        ),
+  )
+      )
+      ),
+        ]
+      )
+    )
+      ),Positioned(
+        top: 28.5,
+        left: 273,
+        child: Container(
+      width: 15,
+      height: 15,
+      decoration: BoxDecoration(
+          boxShadow : [BoxShadow(
+          color: Color.fromRGBO(255, 255, 255, 0.25),
+          offset: Offset(0,0),
+          blurRadius: 0.30000001192092896
+      )],
+  ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+        top: 15,
+        left: 4.263256414560601e-14,
+        child: Container(
+        width: 15,
+        height: 15,
+        decoration: BoxDecoration(
+          color : Color.fromRGBO(196, 196, 196, 1),
+  )
+      )
+      ),Positioned(
+        top: 1.7250137329101562,
+        left: 4.374996185302734,
+        child: SvgPicture.asset(
+        'assets/images/vector.svg',
+        semanticsLabel: 'vector'
+      );
+      ),
+        ]
+      )
+    )
+      ),
+        ]
+      )
+    )
+      ),
+        ]
+      )
+    )
