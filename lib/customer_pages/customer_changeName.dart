@@ -14,6 +14,11 @@ class CustomerChangeName extends StatefulWidget {
 
 class _CustomerChangeNameState extends State<CustomerChangeName> {
   bool _redirecting = false;
+  bool isLoading = false;
+  bool? passMatch;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   late final StreamSubscription<AuthState> _authStateSubscription;
 
   // @override
@@ -28,6 +33,33 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
   //   });
   //   super.initState();
   // }
+
+  Future<void> setUsername() async {
+    final userId = supabase.auth.currentUser!.id;
+    final name = _nameController.text;
+    final data = await supabase
+        .from('user')
+        .upsert({'name': name}).eq('user_id', userId);
+  }
+
+  Future<bool> checkPassword() async {
+    String? email;
+    final userId = await supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('email')
+        .eq('user_id', userId)
+        .single();
+
+    email = data['email'];
+    try {
+      final response = await supabase.auth
+          .signInWithPassword(email: email, password: _passwordController.text);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,240 +254,251 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                   ),
                 ),
                 ////////////////////////////////////
-                Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 263,
-                            height: 37,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                width: 0.5,
-                                color: Color.fromARGB(56, 25, 25, 25),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(164, 117, 117, 117),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 263,
+                              height: 37,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  width: 0.5,
+                                  color: Color.fromARGB(56, 25, 25, 25),
                                 ),
-                              ],
-                            ),
-                            child: TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter fullname';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              // controller: _nameController,
-                              textAlignVertical: TextAlignVertical.bottom,
-                              decoration: InputDecoration(
-                                hintText: "enter new full name",
-                                filled: true,
-                                fillColor: const Color.fromARGB(
-                                    255, 249, 249, 249), // Background color
-                                border: OutlineInputBorder(
-                                  // Use OutlineInputBorder for rounded borders
-                                  borderRadius: BorderRadius.circular(
-                                      10), // This sets the rounded corners for the text field
-                                  borderSide: BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(164, 117, 117, 117),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
                                   ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 1.50,
+                                ],
+                              ),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter fullname';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: _nameController,
+                                textAlignVertical: TextAlignVertical.bottom,
+                                decoration: InputDecoration(
+                                  hintText: "enter new full name",
+                                  filled: true,
+                                  fillColor: const Color.fromARGB(
+                                      255, 249, 249, 249), // Background color
+                                  border: OutlineInputBorder(
+                                    // Use OutlineInputBorder for rounded borders
+                                    borderRadius: BorderRadius.circular(
+                                        10), // This sets the rounded corners for the text field
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.person,
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color: Color(0xFFFFD233),
-                                ),
                               ),
                             ),
-                          ),
-///////////////////////
-                          SizedBox(height: 30),
-                          Text(
-                            'Enter your password for confirmation',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF9B9B9B),
-                              fontSize: 17,
-                              fontFamily: 'Lexend',
-                              fontWeight: FontWeight.w700,
-                              height: 0,
+                            ///////////////////////
+                            SizedBox(height: 30),
+                            Text(
+                              'Enter your password for confirmation',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(0xFF9B9B9B),
+                                fontSize: 17,
+                                fontFamily: 'Lexend',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 20),
+                            SizedBox(height: 20),
 
-//////////////////////
-                          Container(
-                            width: 263,
-                            height: 37,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                width: 0.5,
-                                color: Color.fromARGB(56, 25, 25, 25),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(164, 117, 117, 117),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
+                            //////////////////////
+                            Container(
+                              width: 263,
+                              height: 37,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  width: 0.5,
+                                  color: Color.fromARGB(56, 25, 25, 25),
                                 ),
-                              ],
-                            ),
-                            child: TextFormField(
-                              // controller: _passwordController,
-                              textAlignVertical: TextAlignVertical.bottom,
-                              decoration: InputDecoration(
-                                hintText: "enter password ",
-                                filled: true,
-                                fillColor: const Color.fromARGB(
-                                    255, 249, 249, 249), // Background color
-                                border: OutlineInputBorder(
-                                  // Use OutlineInputBorder for rounded borders
-                                  borderRadius: BorderRadius.circular(
-                                      10), // This sets the rounded corners for the text field
-                                  borderSide: BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(164, 117, 117, 117),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
                                   ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 1.50,
+                                ],
+                              ),
+                              child: TextFormField(
+                                // controller: _passwordController,
+                                textAlignVertical: TextAlignVertical.bottom,
+                                decoration: InputDecoration(
+                                  hintText: "enter password ",
+                                  filled: true,
+                                  fillColor: const Color.fromARGB(
+                                      255, 249, 249, 249), // Background color
+                                  border: OutlineInputBorder(
+                                    // Use OutlineInputBorder for rounded borders
+                                    borderRadius: BorderRadius.circular(
+                                        10), // This sets the rounded corners for the text field
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.password,
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
-                                prefixIcon: Icon(
-                                  Icons.password,
-                                  color: Color(0xFFFFD233),
-                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a password';
+                                  } else if (passMatch == false) {
+                                    return 'Password does not match';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter a password';
-                                } else {
-                                  return null;
-                                }
-                              },
                             ),
-                          ),
-                          SizedBox(height: 70),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // Your code to handle the tap event
-                                  },
-                                  child: Container(
-                                    width: 135,
-                                    height: 53,
-                                    alignment: Alignment.center,
-                                    decoration: ShapeDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 208, 24, 11),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        side: BorderSide(
-                                          width: 1.50,
-                                          color: Color.fromARGB(
-                                              255, 208, 24, 11), // Border color
-                                        ),
-                                      ),
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Color(0x3F000000),
-                                          blurRadius: 4,
-                                          offset: Offset(0, 4),
-                                          spreadRadius: 0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      'cancel',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 236, 236, 236),
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-//////////////////
-SizedBox(width: 30),
-//////////////////
-                                InkWell(
-                                  onTap: () {
-                                    // Your code to handle the tap event
-                                  },
-                                  child: Container(
-                                    width: 135,
-                                    height: 53,
-                                    alignment: Alignment.center,
-                                    decoration: ShapeDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 44, 174, 48),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        side: BorderSide(
-                                          width: 1.50,
-                                          color: const Color.fromARGB(
-                                              255, 44, 174, 48), // Border color
-                                        ),
-                                      ),
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Color(0x3F000000),
-                                          blurRadius: 4,
-                                          offset: Offset(0, 4),
-                                          spreadRadius: 0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      'confirm',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
+                            SizedBox(height: 70),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      // Your code to handle the tap event
+                                    },
+                                    child: Container(
+                                      width: 135,
+                                      height: 53,
+                                      alignment: Alignment.center,
+                                      decoration: ShapeDecoration(
                                         color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
+                                            255, 208, 24, 11),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          side: BorderSide(
+                                            width: 1.50,
+                                            color: Color.fromARGB(255, 208, 24,
+                                                11), // Border color
+                                          ),
+                                        ),
+                                        shadows: [
+                                          BoxShadow(
+                                            color: Color(0x3F000000),
+                                            blurRadius: 4,
+                                            offset: Offset(0, 4),
+                                            spreadRadius: 0,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Text(
+                                        'cancel',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 236, 236, 236),
+                                          fontSize: 15,
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ])
-                        ],
-                      ),
-//////////////////////////////
+                                  //////////////////
+                                  SizedBox(width: 30),
+                                  //////////////////
+                                  InkWell(
+                                    onTap: () async {
+                                      // Your code to handle the tap event
+                                      passMatch = await checkPassword();
+                                      if (_formKey.currentState!.validate()) {
+                                        return;
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 135,
+                                      height: 53,
+                                      alignment: Alignment.center,
+                                      decoration: ShapeDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 44, 174, 48),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          side: BorderSide(
+                                            width: 1.50,
+                                            color: const Color.fromARGB(255, 44,
+                                                174, 48), // Border color
+                                          ),
+                                        ),
+                                        shadows: [
+                                          BoxShadow(
+                                            color: Color(0x3F000000),
+                                            blurRadius: 4,
+                                            offset: Offset(0, 4),
+                                            spreadRadius: 0,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Text(
+                                        'confirm',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 15,
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ])
+                          ],
+                        ),
+                        //////////////////////////////
 
-                      ///////////////////////////
-                    ),
-                  ],
-                  // ],
+                        ///////////////////////////
+                      ),
+                    ],
+                    // ],
+                  ),
                 ),
 
                 ///end

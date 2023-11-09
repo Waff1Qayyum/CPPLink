@@ -13,20 +13,63 @@ class CustomerProfile extends StatefulWidget {
 }
 
 class _CustomerProfileState extends State<CustomerProfile> {
+  String? name;
+  String? phone;
+  String? email;
   bool _redirecting = false;
+  late final Map<String, dynamic> userInfo;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session == null) {
-        _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    });
     super.initState();
+    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+    //   if (_redirecting) return;
+    //   final session = data.session;
+    //   if (session == null) {
+    //     _redirecting = true;
+    //     Navigator.of(context).pushReplacementNamed('/');
+    //   }
+    // });
+    getUsername();
+    getEmail();
+    getPhone();
+  }
+
+  Future<void> getUsername() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('name')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      name = data['name'];
+    });
+  }
+
+  Future<void> getPhone() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('phone')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      phone = data['phone'];
+    });
+  }
+
+  Future<void> getEmail() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('email')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      email = data['email'];
+    });
   }
 
   @override
@@ -151,13 +194,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   ),
                                 ),
                                 SizedBox(width: 10.0),
-                                const Column(
+                                Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Muhd Aiman',
+                                        name ?? 'null',
                                         style: TextStyle(
                                           color: Color.fromARGB(255, 0, 0, 0),
                                           fontSize: 22,
@@ -172,11 +215,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                             Icons.call,
                                             color: Color(0xFFFFD233),
                                           ),
-                                          SizedBox(width:5),
+                                          SizedBox(width: 5),
                                           Text(
-                                            '016240391',
+                                            phone ?? 'null',
                                             style: TextStyle(
-                                              color: Color.fromARGB(255, 0, 0, 0),
+                                              color:
+                                                  Color.fromARGB(255, 0, 0, 0),
                                               fontSize: 15,
                                               fontFamily: 'Lexend',
                                               fontWeight: FontWeight.w100,
@@ -191,11 +235,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                             Icons.email,
                                             color: Color(0xFFFFD233),
                                           ),
-                                          SizedBox(width:5),
+                                          SizedBox(width: 5),
                                           Text(
-                                            '@waffi1211@gmail.com',
+                                            email ?? 'null',
                                             style: TextStyle(
-                                              color: Color.fromARGB(255, 0, 0, 0),
+                                              color:
+                                                  Color.fromARGB(255, 0, 0, 0),
                                               fontSize: 15,
                                               fontFamily: 'Lexend',
                                               fontWeight: FontWeight.w100,
@@ -257,6 +302,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         InkWell(
                           onTap: () {
                             // Your code to handle the tap event
+                            Navigator.pushNamed(context, '/changeName');
                           },
                           child: Container(
                             width: 246,
@@ -298,6 +344,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         InkWell(
                           onTap: () {
                             // Your code to handle the tap event
+                            Navigator.of(context).pushNamed('/changePw');
                           },
                           child: Container(
                             width: 246,
@@ -339,6 +386,39 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         InkWell(
                           onTap: () {
                             // Your code to handle the tap event
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      content: const Text('Confirm Delete?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () async {
+                                              await supabase
+                                                  .from('User')
+                                                  .delete()
+                                                  .eq(
+                                                      'id',
+                                                      supabase.auth.currentUser!
+                                                          .id);
+
+                                              await supabase.rpc('deleteUser');
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'Account Deleted Successfully')));
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  '/login',
+                                                  (route) => false);
+                                            },
+                                            child: const Text('Yes')),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('No'))
+                                      ],
+                                    ));
                           },
                           child: Container(
                             width: 246,
