@@ -17,7 +17,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
           backgroundColor: Color.fromRGBO(250, 195, 44, 1),
           centerTitle: true,
           title: Text(
-            'Customer Homepage',
+            'Register',
             style: TextStyle(
               fontFamily: 'roboto',
               fontWeight: FontWeight.bold,

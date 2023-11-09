@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:cpplink/customer_pages/customer_hompage.dart';
+import 'package:cpplink/login_page.dart';
+import 'package:cpplink/splash.dart';
+// import 'package:parcelink/waffi_folder/register.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'admin_pages/admin_homepage.dart';
-import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
-import 'login_page.dart';
-import 'rider_pages/rider_homepage.dart';
+// import 'login_page.dart';
 import 'splash.dart';
+// import 'waffi_folder/home.dart';
+// import 'waffi_folder/login.dart';
+// import 'waffi_folder/register.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -15,17 +19,11 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-void  clearUserSession(){
-    supabase.auth.signOut();
-}
-
 final supabase = Supabase.instance.client;
-
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  clearUserSession();
     return MaterialApp(
       title: 'CPP Link',
       debugShowCheckedModeBanner: false,
@@ -34,13 +32,12 @@ class MyApp extends StatelessWidget {
         '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
         '/login': (_) => const LoginPage(), //login_page
-        // '/custHome': (_) => const CustomerHomepage(),
+        '/custHome': (_) => const CustomerHomepage(),
         // '/account': (_) => const AccountPage(),
 
-////////////////////users homepage////////////////
-        '/admin_home': (_) => const AdminHomePage(),
-        '/rider_home': (_) => const RiderHomePage(),
-        '/customer_home': (_) => const CustomerHomepage(),
+////////////////for testing purpose//////////
+        // '/login': (_) => const CustomerHomepage(), //check customer homepage
+        // '/login': (_) => const AdminHomePage(), //check customer homepage
       },
     );
   }
