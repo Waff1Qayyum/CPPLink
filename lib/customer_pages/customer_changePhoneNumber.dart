@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class CustomerChangePicture extends StatefulWidget {
-  const CustomerChangePicture({super.key});
+class CustomerChangePhoneNumber extends StatefulWidget {
+  const CustomerChangePhoneNumber({super.key});
 
   @override
-  State<CustomerChangePicture> createState() => CustomerChangePictureState();
+  State<CustomerChangePhoneNumber> createState() => CustomerChangePhoneNumberState();
 }
 
-class CustomerChangePictureState extends State<CustomerChangePicture> {
+class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
   bool _redirecting = false;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
@@ -212,7 +212,7 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                 /////////////////////////////////////
                 SizedBox(height: 50),
                 Text(
-                  'Change Your Account\'s Profile Picture',
+                  'Change Your Account\'s Mobile Number ?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF9B9B9B),
@@ -229,8 +229,8 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                       child: Column(
                         children: [
                           Container(
-                              width: 180,
-                              height: 180,
+                            width: 263,
+                            height: 37,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(10),
@@ -246,7 +246,44 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                                   spreadRadius: 0,
                                 ),
                               ],
-                            )
+                            ),
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter new mobile number';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              // controller: _nameController,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              decoration: InputDecoration(
+                                hintText: "enter new mobile number",
+                                filled: true,
+                                fillColor: const Color.fromARGB(
+                                    255, 249, 249, 249), // Background color
+                                border: OutlineInputBorder(
+                                  // Use OutlineInputBorder for rounded borders
+                                  borderRadius: BorderRadius.circular(
+                                      10), // This sets the rounded corners for the text field
+                                  borderSide: BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 1.50,
+                                    color: Color(0xFFFFD233),
+                                  ),
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.password,
+                                  color: Color(0xFFFFD233),
+                                ),
+                              ),
+                            ),
                           ),
 ///////////////////////
                           SizedBox(height: 30),
@@ -321,7 +358,7 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                               },
                             ),
                           ),
-                          SizedBox(height: 40),
+                          SizedBox(height: 70),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

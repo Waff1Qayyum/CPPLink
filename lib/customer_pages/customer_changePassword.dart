@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class ChangeCustomerPassword extends StatefulWidget {
-  const ChangeCustomerPassword({super.key});
+class CustomerChangePassword extends StatefulWidget {
+  const CustomerChangePassword({super.key});
 
   @override
-  State<ChangeCustomerPassword> createState() => _ChangeCustomerPasswordState();
+  State<CustomerChangePassword> createState() => CustomerChangePasswordState();
 }
 
-class _ChangeCustomerPasswordState extends State<ChangeCustomerPassword> {
+class CustomerChangePasswordState extends State<CustomerChangePassword> {
   bool _redirecting = false;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
