@@ -14,18 +14,16 @@ Future<void> main() async {
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c2N1d3JvbHptb2Nkc2hhZW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkzNTE3MDksImV4cCI6MjAxNDkyNzcwOX0.iGlxlb_WNLjh2apj3u9DDkvfl7d8hChLgd2qrIj6JJk');
   runApp(MyApp());
 }
-
 void  clearUserSession(){
     supabase.auth.signOut();
 }
-
 final supabase = Supabase.instance.client;
-
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  clearUserSession();
+    clearUserSession();
+
     return MaterialApp(
       title: 'CPP Link',
       debugShowCheckedModeBanner: false,

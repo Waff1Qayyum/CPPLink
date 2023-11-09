@@ -18,11 +18,10 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> _redirect() async {
     await Future.delayed(Duration.zero);
     if (!mounted) {
-      print("session is null");
       return;
     }
 
-    final session = supabase.auth.currentSession;
+    final session = supabase.auth.currentSession; //check if user already sign in by checking the session
     if (session != null) {
       final userID = supabase.auth.currentUser!.id;
       final checkAdmin =
@@ -44,7 +43,8 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.of(context).pushReplacementNamed('/customer_home');
       }
     } else {
-      Navigator.of(context).pushReplacementNamed('/login');
+      Navigator.of(context)
+          .pushReplacementNamed('/login'); //go to user login page
     }
   }
 

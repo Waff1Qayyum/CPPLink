@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../main.dart';
 
 class RiderHomePage extends StatefulWidget {
   const RiderHomePage({super.key});
@@ -8,6 +13,22 @@ class RiderHomePage extends StatefulWidget {
 }
 
 class _RiderHomePageState extends State<RiderHomePage> {
+  bool _redirecting = false;
+  late final StreamSubscription<AuthState> _authStateSubscription;
+
+  @override
+  void initState() {
+    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (_redirecting) return;
+      final session = data.session;
+      if (session == null) {
+        _redirecting = true;
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+    });
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,7 +54,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
                   children: [
                     GestureDetector(
                         onTap: () {
-                          // Implement sign out logic here
+                          supabase.auth.signOut();
                         },
                         child: Text(
                           'Sign Out',

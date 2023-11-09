@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../main.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -8,6 +13,22 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminHomePage> {
+  bool _redirecting = false;
+  late final StreamSubscription<AuthState> _authStateSubscription;
+
+  @override
+  void initState() {
+    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (_redirecting) return;
+      final session = data.session;
+      if (session == null) {
+        _redirecting = true;
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+    });
+    super.initState();
+  }
+  
   ElevatedButton buildElevatedButton({
     required String label,
     required VoidCallback onPressed,
@@ -76,8 +97,7 @@ class _AdminPageState extends State<AdminHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Add the action you want to perform when the button is clicked here.
-                    // For example, you can implement a sign-out function.
+                          supabase.auth.signOut();
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFF1720ED),
