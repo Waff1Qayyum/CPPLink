@@ -1,3 +1,4 @@
+import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'admin_pages/admin_homepage.dart';
@@ -29,9 +30,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
-        '/': (_) => const SplashPage(),
+        // '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
-        '/login': (_) => const LoginPage(), //login_page
+        // '/login': (_) => const LoginPage(), //login_page
+        '/': (_) => const CustomerUpdateProfile(), //login_page
         // '/custHome': (_) => const CustomerHomepage(),
         // '/account': (_) => const AccountPage(),
 
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/admin_home': (_) => const AdminHomePage(),
         '/rider_home': (_) => const RiderHomePage(),
         '/customer_home': (_) => const CustomerHomepage(),
+
       },
     );
   }
