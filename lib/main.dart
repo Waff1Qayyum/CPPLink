@@ -1,3 +1,4 @@
+import 'package:cpplink/customer_pages/customer_changeProfilePicture.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -44,10 +45,13 @@ class MyApp extends StatelessWidget {
 ////////////////////users homepage////////////////
         '/admin_home': (_) => const AdminHomePage(),
         '/rider_home': (_) => const RiderHomePage(),
+
+        //customer
         '/customer_home': (_) => const CustomerHomepage(),
         '/customer_update': (_) => const CustomerProfile(), //placeholder
         '/changeName': (_) => const CustomerChangeName(), //placeholder
         '/changePw': (_) => const CustomerChangePassword(), //placeholder
+        '/changePFP': (_) => const CustomerChangePicture(),
       },
     );
   }

@@ -246,6 +246,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ])),
                   ]),
               SizedBox(height: 50),
+              //Button
               Column(
                 children: [
                   Padding(
@@ -254,6 +255,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       InkWell(
                         onTap: () {
                           // Your code to handle the tap event
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/changePFP', (route) => false);
                         },
                         child: Container(
                           width: 246,
