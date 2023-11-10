@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         // '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
-        // '/login': (_) => const LoginPage(), //login_page
-        '/': (_) => const LoginPage(), //login_page
+        '/login': (_) => const LoginPage(), //login_page
+        '/': (_) => const SplashPage(), //login_page
         // '/custHome': (_) => const CustomerHomepage(),
         // '/account': (_) => const AccountPage(),
 
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         '/customer_home': (_) => const CustomerHomepage(),
         '/customer_update': (_) => const CustomerProfile(), //placeholder
         '/changeName': (_) => const CustomerChangeName(), //placeholder
-        '/changePw': (_) => const ChangeCustomerPassword(), //placeholder
+        '/changePw': (_) => const CustomerChangePassword(), //placeholder
       },
     );
   }
