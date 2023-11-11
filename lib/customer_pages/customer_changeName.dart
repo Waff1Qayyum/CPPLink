@@ -19,6 +19,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
   String? phone;
   String? email;
   bool? passMatch;
+  dynamic image;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -38,6 +39,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
     getName();
     getEmail();
     getPhone();
+    displayImage();
   }
 
   Future<void> getName() async {
@@ -76,14 +78,6 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
     });
   }
 
-  Future<void> setUsername() async {
-    String userId = supabase.auth.currentUser!.id;
-    String name = _nameController.text.toUpperCase();
-    final data = await supabase
-        .from('user')
-        .update({'name': name}).match({'user_id': userId});
-  }
-
   Future<bool> checkPassword() async {
     String? email;
     bool? match;
@@ -93,6 +87,35 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
       return true;
     } else
       return false;
+  }
+
+  Future<void> displayImage() async {
+    final userId = supabase.auth.currentUser!.id;
+    final res = await supabase
+        .from('user')
+        .select('picture_url')
+        .eq('user_id', userId)
+        .single();
+
+    if (res['picture_url'] == null) {
+      return;
+    }
+    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = Uri.parse(image).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
+
+    setState(() {
+      image = res['picture_url'];
+    });
+  }
+
+  Future<void> setUsername() async {
+    String userId = supabase.auth.currentUser!.id;
+    String name = _nameController.text.toUpperCase();
+    final data = await supabase
+        .from('user')
+        .update({'name': name}).match({'user_id': userId});
   }
 
   @override
@@ -204,14 +227,16 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                  child: Image.asset(
-                                    './images/cat.jpeg', // Replace with your image URL
-                                    width: 100, // Adjust the width as needed
-                                    height: 100, // Adjust the height as needed
-                                    fit: BoxFit
-                                        .cover, // Adjust the fit as needed
-                                  ),
-                                ),
+                                    child: image != null
+                                        ? Image.network(
+                                            image!,
+                                            fit: BoxFit.cover,
+                                            width: 70,
+                                            height: 70,
+                                          )
+                                        : Container(
+                                            color: Colors.grey,
+                                          )),
                               ),
                               SizedBox(width: 10.0),
                               Column(

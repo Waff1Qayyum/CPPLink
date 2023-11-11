@@ -1,3 +1,4 @@
+import 'package:cpplink/customer_pages/customer_changePhoneNumber.dart';
 import 'package:cpplink/customer_pages/customer_changeProfilePicture.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         '/changeName': (_) => const CustomerChangeName(), //placeholder
         '/changePw': (_) => const CustomerChangePassword(), //placeholder
         '/changePFP': (_) => const CustomerChangePicture(),
+        '/changePhone': (_) => const CustomerChangePhone(),
       },
     );
   }

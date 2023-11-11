@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:io';
 
-import 'package:cpplink/components/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -15,30 +15,132 @@ class CustomerChangePicture extends StatefulWidget {
 }
 
 class CustomerChangePictureState extends State<CustomerChangePicture> {
-  String? _imageUrl;
-  bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
+  dynamic image;
+  XFile? fileImage;
+  File? imageFile;
+  bool isImageSelected = false;
+  String? name;
+  String? phone;
+  String? email;
+  bool? passMatch;
+  bool isLoading = false;
+  TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session == null) {
-        _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    });
+    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+    //   if (_redirecting) return;
+    //   final session = data.session;
+    //   if (session == null) {
+    //     _redirecting = true;
+    //     Navigator.of(context).pushReplacementNamed('/');
+    //   }
+    // });
     super.initState();
-    getImage();
+    displayImage();
+    getName();
+    getEmail();
+    getPhone();
   }
 
-  Future<void> getImage() async {
+  Future<void> getName() async {
     final userId = supabase.auth.currentUser!.id;
-    final data =
-        await supabase.from('user').select().eq('user_id', userId).single();
+    final data = await supabase
+        .from('user')
+        .select('name')
+        .eq('user_id', userId)
+        .single();
     setState(() {
-      _imageUrl = data['profile_url'];
+      name = data['name'];
+    });
+  }
+
+  Future<void> getPhone() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('phone')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      phone = data['phone'];
+    });
+  }
+
+  Future<void> getEmail() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('email')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      email = data['email'];
+    });
+  }
+
+  Future<bool> checkPassword() async {
+    bool? match;
+    match = await supabase.rpc('check_password',
+        params: {'password_input': _passwordController.text});
+    if (match == true || match == 1) {
+      return true;
+    } else
+      return false;
+  }
+
+  Future<void> displayImage() async {
+    final userId = supabase.auth.currentUser!.id;
+    final res = await supabase
+        .from('user')
+        .select('picture_url')
+        .eq('user_id', userId)
+        .single();
+
+    if (res['picture_url'] == null) {
+      return;
+    }
+    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = Uri.parse(image).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
+
+    setState(() {
+      image = res['picture_url'];
+    });
+  }
+
+  Future<void> uploadImage() async {
+    final imageExtension = fileImage!.path.split('.').last.toLowerCase();
+    final imageBytes = await fileImage!.readAsBytes();
+    final userId = supabase.auth.currentUser!.id;
+    final imagePath = '/$userId/profile';
+    await supabase.storage.from('picture').uploadBinary(imagePath, imageBytes,
+        fileOptions:
+            FileOptions(upsert: true, contentType: 'image/$imageExtension'));
+
+    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = Uri.parse(image).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
+    await supabase
+        .from('user')
+        .update({'picture_url': image}).eq('user_id', userId);
+  }
+
+  void getImage() async {
+    final XFile? pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        imageFile = File(pickedImage.path);
+        isImageSelected = true;
+      });
+    }
+    setState(() {
+      fileImage = pickedImage;
     });
   }
 
@@ -63,7 +165,8 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/customer_update', (route) => false);
           },
         ),
         actions: [
@@ -151,21 +254,24 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                             ),
                           ),
                           child: ClipOval(
-                            child: Image.asset(
-                              './images/cat.jpeg',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                              child: image != null
+                                  ? Image.network(
+                                      image!,
+                                      fit: BoxFit.cover,
+                                      width: 70,
+                                      height: 70,
+                                    )
+                                  : Container(
+                                      color: Colors.grey,
+                                    )),
                         ),
                         SizedBox(width: 10.0),
-                        const Column(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Muhd Aiman',
+                              name ?? 'Loading..',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 0, 0, 0),
                                 fontSize: 22,
@@ -182,7 +288,7 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  '016240391',
+                                  phone ?? 'Loading..',
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 0, 0, 0),
                                     fontSize: 15,
@@ -201,7 +307,7 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  '@waffi1211@gmail.com',
+                                  email ?? 'Loading..',
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 0, 0, 0),
                                     fontSize: 15,
@@ -232,176 +338,219 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
               ),
               Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Avatar(
-                          imageUrl: _imageUrl,
-                          onUpload: (imageUrl) async {
-                            setState(() {
-                              _imageUrl = imageUrl;
-                            });
-                            final userId = supabase.auth.currentUser!.id;
-                            await supabase
-                                .from('user')
-                                .update({'picture_url': imageUrl}).match(
-                                    {'user_id': userId});
-                          },
-                        ),
-                        SizedBox(height: 30),
-                        Text(
-                          'Enter your password for confirmation',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF9B9B9B),
-                            fontSize: 17,
-                            fontFamily: 'Lexend',
-                            fontWeight: FontWeight.w700,
-                            height: 0,
+                  Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: isImageSelected == true
+                                ? Image(image: FileImage(imageFile!))
+                                : ((image != null)
+                                    ? Image.network(
+                                        image!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Container(
+                                        color: Colors.grey,
+                                        child: const Center(
+                                          child: Text('No image'),
+                                        ),
+                                      )),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          width: 263,
-                          height: 37,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              width: 0.5,
-                              color: Color.fromARGB(56, 25, 25, 25),
+                          ElevatedButton(
+                            onPressed: () async {
+                              getImage();
+                            },
+                            child: Text('Upload Photo'),
+                          ),
+                          SizedBox(height: 30),
+                          Text(
+                            'Enter your password for confirmation',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xFF9B9B9B),
+                              fontSize: 17,
+                              fontFamily: 'Lexend',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromARGB(164, 117, 117, 117),
-                                blurRadius: 4,
-                                offset: Offset(0, 4),
-                                spreadRadius: 0,
-                              ),
-                            ],
                           ),
-                          child: TextFormField(
-                            textAlignVertical: TextAlignVertical.bottom,
-                            decoration: InputDecoration(
-                              hintText: "enter a password ",
-                              filled: true,
-                              fillColor:
-                                  const Color.fromARGB(255, 249, 249, 249),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
-                                ),
+                          SizedBox(height: 20),
+                          Container(
+                            width: 263,
+                            height: 37,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                width: 0.5,
+                                color: Color.fromARGB(56, 25, 25, 25),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  width: 1.50,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(164, 117, 117, 117),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: 0,
+                                ),
+                              ],
+                            ),
+                            child: TextFormField(
+                              controller: _passwordController,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              decoration: InputDecoration(
+                                hintText: "enter a password ",
+                                filled: true,
+                                fillColor:
+                                    const Color.fromARGB(255, 249, 249, 249),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 1.50,
+                                    color: Color(0xFFFFD233),
+                                  ),
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.password,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
-                              prefixIcon: Icon(
-                                Icons.password,
-                                color: Color(0xFFFFD233),
-                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a password';
+                                } else if (passMatch == false) {
+                                  return 'Password does not match';
+                                } else {
+                                  return null;
+                                }
+                              },
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a password';
-                              } else {
-                                return null;
-                              }
-                            },
                           ),
-                        ),
-                        SizedBox(height: 40),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                // Your code to handle the tap event
-                              },
-                              child: Container(
-                                width: 135,
-                                height: 53,
-                                alignment: Alignment.center,
-                                decoration: ShapeDecoration(
-                                  color: const Color.fromARGB(255, 208, 24, 11),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    side: BorderSide(
-                                      width: 1.50,
-                                      color: Color.fromARGB(255, 208, 24, 11),
+                          SizedBox(height: 40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  // Your code to handle the tap event
+                                },
+                                child: Container(
+                                  width: 135,
+                                  height: 53,
+                                  alignment: Alignment.center,
+                                  decoration: ShapeDecoration(
+                                    color:
+                                        const Color.fromARGB(255, 208, 24, 11),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      side: BorderSide(
+                                        width: 1.50,
+                                        color: Color.fromARGB(255, 208, 24, 11),
+                                      ),
                                     ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x3F000000),
+                                        blurRadius: 4,
+                                        offset: Offset(0, 4),
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
                                   ),
-                                  shadows: [
-                                    BoxShadow(
-                                      color: Color(0x3F000000),
-                                      blurRadius: 4,
-                                      offset: Offset(0, 4),
-                                      spreadRadius: 0,
+                                  child: Text(
+                                    'cancel',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 236, 236, 236),
+                                      fontSize: 15,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                  ],
-                                ),
-                                child: Text(
-                                  'cancel',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 236, 236, 236),
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 30),
-                            InkWell(
-                              onTap: () {
-                                // Your code to handle the tap event
-                              },
-                              child: Container(
-                                width: 135,
-                                height: 53,
-                                alignment: Alignment.center,
-                                decoration: ShapeDecoration(
-                                  color: const Color.fromARGB(255, 44, 174, 48),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    side: BorderSide(
-                                      width: 1.50,
+                              SizedBox(width: 30),
+                              InkWell(
+                                onTap: () async {
+                                  // Your code to handle the tap event
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  passMatch = await checkPassword();
+                                  if (_formKey.currentState!.validate()) {
+                                    uploadImage();
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (context) => AlertDialog(
+                                    //           actions: [
+                                    //             TextButton(
+                                    //                 onPressed: () {
+                                    Navigator.pushNamedAndRemoveUntil(context,
+                                        '/customer_update', (route) => false);
+                                    //                 },
+                                    //                 child: Text('OK'))
+                                    //           ],
+                                    //           content: Text(
+                                    //               'Picture Successfully Updated'),
+                                    //         ));
+                                  }
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                },
+                                child: Container(
+                                  width: 135,
+                                  height: 53,
+                                  alignment: Alignment.center,
+                                  decoration: ShapeDecoration(
+                                    color:
+                                        const Color.fromARGB(255, 44, 174, 48),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      side: BorderSide(
+                                        width: 1.50,
+                                        color: const Color.fromARGB(
+                                            255, 44, 174, 48),
+                                      ),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x3F000000),
+                                        blurRadius: 4,
+                                        offset: Offset(0, 4),
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    'confirm',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
                                       color: const Color.fromARGB(
-                                          255, 44, 174, 48),
+                                          255, 255, 255, 255),
+                                      fontSize: 15,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                  ),
-                                  shadows: [
-                                    BoxShadow(
-                                      color: Color(0x3F000000),
-                                      blurRadius: 4,
-                                      offset: Offset(0, 4),
-                                      spreadRadius: 0,
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  'confirm',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

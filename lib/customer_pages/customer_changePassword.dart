@@ -18,6 +18,7 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
   String? name;
   String? phone;
   String? email;
+  dynamic image;
   bool isLoading = false;
   bool? passMatch;
   bool _redirecting = false;
@@ -40,6 +41,7 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
     getName();
     getEmail();
     getPhone();
+    displayImage();
   }
 
   Future<void> getName() async {
@@ -88,6 +90,27 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
       return true;
     } else
       return false;
+  }
+
+  Future<void> displayImage() async {
+    final userId = supabase.auth.currentUser!.id;
+    final res = await supabase
+        .from('user')
+        .select('picture_url')
+        .eq('user_id', userId)
+        .single();
+
+    if (res['picture_url'] == null) {
+      return;
+    }
+    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = Uri.parse(image).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
+
+    setState(() {
+      image = res['picture_url'];
+    });
   }
 
   Future<void> setPassword() async {
@@ -210,14 +233,16 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                  child: Image.asset(
-                                    './images/cat.jpeg', // Replace with your image URL
-                                    width: 100, // Adjust the width as needed
-                                    height: 100, // Adjust the height as needed
-                                    fit: BoxFit
-                                        .cover, // Adjust the fit as needed
-                                  ),
-                                ),
+                                    child: image != null
+                                        ? Image.network(
+                                            image!,
+                                            fit: BoxFit.cover,
+                                            width: 70,
+                                            height: 70,
+                                          )
+                                        : Container(
+                                            color: Colors.grey,
+                                          )),
                               ),
                               SizedBox(width: 10.0),
                               Column(

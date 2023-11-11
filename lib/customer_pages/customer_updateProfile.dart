@@ -16,6 +16,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   String? name;
   String? phone;
   String? email;
+  dynamic image;
   bool _redirecting = false;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
@@ -33,6 +34,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     getName();
     getEmail();
     getPhone();
+    displayImage();
   }
 
   Future<void> getName() async {
@@ -42,9 +44,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
         .select('name')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      name = data['name'];
-    });
+    if (mounted) {
+      setState(() {
+        name = data['name'];
+      });
+    }
   }
 
   Future<void> getPhone() async {
@@ -54,9 +58,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
         .select('phone')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      phone = data['phone'];
-    });
+    if (mounted) {
+      setState(() {
+        phone = data['phone'];
+      });
+    }
   }
 
   Future<void> getEmail() async {
@@ -66,8 +72,31 @@ class _CustomerProfileState extends State<CustomerProfile> {
         .select('email')
         .eq('user_id', userId)
         .single();
+    if (mounted) {
+      setState(() {
+        email = data['email'];
+      });
+    }
+  }
+
+  Future<void> displayImage() async {
+    final userId = supabase.auth.currentUser!.id;
+    final res = await supabase
+        .from('user')
+        .select('picture_url')
+        .eq('user_id', userId)
+        .single();
+
+    if (res['picture_url'] == null) {
+      return;
+    }
+    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = Uri.parse(image).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
+
     setState(() {
-      email = data['email'];
+      image = res['picture_url'];
     });
   }
 
@@ -180,14 +209,16 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                  child: Image.asset(
-                                    './images/cat.jpeg', // Replace with your image URL
-                                    width: 100, // Adjust the width as needed
-                                    height: 100, // Adjust the height as needed
-                                    fit: BoxFit
-                                        .cover, // Adjust the fit as needed
-                                  ),
-                                ),
+                                    child: image != null
+                                        ? Image.network(
+                                            image!,
+                                            fit: BoxFit.cover,
+                                            width: 70,
+                                            height: 70,
+                                          )
+                                        : Container(
+                                            color: Colors.grey,
+                                          )),
                               ),
                               SizedBox(width: 10.0),
                               Column(
@@ -366,6 +397,48 @@ class _CustomerProfileState extends State<CustomerProfile> {
                           ),
                           child: Text(
                             'Change Password',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 15,
+                              fontFamily: 'Lexend',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // Your code to handle the tap event
+                          Navigator.of(context).pushNamed('/changePhone');
+                        },
+                        child: Container(
+                          width: 246,
+                          height: 53,
+                          alignment: Alignment.center,
+                          decoration: ShapeDecoration(
+                            color: Color(0xFFFFD233),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                width: 1.50,
+                                color: Color(0xFFFFD233), // Border color
+                              ),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            'Change Phone Number',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: const Color.fromARGB(255, 255, 255, 255),
