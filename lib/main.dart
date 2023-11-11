@@ -5,6 +5,7 @@ import 'admin_pages/admin_homepage.dart';
 import 'customer_pages/customer_changeProfilePicture.dart';
 import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
+import 'customer_pages/customer_updateProfile.dart';
 import 'forgotPassword.dart';
 import 'login_page.dart';
 import 'otpVerification.dart';
@@ -46,6 +47,9 @@ class MyApp extends StatelessWidget {
         '/forgotPassword': (_) => const ForgotPassword(),
         '/otpVerification': (_) => const OTPVerification(),
         '/resetPassword': (_) => const ResetPassword(),
+
+//////////////////user_updateProfile//////////////////
+        '/customer_profile': (_) => const CustomerProfile(),
 
 
 

@@ -81,7 +81,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                   children: [
                     Container(
                         child: Image.asset(
-                      './images/cat.jpeg',
+                      './images/cpp_log.png',
                       width: 70,
                       height: 70,
                     )),
@@ -316,6 +316,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                       children: [
                         InkWell(
                           onTap: () {
+
                             // Your code to handle the tap event
                           },
                           child: Container(
@@ -368,6 +369,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                         ),
                         InkWell(
                           onTap: () {
+                            Navigator.of(context).pushReplacementNamed('/customer_profile');
+
                             // Your code to handle the tap event
                           },
                           child: Container(

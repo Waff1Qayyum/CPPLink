@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; //comment
+
+import 'main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -35,7 +37,9 @@ class _LoginPageState extends State<LoginPage> {
         .from('user')
         .select('email')
         .eq('email', _emailController.text);
-    if (checkAdmin.isNotEmpty || checkRider.isNotEmpty || checkCustomer.isNotEmpty) {
+    if (checkAdmin.isNotEmpty ||
+        checkRider.isNotEmpty ||
+        checkCustomer.isNotEmpty) {
       print("email okay");
       return true;
     } else {
@@ -51,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
       if (response.user?.id != null) {
+      print("password okay");
         return false;
       } else {
         return true;
@@ -69,9 +74,9 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-      if (mounted) {
-        //login successfully
-      }
+      // if (mounted) {
+      //   //login successfully
+      // }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -379,7 +384,7 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                   ],
                 ),
-                SizedBox(height:20),
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -411,7 +416,6 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                   ],
                 ),
-
 
                 ///end
               ],
