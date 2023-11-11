@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; //comment
@@ -380,6 +379,39 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                   ],
                 ),
+                SizedBox(height:20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Forgot your password ?',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Lexend',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/forgotPassword');
+                        },
+                        child: Text(
+                          'Reset password now',
+                          style: TextStyle(
+                            color: Color(0xFFFFD233),
+                            fontSize: 12,
+                            fontFamily: 'Lexend',
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                          ),
+                        )),
+                  ],
+                ),
+
 
                 ///end
               ],

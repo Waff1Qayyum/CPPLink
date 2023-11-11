@@ -1,15 +1,13 @@
-import 'package:cpplink/customer_pages/customer_changePhoneNumber.dart';
-import 'package:cpplink/customer_pages/customer_updateProfile.dart';
+import 'package:cpplink/resetPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'admin_pages/admin_homepage.dart';
-import 'customer_pages/customer_changeName.dart';
-import 'customer_pages/customer_changePassword.dart';
 import 'customer_pages/customer_changeProfilePicture.dart';
-import 'customer_pages/customer_deleteAccount.dart';
 import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
+import 'forgotPassword.dart';
 import 'login_page.dart';
+import 'otpVerification.dart';
 import 'rider_pages/rider_homepage.dart';
 import 'splash.dart';
 
@@ -35,17 +33,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
-        // '/': (_) => const SplashPage(),
+        '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
-        // '/login': (_) => const LoginPage(), //login_page
-        '/': (_) => const CustomerChangePicture(), //login_page
-        // '/custHome': (_) => const CustomerHomepage(),
-        // '/account': (_) => const AccountPage(),
+        '/login': (_) => const LoginPage(), //login_page
 
 ////////////////////users homepage////////////////
         '/admin_home': (_) => const AdminHomePage(),
         '/rider_home': (_) => const RiderHomePage(),
         '/customer_home': (_) => const CustomerHomepage(),
+
+//////////////////forgot password//////////////////
+        '/forgotPassword': (_) => const ForgotPassword(),
+        '/otpVerification': (_) => const OTPVerification(),
+        '/resetPassword': (_) => const ResetPassword(),
+
+
 
       },
     );

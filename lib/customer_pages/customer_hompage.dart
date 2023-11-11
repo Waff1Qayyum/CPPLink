@@ -81,7 +81,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                   children: [
                     Container(
                         child: Image.asset(
-                      './images/cat.jpeg',
+                      './images/cpp_logo.png',
                       width: 70,
                       height: 70,
                     )),
