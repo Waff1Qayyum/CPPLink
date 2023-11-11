@@ -81,7 +81,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                   children: [
                     Container(
                         child: Image.asset(
-                      './images/cat.jpeg',
+                      './images/cpp_logo.png',
                       width: 70,
                       height: 70,
                     )),
@@ -132,7 +132,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                                     ),
                                     child: ClipOval(
                                       child: Image.asset(
-                                        './images/cpp_logo.png', // Replace with your image URL
+                                        './images/cat.jpeg', // Replace with your image URL
                                         width: 50, // Adjust the width as needed
                                         height:
                                             50, // Adjust the height as needed
