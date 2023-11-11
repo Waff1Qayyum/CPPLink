@@ -36,7 +36,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           email: _emailController.text, password: _passwordController.text);
       await supabase.from('user').insert({
         'user_id': res.user!.id,
-        'name': _nameController.text.toUpperCase(),
+        'name': _nameController.text,
         'phone': _phoneController.text,
         'email': _emailController.text
       });
@@ -197,8 +197,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                       }
                                     },
                                     controller: _nameController,
-                                    textCapitalization:
-                                        TextCapitalization.characters,
                                     textAlignVertical: TextAlignVertical.bottom,
                                     decoration: InputDecoration(
                                       hintText: "enter full name",

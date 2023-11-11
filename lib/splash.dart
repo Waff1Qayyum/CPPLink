@@ -24,6 +24,7 @@ class _SplashPageState extends State<SplashPage> {
 
     final session = supabase.auth
         .currentSession; //check if user already sign in by checking the session
+
     if (session != null) {
       print('session is not null');
       final userID = supabase.auth.currentUser!.id;
@@ -42,9 +43,19 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.of(context).pushReplacementNamed('/rider_home');
       } else if (checkCustomer.isNotEmpty) {
         print('User is a customer');
-        Navigator.of(context).pushReplacementNamed('/customer_update');
+        Navigator.of(context).pushReplacementNamed('/customer_home');
       }
     } else {
+      print('session is null');
+      //   final initialUri = await getInitialUri();
+      // if (initialUri != null && initialUri.toString().contains("io.supabase.flutterquickstart://login-callback/forgotPassword")) {
+
+      //   print('GO TO RESET PASSWORD PAGE');
+      //   Navigator.of(context).pushReplacementNamed('/forgotPassword'); //go to user login page
+
+      // }
+      //   print('The current url is : ' + initialUri.toString());
+      print('GO TO LOGIN');
       Navigator.of(context)
           .pushReplacementNamed('/login'); //go to user login page
     }
