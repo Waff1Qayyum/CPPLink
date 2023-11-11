@@ -10,7 +10,11 @@ import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
 import 'login_page.dart';
 import 'otpVerification.dart';
+import 'rider_pages/rider_changeName.dart';
+import 'rider_pages/rider_changePassword.dart';
+import 'rider_pages/rider_changePhoneNumber.dart';
 import 'rider_pages/rider_homepage.dart';
+import 'rider_pages/rider_updateProfile.dart';
 import 'splash.dart';
 import 'resetPassword.dart';
 import 'forgotPassword.dart';
@@ -44,8 +48,17 @@ class MyApp extends StatelessWidget {
         '/login': (_) => const LoginPage(), //login_page
 
 ////////////////////users homepage////////////////
+
+        //admin
         '/admin_home': (_) => const AdminHomePage(),
-        '/rider_home': (_) => const RiderHomePage(),
+
+        // rider
+        // '/': (_) => const RiderHomePage(), //temporary
+        '/rider_changeName': (_) => const RiderChangeName(),
+        '/rider_changePw': (_) => const RiderChangePassword(),
+        '/rider_changePFP': (_) => const RiderChangeProfile(),
+        '/rider_changePhone': (_) => const RiderChangePhone(),
+        // '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
 
         //customer
         '/customer_home': (_) => const CustomerHomepage(),

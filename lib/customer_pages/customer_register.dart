@@ -19,6 +19,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   bool? emailUnique;
   bool? phoneUnique;
   bool? phoneValid;
+  bool checked = false;
   final _formkey = GlobalKey<FormState>();
   bool isLoading = false;
 
@@ -31,19 +32,32 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   }
 
   Future<void> _signUp() async {
-    try {
-      final res = await supabase.auth.signUp(
-          email: _emailController.text, password: _passwordController.text);
-      await supabase.from('user').insert({
-        'user_id': res.user!.id,
-        'name': _nameController.text,
-        'phone': _phoneController.text,
-        'email': _emailController.text
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Unexpected Error Occurred')));
+    // try {
+    final res = await supabase.auth.signUp(
+        email: _emailController.text, password: _passwordController.text);
+    await supabase.from('user').insert({
+      'user_id': res.user!.id,
+      'name': _nameController.text,
+      'phone': _phoneController.text,
+      'email': _emailController.text,
+    });
+    if (checked == false || checked == null) {
+      return;
     }
+    await supabase.from('rider').insert({'user_id': res.user!.id});
+    final rider = await supabase
+        .from('rider')
+        .select('rider_id')
+        .eq('user_id', res.user!.id)
+        .single();
+    final riderId = rider['rider_id'];
+    await supabase
+        .from('user')
+        .update({'rider_id': riderId}).eq('user_id', res.user!.id);
+    // } catch (e) {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(SnackBar(content: Text('Unexpected Error Occurred')));
+    // }
   }
 
   Future<bool> _emailUnique() async {
@@ -500,8 +514,25 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                 )
                               ],
                             ),
-
-                            SizedBox(height: 40),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 40.0),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                      value: this.checked,
+                                      onChanged: (checked) {
+                                        setState(() {
+                                          this.checked = checked!;
+                                        });
+                                      }),
+                                  Text('Register as Rider'),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
                             Container(
                               width: 263,
                               height: 37,
