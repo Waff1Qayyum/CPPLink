@@ -1,4 +1,5 @@
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
+import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'admin_pages/admin_homepage.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
         '/rider_changePFP': (_) => const RiderChangeProfile(),
         '/rider_changePhone': (_) => const RiderChangePhone(),
         // '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
+        '/rider_vehicle': (_) => const RiderUploadVehicle(),
 
         //customer
         '/customer_home': (_) => const CustomerHomepage(),
