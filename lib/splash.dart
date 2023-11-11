@@ -21,8 +21,7 @@ class _SplashPageState extends State<SplashPage> {
       return;
     }
 
-    final session = supabase.auth
-        .currentSession; //check if user already sign in by checking the session
+    final session = supabase.auth.currentSession; //check if user already sign in by checking the session
     if (session != null) {
       final userID = supabase.auth.currentUser!.id;
       final checkAdmin =
@@ -38,9 +37,10 @@ class _SplashPageState extends State<SplashPage> {
       } else if (checkRider.isNotEmpty) {
         print('User is a rider');
         Navigator.of(context).pushReplacementNamed('/rider_home');
-      } else if (checkCustomer.isNotEmpty) {
+      }
+      else if (checkCustomer.isNotEmpty) {
         print('User is a customer');
-        Navigator.of(context).pushReplacementNamed('/customer_update');
+        Navigator.of(context).pushReplacementNamed('/customer_home');
       }
     } else {
       Navigator.of(context)

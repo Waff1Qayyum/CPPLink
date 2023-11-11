@@ -1,16 +1,19 @@
-import 'package:cpplink/customer_pages/customer_changePhoneNumber.dart';
-import 'package:cpplink/customer_pages/customer_changeProfilePicture.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'admin_pages/admin_homepage.dart';
 import 'customer_pages/customer_changeName.dart';
 import 'customer_pages/customer_changePassword.dart';
+import 'customer_pages/customer_changePhoneNumber.dart';
+import 'customer_pages/customer_changeProfilePicture.dart';
 import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
 import 'login_page.dart';
+import 'otpVerification.dart';
 import 'rider_pages/rider_homepage.dart';
 import 'splash.dart';
+import 'resetPassword.dart';
+import 'forgotPassword.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -36,12 +39,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
-        // '/': (_) => const SplashPage(),
+        '/': (_) => const SplashPage(),
         '/register': (_) => const CustomerRegisterPage(),
         '/login': (_) => const LoginPage(), //login_page
-        '/': (_) => const SplashPage(), //login_page
-        // '/custHome': (_) => const CustomerHomepage(),
-        // '/account': (_) => const AccountPage(),
 
 ////////////////////users homepage////////////////
         '/admin_home': (_) => const AdminHomePage(),
@@ -54,6 +54,14 @@ class MyApp extends StatelessWidget {
         '/changePw': (_) => const CustomerChangePassword(), //placeholder
         '/changePFP': (_) => const CustomerChangePicture(),
         '/changePhone': (_) => const CustomerChangePhone(),
+
+//////////////////forgot password//////////////////
+        '/forgotPassword': (_) => const ForgotPassword(),
+        '/otpVerification': (_) => const OTPVerification(),
+        '/resetPassword': (_) => const ResetPassword(),
+
+//////////////////user_updateProfile//////////////////
+        '/customer_profile': (_) => const CustomerProfile(),
       },
     );
   }

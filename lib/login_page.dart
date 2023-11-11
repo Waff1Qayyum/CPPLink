@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; //comment
+
+import 'main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,40 +21,30 @@ class _LoginPageState extends State<LoginPage> {
   bool? emailInvalid;
   bool? passwordInvalid;
   bool? workornot;
-  // late final StreamSubscription<AuthState>
-  //     _authStateSubscription; //use to monitor any changes on auth
+  late final StreamSubscription<AuthState>
+      _authStateSubscription; //use to monitor any changes on auth
 
   Future<bool?> _emailError() async {
-    // final checkAdmin = await supabase
-    //     .from('admin')
-    //     .select('email')
-    //     .eq('email', _emailController.text);
-    // final checkRider = await supabase
-    //     .from('rider')
-    //     .select('email')
-    //     .eq('email', _emailController.text);
-    // final checkCustomer = await supabase
-    //     .from('user')
-    //     .select('email')
-    //     .eq('email', _emailController.text);
-    // if (checkAdmin.isNotEmpty ||
-    //     checkRider.isNotEmpty ||
-    //     checkCustomer.isNotEmpty) {
-    //   print("email okay");
-    //   return true;
-    // } else {
-    //   print("error");
-    //   return false;
-    // }
-    final data = await supabase
+    final checkAdmin = await supabase
+        .from('admin')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkRider = await supabase
+        .from('rider')
+        .select('email')
+        .eq('email', _emailController.text);
+    final checkCustomer = await supabase
         .from('user')
         .select('email')
-        .eq('email', _emailController.text)
-        .limit(1);
-    if (data.isNotEmpty && data[0] != null) {
-      return false;
-    } else {
+        .eq('email', _emailController.text);
+    if (checkAdmin.isNotEmpty ||
+        checkRider.isNotEmpty ||
+        checkCustomer.isNotEmpty) {
+      print("email okay");
       return true;
+    } else {
+      print("error");
+      return false;
     }
   }
 
@@ -64,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
       if (response.user?.id != null) {
+      print("password okay");
         return false;
       } else {
         return true;
@@ -75,13 +67,16 @@ class _LoginPageState extends State<LoginPage> {
 
   Future userLogin() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       await supabase.auth.signInWithPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-      if (supabase.auth.currentUser?.id != null) {
-        Navigator.pushNamed(context, '/customer_update');
-      }
+      // if (mounted) {
+      //   //login successfully
+      // }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -96,19 +91,25 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
   @override
   void initState() {
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session != null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/');
-    //   }
-    // });
+    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (_redirecting) return;
+      final session = data.session;
+      if (session != null) {
+        _redirecting = true;
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+    });
     super.initState();
   }
 
@@ -325,6 +326,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if (_formKey.currentState!.validate()) {
                                     userLogin();
                                   }
+                                  ;
                                   setState(() {
                                     isLoading = false;
                                   });
@@ -372,6 +374,38 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text(
                           'Register now',
+                          style: TextStyle(
+                            color: Color(0xFFFFD233),
+                            fontSize: 12,
+                            fontFamily: 'Lexend',
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                          ),
+                        )),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Forgot your password ?',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Lexend',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/forgotPassword');
+                        },
+                        child: Text(
+                          'Reset password now',
                           style: TextStyle(
                             color: Color(0xFFFFD233),
                             fontSize: 12,

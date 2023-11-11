@@ -22,15 +22,15 @@ class _CustomerProfileState extends State<CustomerProfile> {
 
   @override
   void initState() {
+    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      if (_redirecting) return;
+      final session = data.session;
+      if (session == null) {
+        _redirecting = true;
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+    });
     super.initState();
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session == null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/');
-    //   }
-    // });
     getName();
     getEmail();
     getPhone();
