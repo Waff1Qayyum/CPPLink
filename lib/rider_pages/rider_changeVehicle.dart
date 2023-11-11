@@ -7,14 +7,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class CustomerChangePicture extends StatefulWidget {
-  const CustomerChangePicture({super.key});
+class RiderChangePicture extends StatefulWidget {
+  const RiderChangePicture({super.key});
 
   @override
-  State<CustomerChangePicture> createState() => CustomerChangePictureState();
+  State<RiderChangePicture> createState() => _RiderChangePictureState();
 }
 
-class CustomerChangePictureState extends State<CustomerChangePicture> {
+class _RiderChangePictureState extends State<RiderChangePicture> {
   dynamic image;
   XFile? fileImage;
   File? imageFile;

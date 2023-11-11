@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -5,36 +7,28 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class CustomerChangeName extends StatefulWidget {
-  const CustomerChangeName({super.key});
+class RiderChangePassword extends StatefulWidget {
+  const RiderChangePassword({super.key});
 
   @override
-  State<CustomerChangeName> createState() => _CustomerChangeNameState();
+  State<RiderChangePassword> createState() => _RiderChangePasswordState();
 }
 
-class _CustomerChangeNameState extends State<CustomerChangeName> {
-  bool _redirecting = false;
-  bool isLoading = false;
+class _RiderChangePasswordState extends State<RiderChangePassword> {
   String? name;
   String? phone;
   String? email;
-  bool? passMatch;
   dynamic image;
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  bool isLoading = false;
+  bool? passMatch;
+  // bool _redirecting = false;
+  TextEditingController _oldPasswordController = TextEditingController();
+  TextEditingController _newPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late final StreamSubscription<AuthState> _authStateSubscription;
+  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session == null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/');
-    //   }
-    // });
     super.initState();
     getName();
     getEmail();
@@ -78,11 +72,12 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
     });
   }
 
+  //use supabase function to check password
   Future<bool> checkPassword() async {
     String? email;
     bool? match;
     match = await supabase.rpc('check_password',
-        params: {'password_input': _passwordController.text});
+        params: {'password_input': _oldPasswordController.text});
     if (match == true || match == 1) {
       return true;
     } else
@@ -110,12 +105,13 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
     });
   }
 
-  Future<void> setUsername() async {
-    String userId = supabase.auth.currentUser!.id;
-    String name = _nameController.text.toUpperCase();
-    final data = await supabase
-        .from('user')
-        .update({'name': name}).match({'user_id': userId});
+  Future<void> setPassword() async {
+    bool? changed;
+    final res = supabase.auth.currentUser!.id;
+    return await supabase.rpc('change_password', params: {
+      'old_password': _oldPasswordController.text,
+      'new_password': _newPasswordController.text
+    });
   }
 
   @override
@@ -151,6 +147,8 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                   GestureDetector(
                       onTap: () {
                         supabase.auth.signOut();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
                       },
                       child: Text(
                         'Sign Out',
@@ -297,7 +295,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
               /////////////////////////////////////
               SizedBox(height: 50),
               Text(
-                'Change Your Account\'s Name ?',
+                'Change Your Account\'s Password ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF9B9B9B),
@@ -337,16 +335,15 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter fullname';
+                                  return 'Please enter new password';
                                 } else {
                                   return null;
                                 }
                               },
-                              controller: _nameController,
-                              textCapitalization: TextCapitalization.characters,
+                              controller: _newPasswordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter new full name",
+                                hintText: "enter new password",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -367,7 +364,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                                   ),
                                 ),
                                 prefixIcon: Icon(
-                                  Icons.person,
+                                  Icons.password,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
@@ -376,7 +373,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                           ///////////////////////
                           SizedBox(height: 30),
                           Text(
-                            'Enter your password for confirmation',
+                            'Enter your old password for confirmation',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Color(0xFF9B9B9B),
@@ -409,10 +406,10 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                               ],
                             ),
                             child: TextFormField(
-                              controller: _passwordController,
+                              controller: _oldPasswordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter password ",
+                                hintText: "enter old password ",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -504,14 +501,29 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                                     });
                                     passMatch = await checkPassword();
                                     if (_formKey.currentState!.validate()) {
-                                      setUsername();
-                                      //change snackbar design
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'Name Updated Successfully')));
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          '/customer_update', (route) => false);
+                                      setPassword();
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                content:
+                                                    Text('Password Changed'),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator
+                                                            .pushNamedAndRemoveUntil(
+                                                                context,
+                                                                '/customer_update',
+                                                                (route) =>
+                                                                    false);
+                                                      },
+                                                      child: Text('OK'))
+                                                ],
+                                              ));
+                                      // Navigator.pushNamedAndRemoveUntil(
+                                      //     context,
+                                      //     '/customer_update',
+                                      //     (route) => false);
                                     }
                                     setState(() {
                                       isLoading = false;
@@ -541,20 +553,17 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                                         ),
                                       ],
                                     ),
-                                    // if loading show indicator(optional)
-                                    child: isLoading == true
-                                        ? CircularProgressIndicator()
-                                        : Text(
-                                            'confirm',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontSize: 15,
-                                              fontFamily: 'Lexend',
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
+                                    child: Text(
+                                      'confirm',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: const Color.fromARGB(
+                                            255, 255, 255, 255),
+                                        fontSize: 15,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ])

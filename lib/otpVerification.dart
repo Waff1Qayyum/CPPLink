@@ -8,8 +8,7 @@ class OTPVerification extends StatefulWidget {
   const OTPVerification({super.key});
 
   @override
-  State<OTPVerification> createState() =>
-      OTPVerificationState();
+  State<OTPVerification> createState() => OTPVerificationState();
 }
 
 class OTPVerificationState extends State<OTPVerification> {

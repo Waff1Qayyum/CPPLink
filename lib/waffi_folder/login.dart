@@ -25,40 +25,40 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-Future<void> _signIn() async {
-  try {
-    setState(() {
-      _isLoading = true;
-    });
-    await supabase.auth.signInWithPassword(
-      email: _emailController.text.trim(),
-      password: _passController.text,
-    );
-    if (mounted) {
-      //login successfully
-    }
-  } on AuthException catch (error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Signin failed: ${error.message}'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ),
-    );
-  } catch (error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ),
-    );
-  } finally {
-    if (mounted) {
+  Future<void> _signIn() async {
+    try {
       setState(() {
-        _isLoading = false;
+        _isLoading = true;
       });
+      await supabase.auth.signInWithPassword(
+        email: _emailController.text.trim(),
+        password: _passController.text,
+      );
+      if (mounted) {
+        //login successfully
+      }
+    } on AuthException catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Signin failed: ${error.message}'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Unexpected error occurred'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
-}
 
   @override
   void initState() {

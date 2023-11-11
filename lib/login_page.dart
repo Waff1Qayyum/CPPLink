@@ -41,10 +41,10 @@ class _LoginPageState extends State<LoginPage> {
         checkRider.isNotEmpty ||
         checkCustomer.isNotEmpty) {
       print("email okay");
-      return true;
+      return false;
     } else {
       print("error");
-      return false;
+      return true;
     }
   }
 
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
       if (response.user?.id != null) {
-      print("password okay");
+        print("password okay");
         return false;
       } else {
         return true;
@@ -76,6 +76,8 @@ class _LoginPageState extends State<LoginPage> {
       );
       // if (mounted) {
       //   //login successfully
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/customer_update', (route) => false);
       // }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -102,14 +104,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session != null) {
-        _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    });
+    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+    //   if (_redirecting) return;
+    //   final session = data.session;
+    //   if (session != null) {
+    //     _redirecting = true;
+    //     Navigator.of(context).pushReplacementNamed('/');
+    //   }
+    // });
     super.initState();
   }
 

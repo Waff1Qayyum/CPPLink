@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class CustomerChangeName extends StatefulWidget {
-  const CustomerChangeName({super.key});
+class RiderChangeName extends StatefulWidget {
+  const RiderChangeName({super.key});
 
   @override
-  State<CustomerChangeName> createState() => _CustomerChangeNameState();
+  State<RiderChangeName> createState() => _RiderChangeNameState();
 }
 
-class _CustomerChangeNameState extends State<CustomerChangeName> {
+class _RiderChangeNameState extends State<RiderChangeName> {
   bool _redirecting = false;
   bool isLoading = false;
   String? name;

@@ -5,224 +5,311 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class CustomerChangePhoneNumber extends StatefulWidget {
-  const CustomerChangePhoneNumber({super.key});
+class CustomerChangePhone extends StatefulWidget {
+  const CustomerChangePhone({super.key});
 
   @override
-  State<CustomerChangePhoneNumber> createState() => CustomerChangePhoneNumberState();
+  State<CustomerChangePhone> createState() => _CustomerChangePhoneState();
 }
 
-class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
+class _CustomerChangePhoneState extends State<CustomerChangePhone> {
   bool _redirecting = false;
+  bool isLoading = false;
+  String? name;
+  String? phone;
+  String? email;
+  bool? passMatch;
+  dynamic image;
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   late final StreamSubscription<AuthState> _authStateSubscription;
 
-  // @override
-  // void initState() {
-  //   _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-  //     if (_redirecting) return;
-  //     final session = data.session;
-  //     if (session == null) {
-  //       _redirecting = true;
-  //       Navigator.of(context).pushReplacementNamed('/');
-  //     }
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
+    //   if (_redirecting) return;
+    //   final session = data.session;
+    //   if (session == null) {
+    //     _redirecting = true;
+    //     Navigator.of(context).pushReplacementNamed('/');
+    //   }
+    // });
+    super.initState();
+    getName();
+    getEmail();
+    getPhone();
+    displayImage();
+  }
+
+  Future<void> getName() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('name')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      name = data['name'];
+    });
+  }
+
+  Future<void> getPhone() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('phone')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      phone = data['phone'];
+    });
+  }
+
+  Future<void> getEmail() async {
+    final userId = supabase.auth.currentUser!.id;
+    final data = await supabase
+        .from('user')
+        .select('email')
+        .eq('user_id', userId)
+        .single();
+    setState(() {
+      email = data['email'];
+    });
+  }
+
+  Future<bool> checkPassword() async {
+    String? email;
+    bool? match;
+    match = await supabase.rpc('check_password',
+        params: {'password_input': _passwordController.text});
+    if (match == true || match == 1) {
+      return true;
+    } else
+      return false;
+  }
+
+  Future<void> displayImage() async {
+    final userId = supabase.auth.currentUser!.id;
+    final res = await supabase
+        .from('user')
+        .select('picture_url')
+        .eq('user_id', userId)
+        .single();
+
+    if (res['picture_url'] == null) {
+      return;
+    }
+    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = Uri.parse(image).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
+
+    setState(() {
+      image = res['picture_url'];
+    });
+  }
+
+  Future<void> setPhone() async {
+    String userId = supabase.auth.currentUser!.id;
+    String phone = _phoneController.text;
+    final data = await supabase
+        .from('user')
+        .update({'phone': phone}).match({'user_id': userId});
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(250, 195, 44, 1),
-          centerTitle: true,
-          title: Text(
-            'Update Profile',
-            style: TextStyle(
-              fontFamily: 'roboto',
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: Colors.white,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(250, 195, 44, 1),
+        centerTitle: true,
+        title: Text(
+          'Update Profile',
+          style: TextStyle(
+            fontFamily: 'roboto',
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+            color: Colors.white,
           ),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back, // You can replace this with your custom logo
-              color: Colors.white, // Icon color
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          actions: [
-            Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          supabase.auth.signOut();
-                        },
-                        child: Text(
-                          'Sign Out',
-                          style: TextStyle(
-                            color: Color(0xFFFF0000),
-                            fontSize: 13,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w800,
-                            height: 0,
-                          ),
-                        )),
-                  ],
-                )),
-          ],
         ),
-        body: ListView(
-          children: [
-            Column(
-              children: [
-                SizedBox(
-                  height: 20.0,
-                ),
-                Row(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back, // You can replace this with your custom logo
+            color: Colors.white, // Icon color
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        supabase.auth.signOut();
+                      },
+                      child: Text(
+                        'Sign Out',
+                        style: TextStyle(
+                          color: Color(0xFFFF0000),
+                          fontSize: 13,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w800,
+                          height: 0,
+                        ),
+                      )),
+                ],
+              )),
+        ],
+      ),
+      body: ListView(
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      child: Image.asset(
+                    './images/cpp_logo.png',
+                    width: 70,
+                    height: 70,
+                  )),
+                  Text(
+                    'CPP',
+                    style: TextStyle(
+                      color: Color(0xFF050505),
+                      fontSize: 48,
+                      fontFamily: 'Montagu Slab',
+                      fontWeight: FontWeight.w700,
+                      height: 0,
+                    ),
+                  ),
+                  Text(
+                    'Link',
+                    style: TextStyle(
+                      color: Color(0xFFFFD233),
+                      fontSize: 32,
+                      fontFamily: 'Montagu Slab',
+                      fontWeight: FontWeight.w700,
+                      height: 0,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 40.0),
+              Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  //row to put the buttons
                   children: [
-                    Container(
-                        child: Image.asset(
-                      './images/cpp_logo.png',
-                      width: 70,
-                      height: 70,
-                    )),
-                    Text(
-                      'CPP',
-                      style: TextStyle(
-                        color: Color(0xFF050505),
-                        fontSize: 48,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
-                    Text(
-                      'Link',
-                      style: TextStyle(
-                        color: Color(0xFFFFD233),
-                        fontSize: 32,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 40.0),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    //row to put the buttons
-                    children: [
-                      Padding(
-                          //padding for all column
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                              //row to put image + name
-                              children: [
-                                Container(
-                                  width: 100, // Adjust the width as needed
-                                  height: 100, // Adjust the height as needed
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Color(0xFFFFD233), // Border color
-                                      width: 1.0, // Border width
-                                    ),
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      './images/cat.jpeg', // Replace with your image URL
-                                      width: 100, // Adjust the width as needed
-                                      height:
-                                          100, // Adjust the height as needed
-                                      fit: BoxFit
-                                          .cover, // Adjust the fit as needed
-                                    ),
+                    Padding(
+                        //padding for all column
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                            //row to put image + name
+                            children: [
+                              Container(
+                                width: 100, // Adjust the width as needed
+                                height: 100, // Adjust the height as needed
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Color(0xFFFFD233), // Border color
+                                    width: 1.0, // Border width
                                   ),
                                 ),
-                                SizedBox(width: 10.0),
-                                const Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Muhd Aiman',
-                                        style: TextStyle(
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                          fontSize: 22,
-                                          fontFamily: 'Lexend',
-                                          fontWeight: FontWeight.w700,
-                                          height: 0,
+                                child: ClipOval(
+                                    child: image != null
+                                        ? Image.network(
+                                            image!,
+                                            fit: BoxFit.cover,
+                                            width: 70,
+                                            height: 70,
+                                          )
+                                        : Container(
+                                            color: Colors.grey,
+                                          )),
+                              ),
+                              SizedBox(width: 10.0),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      name ?? 'Loading..',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontSize: 22,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.call,
+                                          color: Color(0xFFFFD233),
                                         ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.call,
-                                            color: Color(0xFFFFD233),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          phone ?? 'Loading..',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w100,
+                                            height: 0,
                                           ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            '016240391',
-                                            style: TextStyle(
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0),
-                                              fontSize: 15,
-                                              fontFamily: 'Lexend',
-                                              fontWeight: FontWeight.w100,
-                                              height: 0,
-                                            ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.email,
+                                          color: Color(0xFFFFD233),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          email ?? 'Loading..',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w100,
+                                            height: 0,
                                           ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.email,
-                                            color: Color(0xFFFFD233),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            '@waffi1211@gmail.com',
-                                            style: TextStyle(
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0),
-                                              fontSize: 15,
-                                              fontFamily: 'Lexend',
-                                              fontWeight: FontWeight.w100,
-                                              height: 0,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ])
-                              ])),
-                    ]),
-                /////////////////////////////////////
-                SizedBox(height: 50),
-                Text(
-                  'Change Your Account\'s Mobile Number ?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF9B9B9B),
-                    fontSize: 17,
-                    fontFamily: 'Lexend',
-                    fontWeight: FontWeight.w700,
-                  ),
+                                        ),
+                                      ],
+                                    ),
+                                  ])
+                            ])),
+                  ]),
+              /////////////////////////////////////
+              SizedBox(height: 50),
+              Text(
+                'Change Your Phone Number ?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF9B9B9B),
+                  fontSize: 17,
+                  fontFamily: 'Lexend',
+                  fontWeight: FontWeight.w700,
                 ),
-                ////////////////////////////////////
-                Column(
+              ),
+              ////////////////////////////////////
+              Form(
+                key: _formKey,
+                child: Column(
                   children: [
                     Padding(
                       padding: EdgeInsets.all(20),
@@ -250,15 +337,16 @@ class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter new mobile number';
+                                  return 'Please enter fullname';
                                 } else {
                                   return null;
                                 }
                               },
-                              // controller: _nameController,
+                              controller: _phoneController,
+                              textCapitalization: TextCapitalization.characters,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter new mobile number",
+                                hintText: "enter new phone number",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -279,13 +367,13 @@ class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
                                   ),
                                 ),
                                 prefixIcon: Icon(
-                                  Icons.password,
+                                  Icons.person,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
                             ),
                           ),
-///////////////////////
+                          ///////////////////////
                           SizedBox(height: 30),
                           Text(
                             'Enter your password for confirmation',
@@ -300,7 +388,7 @@ class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
                           ),
                           SizedBox(height: 20),
 
-//////////////////////
+                          //////////////////////
                           Container(
                             width: 263,
                             height: 37,
@@ -321,10 +409,10 @@ class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
                               ],
                             ),
                             child: TextFormField(
-                              // controller: _passwordController,
+                              controller: _passwordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter a password ",
+                                hintText: "enter password ",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -352,6 +440,8 @@ class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter a password';
+                                } else if (passMatch == false) {
+                                  return 'Password does not match';
                                 } else {
                                   return null;
                                 }
@@ -403,12 +493,29 @@ class CustomerChangePhoneNumberState extends State<CustomerChangePhoneNumber> {
                                     ),
                                   ),
                                 ),
-//////////////////
-SizedBox(width: 30),
-//////////////////
+                                //////////////////
+                                SizedBox(width: 30),
+                                //////////////////
                                 InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     // Your code to handle the tap event
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    passMatch = await checkPassword();
+                                    if (_formKey.currentState!.validate()) {
+                                      setPhone();
+                                      //change snackbar design
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Name Updated Successfully')));
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          '/customer_update', (route) => false);
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                   },
                                   child: Container(
                                     width: 135,
@@ -434,35 +541,38 @@ SizedBox(width: 30),
                                         ),
                                       ],
                                     ),
-                                    child: Text(
-                                      'confirm',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
+                                    // if loading show indicator(optional)
+                                    child: isLoading == true
+                                        ? CircularProgressIndicator()
+                                        : Text(
+                                            'confirm',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ])
                         ],
                       ),
-//////////////////////////////
+                      //////////////////////////////
 
                       ///////////////////////////
                     ),
                   ],
                   // ],
                 ),
+              ),
 
-                ///end
-              ],
-            ),
-          ],
-        ),
+              ///end
+            ],
+          ),
+        ],
       ),
     );
   }

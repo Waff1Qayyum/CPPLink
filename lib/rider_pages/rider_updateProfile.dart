@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class CustomerProfile extends StatefulWidget {
-  const CustomerProfile({super.key});
+class RiderChangeProfile extends StatefulWidget {
+  const RiderChangeProfile({super.key});
 
   @override
-  State<CustomerProfile> createState() => _CustomerProfileState();
+  State<RiderChangeProfile> createState() => _RiderChangeProfileState();
 }
 
-class _CustomerProfileState extends State<CustomerProfile> {
+class _RiderChangeProfileState extends State<RiderChangeProfile> {
   String? name;
   String? phone;
   String? email;

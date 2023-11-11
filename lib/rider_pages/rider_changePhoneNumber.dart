@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class CustomerChangeName extends StatefulWidget {
-  const CustomerChangeName({super.key});
+class RiderChangePhone extends StatefulWidget {
+  const RiderChangePhone({super.key});
 
   @override
-  State<CustomerChangeName> createState() => _CustomerChangeNameState();
+  State<RiderChangePhone> createState() => _RiderChangePhoneState();
 }
 
-class _CustomerChangeNameState extends State<CustomerChangeName> {
+class _RiderChangePhoneState extends State<RiderChangePhone> {
   bool _redirecting = false;
   bool isLoading = false;
   String? name;
@@ -20,7 +20,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
   String? email;
   bool? passMatch;
   dynamic image;
-  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late final StreamSubscription<AuthState> _authStateSubscription;
@@ -110,12 +110,12 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
     });
   }
 
-  Future<void> setUsername() async {
+  Future<void> setPhone() async {
     String userId = supabase.auth.currentUser!.id;
-    String name = _nameController.text.toUpperCase();
+    String phone = _phoneController.text;
     final data = await supabase
         .from('user')
-        .update({'name': name}).match({'user_id': userId});
+        .update({'phone': phone}).match({'user_id': userId});
   }
 
   @override
@@ -297,7 +297,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
               /////////////////////////////////////
               SizedBox(height: 50),
               Text(
-                'Change Your Account\'s Name ?',
+                'Change Your Phone Number ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF9B9B9B),
@@ -342,11 +342,11 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                                   return null;
                                 }
                               },
-                              controller: _nameController,
+                              controller: _phoneController,
                               textCapitalization: TextCapitalization.characters,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter new full name",
+                                hintText: "enter new phone number",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -504,7 +504,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                                     });
                                     passMatch = await checkPassword();
                                     if (_formKey.currentState!.validate()) {
-                                      setUsername();
+                                      setPhone();
                                       //change snackbar design
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(

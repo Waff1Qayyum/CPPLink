@@ -19,6 +19,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   bool? emailUnique;
   bool? phoneUnique;
   bool? phoneValid;
+  bool checked = false;
   final _formkey = GlobalKey<FormState>();
   bool isLoading = false;
 
@@ -38,8 +39,21 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         'user_id': res.user!.id,
         'name': _nameController.text,
         'phone': _phoneController.text,
-        'email': _emailController.text
+        'email': _emailController.text,
       });
+      if (checked == false || checked == null) {
+        return;
+      }
+      await supabase.from('rider').insert({'user_id': res.user!.id});
+      final rider = await supabase
+          .from('rider')
+          .select('rider_id')
+          .eq('user_id', res.user!.id)
+          .single();
+      final riderId = rider['rider_id'];
+      await supabase
+          .from('user')
+          .update({'rider_id': riderId}).eq('user_id', res.user!.id);
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Unexpected Error Occurred')));
@@ -500,8 +514,25 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                 )
                               ],
                             ),
-
-                            SizedBox(height: 40),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 40.0),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                      value: this.checked,
+                                      onChanged: (checked) {
+                                        setState(() {
+                                          this.checked = checked!;
+                                        });
+                                      }),
+                                  Text('Register as Rider'),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
                             Container(
                               width: 263,
                               height: 37,
@@ -529,8 +560,13 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                   phoneValid = await _phoneValid();
                                   if (_formkey.currentState!.validate()) {
                                     _signUp();
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/login', (route) => false);
+                                    if (checked) {
+                                      Navigator.pushNamed(
+                                          context, '/rider_vehicle');
+                                    } else {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/login', (route) => false);
+                                    }
                                   }
                                   setState(() {
                                     isLoading = false;

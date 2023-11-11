@@ -1,17 +1,25 @@
-import 'package:cpplink/resetPassword.dart';
+import 'package:cpplink/customer_pages/customer_updateProfile.dart';
+import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'admin_pages/admin_homepage.dart';
+import 'customer_pages/customer_changeName.dart';
+import 'customer_pages/customer_changePassword.dart';
+import 'customer_pages/customer_changePhoneNumber.dart';
 import 'customer_pages/customer_changeProfilePicture.dart';
 import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_register.dart';
-import 'customer_pages/customer_updateProfile.dart';
-import 'forgotPassword.dart';
 import 'login_page.dart';
 import 'otpVerification.dart';
 import 'registerType_page.dart';
+import 'rider_pages/rider_changeName.dart';
+import 'rider_pages/rider_changePassword.dart';
+import 'rider_pages/rider_changePhoneNumber.dart';
 import 'rider_pages/rider_homepage.dart';
+import 'rider_pages/rider_updateProfile.dart';
 import 'splash.dart';
+import 'resetPassword.dart';
+import 'forgotPassword.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -49,9 +57,26 @@ class MyApp extends StatelessWidget {
 
 
 ////////////////////users homepage////////////////
+
+        //admin
         '/admin_home': (_) => const AdminHomePage(),
-        '/rider_home': (_) => const RiderHomePage(),
+
+        // rider
+        // '/': (_) => const RiderHomePage(), //temporary
+        '/rider_changeName': (_) => const RiderChangeName(),
+        '/rider_changePw': (_) => const RiderChangePassword(),
+        '/rider_changePFP': (_) => const RiderChangeProfile(),
+        '/rider_changePhone': (_) => const RiderChangePhone(),
+        // '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
+        '/rider_vehicle': (_) => const RiderUploadVehicle(),
+
+        //customer
         '/customer_home': (_) => const CustomerHomepage(),
+        '/customer_update': (_) => const CustomerProfile(), //placeholder
+        '/changeName': (_) => const CustomerChangeName(), //placeholder
+        '/changePw': (_) => const CustomerChangePassword(), //placeholder
+        '/changePFP': (_) => const CustomerChangePicture(),
+        '/changePhone': (_) => const CustomerChangePhone(),
 
 //////////////////forgot password//////////////////
         '/forgotPassword': (_) => const ForgotPassword(),
