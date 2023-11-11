@@ -9,6 +9,7 @@ import 'customer_pages/customer_updateProfile.dart';
 import 'forgotPassword.dart';
 import 'login_page.dart';
 import 'otpVerification.dart';
+import 'registerType_page.dart';
 import 'rider_pages/rider_homepage.dart';
 import 'splash.dart';
 
@@ -19,9 +20,11 @@ Future<void> main() async {
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c2N1d3JvbHptb2Nkc2hhZW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkzNTE3MDksImV4cCI6MjAxNDkyNzcwOX0.iGlxlb_WNLjh2apj3u9DDkvfl7d8hChLgd2qrIj6JJk');
   runApp(MyApp());
 }
-void  clearUserSession(){
-    supabase.auth.signOut();
+
+void clearUserSession() {
+  supabase.auth.signOut();
 }
+
 final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
@@ -35,8 +38,15 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
-        '/register': (_) => const CustomerRegisterPage(),
         '/login': (_) => const LoginPage(), //login_page
+        // '/login': (_) => const RegisterTypePage(), //login_page
+
+////////////////////register page////////////////
+        '/register_type': (_) => const RegisterTypePage(), //login_page
+        '/customer_register': (_) => const CustomerRegisterPage(),
+        // '/rider_register': (_) => const CustomerRegisterPage(),
+
+
 
 ////////////////////users homepage////////////////
         '/admin_home': (_) => const AdminHomePage(),
@@ -50,9 +60,6 @@ class MyApp extends StatelessWidget {
 
 //////////////////user_updateProfile//////////////////
         '/customer_profile': (_) => const CustomerProfile(),
-
-
-
       },
     );
   }
