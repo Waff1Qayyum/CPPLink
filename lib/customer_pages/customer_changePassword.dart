@@ -11,19 +11,15 @@ class CustomerChangePassword extends StatefulWidget {
   const CustomerChangePassword({super.key});
 
   @override
-  State<CustomerChangePassword> createState() => CustomerChangePasswordState();
+  State<CustomerChangePassword> createState() => _ChangeCustomerPasswordState();
 }
 
-<<<<<<< Updated upstream
-class CustomerChangePasswordState extends State<CustomerChangePassword> {
-=======
-class _ChangeCustomerPasswordState extends State<ChangeCustomerPassword> {
+class _ChangeCustomerPasswordState extends State<CustomerChangePassword> {
   String? name;
   String? phone;
   String? email;
   bool isLoading = false;
   bool? passMatch;
->>>>>>> Stashed changes
   bool _redirecting = false;
   TextEditingController _oldPasswordController = TextEditingController();
   TextEditingController _newPasswordController = TextEditingController();
