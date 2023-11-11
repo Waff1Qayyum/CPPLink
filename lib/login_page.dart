@@ -380,38 +380,6 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                   ],
                 ),
-                SizedBox(height:20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Forgot Your password?  ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'Lexend',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/forgotPassword');
-                        },
-                        child: Text(
-                          'Reset your password here',
-                          style: TextStyle(
-                            color: Color(0xFFFFD233),
-                            fontSize: 12,
-                            fontFamily: 'Lexend',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        )),
-                  ],
-                ),
 
                 ///end
               ],
