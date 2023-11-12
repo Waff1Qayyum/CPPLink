@@ -23,12 +23,10 @@ class ForgotPasswordState extends State<ForgotPassword> {
     final email = _emailController.text.trim();
     var emailExist = false;
     final checkAdmin = await supabase.from('admin').select().eq('email', email);
-    final checkRider = await supabase.from('rider').select().eq('email', email);
     final checkCustomer =
         await supabase.from('user').select().eq('email', email);
 
     if (checkAdmin.isNotEmpty ||
-        checkRider.isNotEmpty ||
         checkCustomer.isNotEmpty) {
       emailExist = true;
     }

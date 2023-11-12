@@ -121,8 +121,9 @@ class _AdminProfileState extends State<AdminProfile> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
-          },
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/admin_home', (route) => false);
+                        }
         ),
         actions: [
           Padding(

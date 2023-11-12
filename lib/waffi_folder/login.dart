@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       if (mounted) {
         //login successfully
+        print('sign in success');
       }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
