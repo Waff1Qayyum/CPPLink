@@ -1,11 +1,17 @@
-import 'package:cpplink/customer_pages/customer_register.dart';
+import 'package:cpplink/admin_pages/admin_updateProfille.dart';
+import 'package:cpplink/customer_register.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-//////////admin////////////
+import 'admin_pages/admin_changeName.dart';
+import 'admin_pages/admin_changePassword.dart';
+import 'admin_pages/admin_changePhoneNumber.dart';
+import 'admin_pages/admin_changeProfilePicture.dart';
 import 'admin_pages/admin_homepage.dart';
+//////////admin////////////
+import 'waffi_folder/admin_homepageBukhari.dart';
 //////customer/////////
 import 'customer_pages/customer_changeName.dart';
 import 'customer_pages/customer_changePassword.dart';
@@ -51,8 +57,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
-        // '/login': (_) => const LoginPage(), //login_page
-        // '/login': (_) => const CustomerHomepage(), //login_page
+        '/login': (_) => const LoginPage(), //login_page
+        // '/login': (_) => const AdminHomePage(), //login_page
 
 ////////////////////register page////////////////
         '/register_type': (_) => const RegisterTypePage(), //login_page
@@ -63,9 +69,15 @@ class MyApp extends StatelessWidget {
 
         //admin
         '/admin_home': (_) => const AdminHomePage(),
+        '/admin_profile': (_) => const AdminProfile(),
+        '/admin_changeName': (_) => const AdminChangeName(),
+        '/admin_changePw': (_) => const AdminChangePassword(),
+        '/admin_changePFP': (_) => const AdminChangePicture(),
+        '/admin_changePhone': (_) => const AdminChangePhone(),
+        
 
         // rider
-        '/login': (_) => const RiderHomePage(), //temporary
+        '/rider_home': (_) => const RiderHomePage(), //temporary
         '/rider_changeName': (_) => const RiderChangeName(),
         '/rider_changePw': (_) => const RiderChangePassword(),
         '/rider_changePFP': (_) => const RiderChangeProfile(),
