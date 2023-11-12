@@ -534,29 +534,33 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                 ],
                               ),
                               child: ElevatedButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  emailUnique = await _emailUnique();
-                                  phoneUnique = await _phoneUnique();
-                                  phoneValid = await _phoneValid();
-                                  if (_formkey.currentState!.validate()) {
-                                    _signUp();
-                                    if (RegisterUserType == 'rider') {
-                                      print('go to vehicle page');
-                                      Navigator.pushNamed(
-                                          context, '/rider_vehicle');
-                                    } else {
-                                      print('go to login page');
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context, '/login', (route) => false);
-                                    }
-                                  }
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                },
+                                onPressed: isLoading == true
+                                    ? null
+                                    : () async {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        emailUnique = await _emailUnique();
+                                        phoneUnique = await _phoneUnique();
+                                        phoneValid = await _phoneValid();
+                                        if (_formkey.currentState!.validate()) {
+                                          _signUp();
+                                          if (RegisterUserType == 'rider') {
+                                            print('go to vehicle page');
+                                            Navigator.pushNamed(
+                                                context, '/rider_vehicle');
+                                          } else {
+                                            print('go to login page');
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                '/login',
+                                                (route) => false);
+                                          }
+                                        }
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
                                 child: Text(
                                     isLoading == false
                                         ? 'Register'

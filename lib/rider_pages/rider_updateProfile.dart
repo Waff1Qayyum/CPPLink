@@ -22,14 +22,6 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
 
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session == null) {
-        _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    });
     super.initState();
     getName();
     getEmail();
@@ -132,14 +124,11 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        try {
+                        if (mounted) {
                           Navigator.pushNamedAndRemoveUntil(
                               context, '/login', (route) => false);
-                          supabase.auth.signOut();
-                        } catch (e) {
-                          print(e.toString());
                         }
-                        ;
+                        supabase.auth.signOut();
                       },
                       child: Text(
                         'Sign Out',
@@ -512,15 +501,23 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                     actions: [
                                       TextButton(
                                           onPressed: () async {
-                                            await supabase.rpc('deleteUser');
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'Account Deleted Successfully')));
-                                            Navigator.pushNamedAndRemoveUntil(
-                                                context,
-                                                '/login',
-                                                (route) => false);
+                                            try {
+                                              await supabase.rpc('deleteUser');
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'Account Deleted Successfully')));
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  '/login',
+                                                  (route) => false);
+                                            } catch (e) {
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'Error Occured While Deleting Account')));
+                                            }
                                           },
                                           child: const Text('Yes')),
                                       TextButton(

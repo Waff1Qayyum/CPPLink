@@ -80,7 +80,6 @@ class _LoginPageState extends State<LoginPage> {
         // Navigator.pushNamedAndRemoveUntil(
         //     context, '/customer_update', (route) => false);
         Navigator.of(context).pushReplacementNamed('/');
-
       }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -103,6 +102,10 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
+  }
+
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -309,20 +312,23 @@ class _LoginPageState extends State<LoginPage> {
                                 ],
                               ),
                               child: ElevatedButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  emailInvalid = await _emailError();
-                                  passwordInvalid = await _passwordError();
-                                  if (_formKey.currentState!.validate()) {
-                                    userLogin();
-                                  }
-                                  ;
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                },
+                                onPressed: isLoading == true
+                                    ? null
+                                    : () async {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        emailInvalid = await _emailError();
+                                        passwordInvalid =
+                                            await _passwordError();
+                                        if (_formKey.currentState!.validate()) {
+                                          await userLogin();
+                                        }
+                                        ;
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
                                 child: Text(
                                     isLoading == false
                                         ? 'Sign In'

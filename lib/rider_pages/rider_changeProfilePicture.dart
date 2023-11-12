@@ -30,14 +30,6 @@ class ChangePictureState extends State<RiderChangePicture> {
 
   @override
   void initState() {
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session == null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/');
-    //   }
-    // });
     super.initState();
     displayImage();
     getName();
@@ -52,9 +44,11 @@ class ChangePictureState extends State<RiderChangePicture> {
         .select('name')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      name = data['name'];
-    });
+    if (mounted) {
+      setState(() {
+        name = data['name'];
+      });
+    }
   }
 
   Future<void> getPhone() async {
@@ -64,9 +58,11 @@ class ChangePictureState extends State<RiderChangePicture> {
         .select('phone')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      phone = data['phone'];
-    });
+    if (mounted) {
+      setState(() {
+        phone = data['phone'];
+      });
+    }
   }
 
   Future<void> getEmail() async {
@@ -76,9 +72,11 @@ class ChangePictureState extends State<RiderChangePicture> {
         .select('email')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      email = data['email'];
-    });
+    if (mounted) {
+      setState(() {
+        email = data['email'];
+      });
+    }
   }
 
   Future<bool> checkPassword() async {
@@ -106,10 +104,15 @@ class ChangePictureState extends State<RiderChangePicture> {
     // image = Uri.parse(image).replace(queryParameters: {
     //   't': DateTime.now().millisecondsSinceEpoch.toString()
     // }).toString();
+    if (mounted) {
+      setState(() {
+        image = res['picture_url'];
+      });
+    }
+  }
 
-    setState(() {
-      image = res['picture_url'];
-    });
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> uploadImage() async {
@@ -169,38 +172,6 @@ class ChangePictureState extends State<RiderChangePicture> {
                 context, '/rider_profile', (route) => false);
           },
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    try {
-                      supabase.auth.signOut();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/login', (route) => false);
-                    } catch (e) {
-                      print(e.toString());
-                    }
-                    ;
-                  },
-                  child: Text(
-                    'Sign Out',
-                    style: TextStyle(
-                      color: Color(0xFFFF0000),
-                      fontSize: 13,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w800,
-                      height: 0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
       body: ListView(
         children: [
@@ -448,75 +419,32 @@ class ChangePictureState extends State<RiderChangePicture> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  // Your code to handle the tap event
-                                },
-                                child: Container(
-                                  width: 135,
-                                  height: 53,
-                                  alignment: Alignment.center,
-                                  decoration: ShapeDecoration(
-                                    color:
-                                        const Color.fromARGB(255, 208, 24, 11),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      side: BorderSide(
-                                        width: 1.50,
-                                        color: Color.fromARGB(255, 208, 24, 11),
-                                      ),
-                                    ),
-                                    shadows: [
-                                      BoxShadow(
-                                        color: Color(0x3F000000),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    'cancel',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 236, 236, 236),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ),
                               SizedBox(width: 30),
                               InkWell(
-                                onTap: () async {
-                                  // Your code to handle the tap event
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  passMatch = await checkPassword();
-                                  if (_formKey.currentState!.validate()) {
-                                    uploadImage();
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (context) => AlertDialog(
-                                    //           actions: [
-                                    //             TextButton(
-                                    //                 onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(context,
-                                        '/rider_profile', (route) => false);
-                                    //                 },
-                                    //                 child: Text('OK'))
-                                    //           ],
-                                    //           content: Text(
-                                    //               'Picture Successfully Updated'),
-                                    //         ));
-                                  }
+                                onTap: isLoading == true
+                                    ? null
+                                    : () async {
+                                        // Your code to handle the tap event
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        passMatch = await checkPassword();
+                                        if (_formKey.currentState!.validate()) {
+                                          await uploadImage();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      'Profile Picture Updated Successfully')));
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              '/rider_profile',
+                                              (route) => false);
+                                        }
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                },
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
                                 child: Container(
                                   width: 135,
                                   height: 53,
@@ -541,17 +469,19 @@ class ChangePictureState extends State<RiderChangePicture> {
                                       ),
                                     ],
                                   ),
-                                  child: Text(
-                                    'confirm',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  child: isLoading == true
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                          'confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ],

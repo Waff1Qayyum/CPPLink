@@ -19,66 +19,26 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
   XFile? fileImage;
   File? imageFile;
   bool isImageSelected = false;
-  String? name;
-  String? phone;
-  String? email;
   bool? passMatch;
   bool isLoading = false;
+
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _plateController = TextEditingController();
+  TextEditingController _modelController = TextEditingController();
+  TextEditingController _typeController = TextEditingController();
+  TextEditingController _colourController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session == null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/');
-    //   }
-    // });
     super.initState();
     displayImage();
-    getName();
-    getEmail();
-    getPhone();
+    assignData();
   }
 
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    setState(() {
-      name = data['name'];
-    });
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    setState(() {
-      phone = data['phone'];
-    });
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    setState(() {
-      email = data['email'];
-    });
+  void dispose() {
+    super.dispose();
   }
 
   Future<bool> checkPassword() async {
@@ -87,8 +47,9 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
         params: {'password_input': _passwordController.text});
     if (match == true || match == 1) {
       return true;
-    } else
+    } else {
       return false;
+    }
   }
 
   Future<void> displayImage() async {
@@ -108,14 +69,23 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
     if (data['picture_url'] == null) {
       return;
     }
-    // image = supabase.storage.from('picture').getPublicUrl('/$riderId/profile');
-    // image = Uri.parse(image).replace(queryParameters: {
-    //   't': DateTime.now().millisecondsSinceEpoch.toString()
-    // }).toString();
 
-    setState(() {
-      image = data['picture_url'];
-    });
+    if (mounted) {
+      setState(() {
+        image = data['picture_url'];
+      });
+    }
+  }
+
+  Future<void> assignData() async {
+    final userId = await supabase.auth.currentUser!.id;
+    final data =
+        await supabase.from('rider').select().eq('user_id', userId).single();
+
+    _plateController.text = data['plate_number'];
+    _modelController.text = data['vehicle_model'];
+    _typeController.text = data['vehicle_type'];
+    _colourController.text = data['vehicle_colour'];
   }
 
   Future<void> uploadImage() async {
@@ -175,33 +145,6 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                 context, '/rider_profile', (route) => false);
           },
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
-                    supabase.auth.signOut();
-                  },
-                  child: Text(
-                    'Sign Out',
-                    style: TextStyle(
-                      color: Color(0xFFFF0000),
-                      fontSize: 13,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w800,
-                      height: 0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
       body: ListView(
         children: [
@@ -243,99 +186,9 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                   ),
                 ],
               ),
-              SizedBox(height: 40.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Color(0xFFFFD233),
-                              width: 1.0,
-                            ),
-                          ),
-                          child: ClipOval(
-                              child: image != null
-                                  ? Image.network(
-                                      image!,
-                                      fit: BoxFit.cover,
-                                      width: 70,
-                                      height: 70,
-                                    )
-                                  : Container(
-                                      color: Colors.grey,
-                                    )),
-                        ),
-                        SizedBox(width: 10.0),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name ?? 'Loading..',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontSize: 22,
-                                fontFamily: 'Lexend',
-                                fontWeight: FontWeight.w700,
-                                height: 0,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.call,
-                                  color: Color(0xFFFFD233),
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  phone ?? 'Loading..',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w100,
-                                    height: 0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.email,
-                                  color: Color(0xFFFFD233),
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  email ?? 'Loading..',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w100,
-                                    height: 0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
               SizedBox(height: 50),
               Text(
-                'Change Your Account\'s Profile Picture',
+                'Update Vehicle Details',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF9B9B9B),
@@ -374,6 +227,278 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                               getImage();
                             },
                             child: Text('Upload Photo'),
+                          ),
+                          SizedBox(height: 30),
+                          Text(
+                            'Select to update',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xFF9B9B9B),
+                              fontSize: 17,
+                              fontFamily: 'Lexend',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Plate Number :'),
+                              SizedBox(height: 10),
+                              Container(
+                                width: 263,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Color.fromARGB(56, 25, 25, 25),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(164, 117, 117, 117),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: TextFormField(
+                                  controller: _plateController,
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    hintText: "enter vehicle plate no ",
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(
+                                        255, 249, 249, 249),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 1.50,
+                                        color: Color(0xFFFFD233),
+                                      ),
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.password,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a password';
+                                    } else if (passMatch == false) {
+                                      return 'Password does not match';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Vehicle Model : '),
+                              SizedBox(height: 10),
+                              Container(
+                                width: 263,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Color.fromARGB(56, 25, 25, 25),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(164, 117, 117, 117),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: TextFormField(
+                                  controller: _modelController,
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    hintText: "enter a password ",
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(
+                                        255, 249, 249, 249),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 1.50,
+                                        color: Color(0xFFFFD233),
+                                      ),
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.password,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a password';
+                                    } else if (passMatch == false) {
+                                      return 'Password does not match';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Vehicle Type :'),
+                              SizedBox(height: 10),
+                              Container(
+                                width: 263,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Color.fromARGB(56, 25, 25, 25),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(164, 117, 117, 117),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: TextFormField(
+                                  controller: _typeController,
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    hintText: "enter a password ",
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(
+                                        255, 249, 249, 249),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 1.50,
+                                        color: Color(0xFFFFD233),
+                                      ),
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.password,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a password';
+                                    } else if (passMatch == false) {
+                                      return 'Password does not match';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Vehicle Colour :'),
+                              SizedBox(height: 10),
+                              Container(
+                                width: 263,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: Color.fromARGB(56, 25, 25, 25),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(164, 117, 117, 117),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: TextFormField(
+                                  controller: _colourController,
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  decoration: InputDecoration(
+                                    hintText: "enter a password ",
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(
+                                        255, 249, 249, 249),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 1.50,
+                                        color: Color(0xFFFFD233),
+                                      ),
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.password,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a password';
+                                    } else if (passMatch == false) {
+                                      return 'Password does not match';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 30),
                           Text(
@@ -449,75 +574,32 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  // Your code to handle the tap event
-                                },
-                                child: Container(
-                                  width: 135,
-                                  height: 53,
-                                  alignment: Alignment.center,
-                                  decoration: ShapeDecoration(
-                                    color:
-                                        const Color.fromARGB(255, 208, 24, 11),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      side: BorderSide(
-                                        width: 1.50,
-                                        color: Color.fromARGB(255, 208, 24, 11),
-                                      ),
-                                    ),
-                                    shadows: [
-                                      BoxShadow(
-                                        color: Color(0x3F000000),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    'cancel',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 236, 236, 236),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ),
                               SizedBox(width: 30),
                               InkWell(
-                                onTap: () async {
-                                  // Your code to handle the tap event
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  passMatch = await checkPassword();
-                                  if (_formKey.currentState!.validate()) {
-                                    uploadImage();
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (context) => AlertDialog(
-                                    //           actions: [
-                                    //             TextButton(
-                                    //                 onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(context,
-                                        '/rider_profile', (route) => false);
-                                    //                 },
-                                    //                 child: Text('OK'))
-                                    //           ],
-                                    //           content: Text(
-                                    //               'Picture Successfully Updated'),
-                                    //         ));
-                                  }
+                                onTap: isLoading == true
+                                    ? null
+                                    : () async {
+                                        // Your code to handle the tap event
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        passMatch = await checkPassword();
+                                        if (_formKey.currentState!.validate()) {
+                                          await uploadImage();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      'Vehicle Detail Updated Successfully')));
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              '/rider_profile',
+                                              (route) => false);
+                                        }
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                },
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
                                 child: Container(
                                   width: 135,
                                   height: 53,

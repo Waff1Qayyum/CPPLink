@@ -11,19 +11,8 @@ class CustomerHomepage extends StatefulWidget {
 }
 
 class _CustomerHomepageState extends State<CustomerHomepage> {
-  bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
-
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session == null) {
-        _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    });
     super.initState();
   }
 
@@ -53,6 +42,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                     GestureDetector(
                         onTap: () {
                           supabase.auth.signOut();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
                         },
                         child: Text(
                           'Sign Out',
@@ -316,7 +307,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).pushReplacementNamed('/customer_profile');
+                            Navigator.of(context)
+                                .pushReplacementNamed('/customer_profile');
                             // Your code to handle the tap event
                           },
                           child: Container(

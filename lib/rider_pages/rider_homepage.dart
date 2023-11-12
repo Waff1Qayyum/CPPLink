@@ -15,7 +15,7 @@ class RiderHomePage extends StatefulWidget {
 class _RiderHomePageState extends State<RiderHomePage> {
   bool _redirecting = false;
   late final StreamSubscription<AuthState> _authStateSubscription;
- double _sliderValue = 0.0;
+  double _sliderValue = 0.0;
   // @override
   // void initState() {
   //   _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
@@ -28,7 +28,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
   //   });
   //   super.initState();
   // }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,39 +46,36 @@ class _RiderHomePageState extends State<RiderHomePage> {
               color: Colors.white,
             ),
           ),
-          leading: 
-          
-          Container(
-        //     color: Colors.white,
-        //     child:
-        //   Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Slider(
-        //       value: _sliderValue,
-        //       onChanged: (value) {
-        //         setState(() {
-        //           _sliderValue = value;
-        //         });
-        //       },
-        //       min: 0,
-        //       max: 1,
-        //       divisions: 10, // Optional: Set the number of divisions
-        //       label: '$_sliderValue',
-        //       activeColor: Colors.green,
-        //       inactiveColor: Colors.red, // Optional: Display a label
-        //     ),
-        //     ElevatedButton(
-        //       onPressed: () {
-        //         // Handle button press
-        //         print('Button pressed with value: $_sliderValue');
-        //       },
-        //       child: Text('Press Me'),
-        //     ),
-        //   ],
-        // ),
-        ),
-
+          leading: Container(
+              //     color: Colors.white,
+              //     child:
+              //   Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Slider(
+              //       value: _sliderValue,
+              //       onChanged: (value) {
+              //         setState(() {
+              //           _sliderValue = value;
+              //         });
+              //       },
+              //       min: 0,
+              //       max: 1,
+              //       divisions: 10, // Optional: Set the number of divisions
+              //       label: '$_sliderValue',
+              //       activeColor: Colors.green,
+              //       inactiveColor: Colors.red, // Optional: Display a label
+              //     ),
+              //     ElevatedButton(
+              //       onPressed: () {
+              //         // Handle button press
+              //         print('Button pressed with value: $_sliderValue');
+              //       },
+              //       child: Text('Press Me'),
+              //     ),
+              //   ],
+              // ),
+              ),
           actions: [
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
@@ -88,6 +85,8 @@ class _RiderHomePageState extends State<RiderHomePage> {
                     GestureDetector(
                         onTap: () {
                           supabase.auth.signOut();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
                         },
                         child: Text(
                           'Sign Out',

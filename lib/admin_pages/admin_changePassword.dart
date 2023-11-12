@@ -21,22 +21,12 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
   dynamic image;
   bool isLoading = false;
   bool? passMatch;
-  bool _redirecting = false;
   TextEditingController _oldPasswordController = TextEditingController();
   TextEditingController _newPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session == null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/');
-    //   }
-    // });
     super.initState();
     getName();
     getEmail();
@@ -51,9 +41,11 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
         .select('name')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      name = data['name'];
-    });
+    if (mounted) {
+      setState(() {
+        name = data['name'];
+      });
+    }
   }
 
   Future<void> getPhone() async {
@@ -63,9 +55,11 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
         .select('phone')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      phone = data['phone'];
-    });
+    if (mounted) {
+      setState(() {
+        phone = data['phone'];
+      });
+    }
   }
 
   Future<void> getEmail() async {
@@ -75,21 +69,15 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
         .select('email')
         .eq('user_id', userId)
         .single();
-    setState(() {
-      email = data['email'];
-    });
+    if (mounted) {
+      setState(() {
+        email = data['email'];
+      });
+    }
   }
 
-  //use supabase function to check password
-  Future<bool> checkPassword() async {
-    String? email;
-    bool? match;
-    match = await supabase.rpc('check_password',
-        params: {'password_input': _oldPasswordController.text});
-    if (match == true || match == 1) {
-      return true;
-    } else
-      return false;
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> displayImage() async {
@@ -107,10 +95,23 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
     image = Uri.parse(image).replace(queryParameters: {
       't': DateTime.now().millisecondsSinceEpoch.toString()
     }).toString();
+    if (mounted) {
+      setState(() {
+        image = res['picture_url'];
+      });
+    }
+  }
 
-    setState(() {
-      image = res['picture_url'];
-    });
+  //use supabase function to check password
+  Future<bool> checkPassword() async {
+    String? email;
+    bool? match;
+    match = await supabase.rpc('check_password',
+        params: {'password_input': _oldPasswordController.text});
+    if (match == true || match == 1) {
+      return true;
+    } else
+      return false;
   }
 
   Future<void> setPassword() async {
@@ -146,31 +147,6 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        supabase.auth.signOut();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/login', (route) => false);
-                      },
-                      child: Text(
-                        'Sign Out',
-                        style: TextStyle(
-                          color: Color(0xFFFF0000),
-                          fontSize: 13,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w800,
-                          height: 0,
-                        ),
-                      )),
-                ],
-              )),
-        ],
       ),
       body: ListView(
         children: [
@@ -457,86 +433,34 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    // Your code to handle the tap event
-                                  },
-                                  child: Container(
-                                    width: 135,
-                                    height: 53,
-                                    alignment: Alignment.center,
-                                    decoration: ShapeDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 208, 24, 11),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        side: BorderSide(
-                                          width: 1.50,
-                                          color: Color.fromARGB(
-                                              255, 208, 24, 11), // Border color
-                                        ),
-                                      ),
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Color(0x3F000000),
-                                          blurRadius: 4,
-                                          offset: Offset(0, 4),
-                                          spreadRadius: 0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      'cancel',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 236, 236, 236),
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                                 //////////////////
                                 SizedBox(width: 30),
                                 //////////////////
                                 InkWell(
-                                  onTap: () async {
-                                    // Your code to handle the tap event
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    passMatch = await checkPassword();
-                                    if (_formKey.currentState!.validate()) {
-                                      setPassword();
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                                content:
-                                                    Text('Password Changed'),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator
-                                                            .pushNamedAndRemoveUntil(
-                                                                context,
-                                                                '/admin_profile',
-                                                                (route) =>
-                                                                    false);
-                                                      },
-                                                      child: Text('OK'))
-                                                ],
-                                              ));
-                                      // Navigator.pushNamedAndRemoveUntil(
-                                      //     context,
-                                      //     '/customer_update',
-                                      //     (route) => false);
-                                    }
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  },
+                                  onTap: isLoading == true
+                                      ? null
+                                      : () async {
+                                          // Your code to handle the tap event
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          passMatch = await checkPassword();
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            await setPassword();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'Password Updated Successfully')));
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                '/admin_profile',
+                                                (route) => false);
+                                          }
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        },
                                   child: Container(
                                     width: 135,
                                     height: 53,

@@ -17,19 +17,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
   String? phone;
   String? email;
   dynamic image;
-  bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session == null) {
-        _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    });
     super.initState();
     getName();
     getEmail();
@@ -121,7 +111,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/customer_home');
+            Navigator.of(context).pushReplacementNamed('/customer_home');
           },
         ),
         actions: [

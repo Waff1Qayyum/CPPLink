@@ -53,6 +53,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     GestureDetector(
                         onTap: () {
                           supabase.auth.signOut();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
                         },
                         child: Text(
                           'Sign Out',
@@ -316,7 +318,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).pushReplacementNamed('/admin_profile');
+                            Navigator.of(context)
+                                .pushReplacementNamed('/admin_profile');
                             // Your code to handle the tap event
                           },
                           child: Container(
