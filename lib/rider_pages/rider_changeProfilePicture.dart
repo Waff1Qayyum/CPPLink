@@ -102,10 +102,10 @@ class ChangePictureState extends State<RiderChangePicture> {
     if (res['picture_url'] == null) {
       return;
     }
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
+    // image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    // image = Uri.parse(image).replace(queryParameters: {
+    //   't': DateTime.now().millisecondsSinceEpoch.toString()
+    // }).toString();
 
     setState(() {
       image = res['picture_url'];
@@ -166,7 +166,7 @@ class ChangePictureState extends State<RiderChangePicture> {
           ),
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/customer_update', (route) => false);
+                context, '/rider_profile', (route) => false);
           },
         ),
         actions: [
@@ -177,6 +177,8 @@ class ChangePictureState extends State<RiderChangePicture> {
               children: [
                 GestureDetector(
                   onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/login', (route) => false);
                     supabase.auth.signOut();
                   },
                   child: Text(
@@ -497,7 +499,7 @@ class ChangePictureState extends State<RiderChangePicture> {
                                     //             TextButton(
                                     //                 onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(context,
-                                        '/customer_update', (route) => false);
+                                        '/rider_profile', (route) => false);
                                     //                 },
                                     //                 child: Text('OK'))
                                     //           ],

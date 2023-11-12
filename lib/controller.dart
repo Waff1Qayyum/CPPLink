@@ -12,7 +12,7 @@ String getEmail() {
 }
 
 /////////////////////////
-//////////////////////// for register
+//////////////////////// for register rider
 var RegisterUserType;
 var registerEmail;
 var registerPassword;

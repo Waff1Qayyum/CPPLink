@@ -1,8 +1,7 @@
 // import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
-import '../controller.dart';
-import '../main.dart';
-// import '../rider_pages/rider_controller.dart';
+import 'controller.dart';
+import 'main.dart';
 
 class CustomerRegisterPage extends StatefulWidget {
   const CustomerRegisterPage({super.key});

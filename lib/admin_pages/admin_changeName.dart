@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class RiderChangePhone extends StatefulWidget {
-  const RiderChangePhone({super.key});
+class AdminChangeName extends StatefulWidget {
+  const AdminChangeName({super.key});
 
   @override
-  State<RiderChangePhone> createState() => _RiderChangePhoneState();
+  State<AdminChangeName> createState() => _AdminChangeNameState();
 }
 
-class _RiderChangePhoneState extends State<RiderChangePhone> {
+class _AdminChangeNameState extends State<AdminChangeName> {
   bool _redirecting = false;
   bool isLoading = false;
   String? name;
@@ -20,7 +20,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   String? email;
   bool? passMatch;
   dynamic image;
-  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late final StreamSubscription<AuthState> _authStateSubscription;
@@ -45,7 +45,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getName() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('name')
         .eq('user_id', userId)
         .single();
@@ -57,7 +57,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getPhone() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('phone')
         .eq('user_id', userId)
         .single();
@@ -69,7 +69,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getEmail() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('email')
         .eq('user_id', userId)
         .single();
@@ -92,7 +92,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> displayImage() async {
     final userId = supabase.auth.currentUser!.id;
     final res = await supabase
-        .from('user')
+        .from('admin')
         .select('picture_url')
         .eq('user_id', userId)
         .single();
@@ -110,12 +110,12 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
     });
   }
 
-  Future<void> setPhone() async {
+  Future<void> setUsername() async {
     String userId = supabase.auth.currentUser!.id;
-    String phone = _phoneController.text;
+    String name = _nameController.text.toUpperCase();
     final data = await supabase
-        .from('user')
-        .update({'phone': phone}).match({'user_id': userId});
+        .from('admin')
+        .update({'name': name}).match({'user_id': userId});
   }
 
   @override
@@ -140,7 +140,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
           ),
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/rider_profile', (route) => false);
+                context, '/admin_profile', (route) => false);
           },
         ),
         actions: [
@@ -151,8 +151,6 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/login', (route) => false);
                         supabase.auth.signOut();
                       },
                       child: Text(
@@ -300,7 +298,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
               /////////////////////////////////////
               SizedBox(height: 50),
               Text(
-                'Change Your Phone Number ?',
+                'Change Your Account\'s Name ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF9B9B9B),
@@ -340,16 +338,16 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter phone number';
+                                  return 'Please enter fullname';
                                 } else {
                                   return null;
                                 }
                               },
-                              controller: _phoneController,
+                              controller: _nameController,
                               textCapitalization: TextCapitalization.characters,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter new phone number",
+                                hintText: "enter new full name",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -415,7 +413,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                               controller: _passwordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter password",
+                                hintText: "enter password ",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -507,14 +505,14 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                                     });
                                     passMatch = await checkPassword();
                                     if (_formKey.currentState!.validate()) {
-                                      setPhone();
+                                      setUsername();
                                       //change snackbar design
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content: Text(
-                                                  'Phone number updated')));
+                                                  'Name Updated Successfully')));
                                       Navigator.pushNamedAndRemoveUntil(context,
-                                          '/rider_profile', (route) => false);
+                                          '/admin_profile', (route) => false);
                                     }
                                     setState(() {
                                       isLoading = false;

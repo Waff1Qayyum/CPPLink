@@ -139,7 +139,8 @@ class _RiderChangeNameState extends State<RiderChangeName> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/rider_profile', (route) => false);
           },
         ),
         actions: [
@@ -150,6 +151,8 @@ class _RiderChangeNameState extends State<RiderChangeName> {
                 children: [
                   GestureDetector(
                       onTap: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
                         supabase.auth.signOut();
                       },
                       child: Text(
@@ -511,7 +514,7 @@ class _RiderChangeNameState extends State<RiderChangeName> {
                                               content: Text(
                                                   'Name Updated Successfully')));
                                       Navigator.pushNamedAndRemoveUntil(context,
-                                          '/customer_update', (route) => false);
+                                          '/rider_profile', (route) => false);
                                     }
                                     setState(() {
                                       isLoading = false;

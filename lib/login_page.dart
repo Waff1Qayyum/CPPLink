@@ -74,11 +74,14 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-      // if (mounted) {
-      //   //login successfully
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/customer_update', (route) => false);
-      // }
+      if (mounted) {
+        print('login success');
+        //   //login successfully
+        // Navigator.pushNamedAndRemoveUntil(
+        //     context, '/customer_update', (route) => false);
+        Navigator.of(context).pushReplacementNamed('/');
+
+      }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -100,19 +103,6 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
-  }
-
-  @override
-  void initState() {
-    // _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-    //   if (_redirecting) return;
-    //   final session = data.session;
-    //   if (session != null) {
-    //     _redirecting = true;
-    //     Navigator.of(context).pushReplacementNamed('/');
-    //   }
-    // });
-    super.initState();
   }
 
   @override

@@ -7,14 +7,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class RiderChangeVehicle extends StatefulWidget {
-  const RiderChangeVehicle({super.key});
+class AdminChangePicture extends StatefulWidget {
+  const AdminChangePicture({super.key});
 
   @override
-  State<RiderChangeVehicle> createState() => _RiderChangeVehicleState();
+  State<AdminChangePicture> createState() => AdminChangePictureState();
 }
 
-class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
+class AdminChangePictureState extends State<AdminChangePicture> {
   dynamic image;
   XFile? fileImage;
   File? imageFile;
@@ -48,7 +48,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
   Future<void> getName() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('name')
         .eq('user_id', userId)
         .single();
@@ -60,7 +60,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
   Future<void> getPhone() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('phone')
         .eq('user_id', userId)
         .single();
@@ -72,7 +72,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
   Future<void> getEmail() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('email')
         .eq('user_id', userId)
         .single();
@@ -92,29 +92,23 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
   }
 
   Future<void> displayImage() async {
-    final res = supabase.auth.currentUser!.id;
-    final rider = await supabase
-        .from('rider')
-        .select('rider_id')
-        .eq('user_id', res)
-        .single();
-    final riderid = rider['rider_id'];
-    final data = await supabase
-        .from('rider')
+    final userId = supabase.auth.currentUser!.id;
+    final res = await supabase
+        .from('admin')
         .select('picture_url')
-        .eq('user_id', res)
+        .eq('user_id', userId)
         .single();
 
-    if (data['picture_url'] == null) {
+    if (res['picture_url'] == null) {
       return;
     }
-    // image = supabase.storage.from('picture').getPublicUrl('/$riderId/profile');
-    // image = Uri.parse(image).replace(queryParameters: {
-    //   't': DateTime.now().millisecondsSinceEpoch.toString()
-    // }).toString();
+    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = Uri.parse(image).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
 
     setState(() {
-      image = data['picture_url'];
+      image = res['picture_url'];
     });
   }
 
@@ -132,7 +126,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
       't': DateTime.now().millisecondsSinceEpoch.toString()
     }).toString();
     await supabase
-        .from('user')
+        .from('admin')
         .update({'picture_url': image}).eq('user_id', userId);
   }
 
@@ -172,7 +166,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
           ),
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/rider_profile', (route) => false);
+                context, '/admin_profile', (route) => false);
           },
         ),
         actions: [
@@ -183,8 +177,6 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
                     supabase.auth.signOut();
                   },
                   child: Text(
@@ -505,7 +497,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                     //             TextButton(
                                     //                 onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(context,
-                                        '/rider_profile', (route) => false);
+                                        '/admin_profile', (route) => false);
                                     //                 },
                                     //                 child: Text('OK'))
                                     //           ],

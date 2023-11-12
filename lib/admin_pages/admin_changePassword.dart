@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -5,25 +7,25 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class RiderChangePhone extends StatefulWidget {
-  const RiderChangePhone({super.key});
+class AdminChangePassword extends StatefulWidget {
+  const AdminChangePassword({super.key});
 
   @override
-  State<RiderChangePhone> createState() => _RiderChangePhoneState();
+  State<AdminChangePassword> createState() => _AdminChangePasswordState();
 }
 
-class _RiderChangePhoneState extends State<RiderChangePhone> {
-  bool _redirecting = false;
-  bool isLoading = false;
+class _AdminChangePasswordState extends State<AdminChangePassword> {
   String? name;
   String? phone;
   String? email;
-  bool? passMatch;
   dynamic image;
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  bool isLoading = false;
+  bool? passMatch;
+  bool _redirecting = false;
+  TextEditingController _oldPasswordController = TextEditingController();
+  TextEditingController _newPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late final StreamSubscription<AuthState> _authStateSubscription;
+  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getName() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('name')
         .eq('user_id', userId)
         .single();
@@ -57,7 +59,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getPhone() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('phone')
         .eq('user_id', userId)
         .single();
@@ -69,7 +71,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getEmail() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('email')
         .eq('user_id', userId)
         .single();
@@ -78,11 +80,12 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
     });
   }
 
+  //use supabase function to check password
   Future<bool> checkPassword() async {
     String? email;
     bool? match;
     match = await supabase.rpc('check_password',
-        params: {'password_input': _passwordController.text});
+        params: {'password_input': _oldPasswordController.text});
     if (match == true || match == 1) {
       return true;
     } else
@@ -92,7 +95,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> displayImage() async {
     final userId = supabase.auth.currentUser!.id;
     final res = await supabase
-        .from('user')
+        .from('admin')
         .select('picture_url')
         .eq('user_id', userId)
         .single();
@@ -110,12 +113,13 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
     });
   }
 
-  Future<void> setPhone() async {
-    String userId = supabase.auth.currentUser!.id;
-    String phone = _phoneController.text;
-    final data = await supabase
-        .from('user')
-        .update({'phone': phone}).match({'user_id': userId});
+  Future<void> setPassword() async {
+    bool? changed;
+    final res = supabase.auth.currentUser!.id;
+    return await supabase.rpc('change_password', params: {
+      'old_password': _oldPasswordController.text,
+      'new_password': _newPasswordController.text
+    });
   }
 
   @override
@@ -139,8 +143,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/rider_profile', (route) => false);
+            Navigator.of(context).pop();
           },
         ),
         actions: [
@@ -151,9 +154,9 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                 children: [
                   GestureDetector(
                       onTap: () {
+                        supabase.auth.signOut();
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/login', (route) => false);
-                        supabase.auth.signOut();
                       },
                       child: Text(
                         'Sign Out',
@@ -300,7 +303,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
               /////////////////////////////////////
               SizedBox(height: 50),
               Text(
-                'Change Your Phone Number ?',
+                'Change Your Account\'s Password ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF9B9B9B),
@@ -340,16 +343,15 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter phone number';
+                                  return 'Please enter new password';
                                 } else {
                                   return null;
                                 }
                               },
-                              controller: _phoneController,
-                              textCapitalization: TextCapitalization.characters,
+                              controller: _newPasswordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter new phone number",
+                                hintText: "enter new password",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -370,7 +372,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                                   ),
                                 ),
                                 prefixIcon: Icon(
-                                  Icons.person,
+                                  Icons.password,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
@@ -379,7 +381,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                           ///////////////////////
                           SizedBox(height: 30),
                           Text(
-                            'Enter your password for confirmation',
+                            'Enter your old password for confirmation',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Color(0xFF9B9B9B),
@@ -412,10 +414,10 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                               ],
                             ),
                             child: TextFormField(
-                              controller: _passwordController,
+                              controller: _oldPasswordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter password",
+                                hintText: "enter old password ",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -507,14 +509,29 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                                     });
                                     passMatch = await checkPassword();
                                     if (_formKey.currentState!.validate()) {
-                                      setPhone();
-                                      //change snackbar design
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'Phone number updated')));
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          '/rider_profile', (route) => false);
+                                      setPassword();
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                content:
+                                                    Text('Password Changed'),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator
+                                                            .pushNamedAndRemoveUntil(
+                                                                context,
+                                                                '/admin_profile',
+                                                                (route) =>
+                                                                    false);
+                                                      },
+                                                      child: Text('OK'))
+                                                ],
+                                              ));
+                                      // Navigator.pushNamedAndRemoveUntil(
+                                      //     context,
+                                      //     '/customer_update',
+                                      //     (route) => false);
                                     }
                                     setState(() {
                                       isLoading = false;
@@ -544,20 +561,17 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                                         ),
                                       ],
                                     ),
-                                    // if loading show indicator(optional)
-                                    child: isLoading == true
-                                        ? CircularProgressIndicator()
-                                        : Text(
-                                            'confirm',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontSize: 15,
-                                              fontFamily: 'Lexend',
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
+                                    child: Text(
+                                      'confirm',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: const Color.fromARGB(
+                                            255, 255, 255, 255),
+                                        fontSize: 15,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ])

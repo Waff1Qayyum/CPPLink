@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class RiderChangePhone extends StatefulWidget {
-  const RiderChangePhone({super.key});
+class AdminChangePhone extends StatefulWidget {
+  const AdminChangePhone({super.key});
 
   @override
-  State<RiderChangePhone> createState() => _RiderChangePhoneState();
+  State<AdminChangePhone> createState() => _AdminChangePhoneState();
 }
 
-class _RiderChangePhoneState extends State<RiderChangePhone> {
+class _AdminChangePhoneState extends State<AdminChangePhone> {
   bool _redirecting = false;
   bool isLoading = false;
   String? name;
@@ -45,7 +45,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getName() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('name')
         .eq('user_id', userId)
         .single();
@@ -57,7 +57,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getPhone() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('phone')
         .eq('user_id', userId)
         .single();
@@ -69,7 +69,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> getEmail() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('email')
         .eq('user_id', userId)
         .single();
@@ -92,7 +92,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   Future<void> displayImage() async {
     final userId = supabase.auth.currentUser!.id;
     final res = await supabase
-        .from('user')
+        .from('admin')
         .select('picture_url')
         .eq('user_id', userId)
         .single();
@@ -114,7 +114,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
     String userId = supabase.auth.currentUser!.id;
     String phone = _phoneController.text;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .update({'phone': phone}).match({'user_id': userId});
   }
 
@@ -139,8 +139,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/rider_profile', (route) => false);
+            Navigator.of(context).pop();
           },
         ),
         actions: [
@@ -151,8 +150,6 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/login', (route) => false);
                         supabase.auth.signOut();
                       },
                       child: Text(
@@ -340,7 +337,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter phone number';
+                                  return 'Please enter fullname';
                                 } else {
                                   return null;
                                 }
@@ -415,7 +412,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                               controller: _passwordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter password",
+                                hintText: "enter password ",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -512,9 +509,9 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content: Text(
-                                                  'Phone number updated')));
+                                                  'Name Updated Successfully')));
                                       Navigator.pushNamedAndRemoveUntil(context,
-                                          '/rider_profile', (route) => false);
+                                          '/admin_profile', (route) => false);
                                     }
                                     setState(() {
                                       isLoading = false;

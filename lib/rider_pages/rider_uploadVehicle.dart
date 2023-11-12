@@ -385,20 +385,24 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     await signIn();
                                     await uploadVehicle();
                                     await uploadImage();
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (context) => AlertDialog(
-                                    //           actions: [
-                                    //             TextButton(
-                                    //                 onPressed: () {
-                                    // Navigator.pushNamedAndRemoveUntil(context,
-                                    //     '/customer_update', (route) => false);
-                                    //                 },
-                                    //                 child: Text('OK'))
-                                    //           ],
-                                    //           content: Text(
-                                    //               'Vehicle Successfully Uploaded'),
-                                    //         ));
+
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator
+                                                          .pushNamedAndRemoveUntil(
+                                                              context,
+                                                              '/login',
+                                                              (route) => false);
+                                                    },
+                                                    child: Text('OK'))
+                                              ],
+                                              content: Text(
+                                                  'Vehicle Successfully Uploaded'),
+                                            ));
                                   }
 
                                   setState(() {
@@ -429,17 +433,29 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                       ),
                                     ],
                                   ),
-                                  child: Text(
-                                    'confirm',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  child: isLoading == false
+                                      ? Text(
+                                          'confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        )
+                                      : Text(
+                                          'Loading..',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ],

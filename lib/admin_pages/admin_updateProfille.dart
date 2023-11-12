@@ -5,14 +5,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class RiderChangeProfile extends StatefulWidget {
-  const RiderChangeProfile({super.key});
+class AdminProfile extends StatefulWidget {
+  const AdminProfile({super.key});
 
   @override
-  State<RiderChangeProfile> createState() => _RiderChangeProfileState();
+  State<AdminProfile> createState() => _AdminProfileState();
 }
 
-class _RiderChangeProfileState extends State<RiderChangeProfile> {
+class _AdminProfileState extends State<AdminProfile> {
   String? name;
   String? phone;
   String? email;
@@ -40,7 +40,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
   Future<void> getName() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('name')
         .eq('user_id', userId)
         .single();
@@ -54,7 +54,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
   Future<void> getPhone() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('phone')
         .eq('user_id', userId)
         .single();
@@ -68,7 +68,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
   Future<void> getEmail() async {
     final userId = supabase.auth.currentUser!.id;
     final data = await supabase
-        .from('user')
+        .from('admin')
         .select('email')
         .eq('user_id', userId)
         .single();
@@ -82,7 +82,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
   Future<void> displayImage() async {
     final userId = supabase.auth.currentUser!.id;
     final res = await supabase
-        .from('user')
+        .from('admin')
         .select('picture_url')
         .eq('user_id', userId)
         .single();
@@ -132,8 +132,6 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/login', (route) => false);
                         supabase.auth.signOut();
                       },
                       child: Text(
@@ -289,7 +287,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                         onTap: () {
                           // Your code to handle the tap event
                           Navigator.pushNamedAndRemoveUntil(
-                              context, '/rider_changePFP', (route) => false);
+                              context, '/admin_changePFP', (route) => false);
                         },
                         child: Container(
                           width: 246,
@@ -331,7 +329,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                       InkWell(
                         onTap: () {
                           // Your code to handle the tap event
-                          Navigator.pushNamed(context, '/rider_changeName');
+                          Navigator.pushNamed(context, '/admin_changeName');
                         },
                         child: Container(
                           width: 246,
@@ -373,7 +371,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                       InkWell(
                         onTap: () {
                           // Your code to handle the tap event
-                          Navigator.of(context).pushNamed('/rider_changePw');
+                          Navigator.of(context).pushNamed('/admin_changePw');
                         },
                         child: Container(
                           width: 246,
@@ -415,7 +413,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                       InkWell(
                         onTap: () {
                           // Your code to handle the tap event
-                          Navigator.of(context).pushNamed('/rider_changePhone');
+                          Navigator.of(context).pushNamed('/admin_changePhone');
                         },
                         child: Container(
                           width: 246,
@@ -453,112 +451,6 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                       ),
                       SizedBox(
                         height: 20,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          // Your code to handle the tap event
-                          Navigator.of(context)
-                              .pushNamed('/rider_changeVehicle');
-                        },
-                        child: Container(
-                          width: 246,
-                          height: 53,
-                          alignment: Alignment.center,
-                          decoration: ShapeDecoration(
-                            color: Color(0xFFFFD233),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(
-                                width: 1.50,
-                                color: Color(0xFFFFD233), // Border color
-                              ),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0x3F000000),
-                                blurRadius: 4,
-                                offset: Offset(0, 4),
-                                spreadRadius: 0,
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            'Update Vehicle',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 15,
-                              fontFamily: 'Lexend',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          // Your code to handle the tap event
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    content: const Text('Confirm Delete?'),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () async {
-                                            await supabase.rpc('deleteUser');
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'Account Deleted Successfully')));
-                                            Navigator.pushNamedAndRemoveUntil(
-                                                context,
-                                                '/login',
-                                                (route) => false);
-                                          },
-                                          child: const Text('Yes')),
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('No'))
-                                    ],
-                                  ));
-                        },
-                        child: Container(
-                          width: 246,
-                          height: 53,
-                          alignment: Alignment.center,
-                          decoration: ShapeDecoration(
-                            color: Color(0xFFFFD233),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(
-                                width: 1.50,
-                                color: Color(0xFFFFD233), // Border color
-                              ),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0x3F000000),
-                                blurRadius: 4,
-                                offset: Offset(0, 4),
-                                spreadRadius: 0,
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            'Delete Account',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 15,
-                              fontFamily: 'Lexend',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
                       ),
                     ]),
 
