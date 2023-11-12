@@ -54,7 +54,7 @@ final supabase = Supabase.instance.client;
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // clearUserSession();
+    clearUserSession();
 
     return MaterialApp(
       title: 'CPP Link',

@@ -54,32 +54,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         'email': _emailController.text,
       });
       print('created successfully');
-      // if (checked == false || checked == null) {
-      //   return;
-      // }
-      // await supabase.from('rider').insert({'user_id': res.user!.id});
-      // final rider = await supabase
-      //     .from('rider')
-      //     .select('rider_id')
-      //     .eq('user_id', res.user!.id)
-      //     .single();
-      // final riderId = rider['rider_id'];
-      // await supabase
-      //     .from('user')
-      //     .update({'rider_id': riderId}).eq('user_id', res.user!.id);
       return;
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Unexpected Error Occurred')));
     }
   }
-
-  // void _nextPage() {
-  //   registerEmail = _emailController.text;
-  //   registerPassword = _passwordController.text;
-  //   registerName = _nameController.text;
-  //   registerPhone = _phoneController.text;
-  // }
 
   Future<bool> _emailUnique() async {
     final _email = await supabase

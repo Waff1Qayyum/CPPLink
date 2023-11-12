@@ -484,11 +484,13 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                               InkWell(
                                 onTap: () async {
                                   // Your code to handle the tap event
+                                  print('clicked');
                                   setState(() {
                                     isLoading = true;
                                   });
                                   passMatch = await checkPassword();
                                   if (_formKey.currentState!.validate()) {
+                                    print('process image');
                                     uploadImage();
                                     // showDialog(
                                     //     context: context,
@@ -507,6 +509,7 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                                   }
 
                                   setState(() {
+                                    print('finish');
                                     isLoading = false;
                                   });
                                 },
