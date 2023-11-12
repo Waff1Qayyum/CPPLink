@@ -51,14 +51,16 @@ void setRiderPhone(String phone) {
   registerPhone = phone;
 }
 
-Future<void> signupRider(
+Future<dynamic> signupRider(
     // var email,
     // var phone,
     // var name,
     // var password,
     ) async {
-  final user = await supabase.auth
-      .signUp(email: registerEmail, password: registerPassword);
+  final user = await supabase.auth.signUp(
+      email: registerEmail,
+      password: registerPassword,
+      emailRedirectTo: 'io.supabase.flutterquickstart://login-callback/');
   await supabase.from('user').insert({
     'user_id': user.user!.id,
     'email': registerEmail,
@@ -76,6 +78,8 @@ Future<void> signupRider(
   await supabase
       .from('user')
       .update({'rider_id': riderId}).eq('user_id', user.user!.id);
+
+  return user.user?.id;
 }
 
 

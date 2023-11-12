@@ -44,7 +44,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         return;
       }
       final res = await supabase.auth.signUp(
-          email: _emailController.text, password: _passwordController.text, emailRedirectTo: 'io.supabase.flutterquickstart://login-callback/');
+          email: _emailController.text,
+          password: _passwordController.text,
+          emailRedirectTo: 'io.supabase.flutterquickstart://login-callback/');
       await supabase.from('user').insert({
         'user_id': res.user!.id,
         'name': _nameController.text,

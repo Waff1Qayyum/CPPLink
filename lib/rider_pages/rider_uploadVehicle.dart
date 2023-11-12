@@ -25,24 +25,26 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
   TextEditingController _plateController = TextEditingController();
   TextEditingController _colourController = TextEditingController();
   TextEditingController _modelController = TextEditingController();
+  TextEditingController _typeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   Future<void> signIn() async {
-    final res = await supabase.auth.signInWithPassword(
-      email: registerEmail,
-      password: registerPassword,
-    );
+    // final res = await supabase.auth.signInWithPassword(
+    //   email: registerEmail,
+    //   password: registerPassword,
+    // );
+    // final res = await supabase.auth.currentUser!.id;
   }
 
-  Future<void> uploadImage() async {
+  Future<void> uploadImage(dynamic id) async {
     final imageExtension = fileImage!.path.split('.').last.toLowerCase();
     final imageBytes = await fileImage!.readAsBytes();
 
-    final res = supabase.auth.currentUser!.id;
+    // final res = supabase.auth.currentUser!.id;
     final rider = await supabase
         .from('rider')
         .select('rider_id')
-        .eq('user_id', res)
+        .eq('user_id', id)
         .single();
     final riderId = rider['rider_id'];
 
@@ -74,15 +76,14 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
     });
   }
 
-  Future<void> uploadVehicle() async {
+  Future<void> uploadVehicle(dynamic id) async {
     try {
-      final res = supabase.auth.currentUser!.id;
-
       await supabase.from('rider').update({
         'vehicle_model': _modelController.text.toUpperCase(),
         'vehicle_colour': _colourController.text.toUpperCase(),
-        'plate_number': _plateController.text.toUpperCase()
-      }).eq('user_id', res);
+        'plate_number': _plateController.text.toUpperCase(),
+        'vehicle_type': _typeController.text.toUpperCase(),
+      }).eq('user_id', id);
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -295,6 +296,62 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                               ],
                             ),
                             child: TextFormField(
+                              controller: _typeController,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              decoration: InputDecoration(
+                                hintText: "enter vehicle type",
+                                filled: true,
+                                fillColor:
+                                    const Color.fromARGB(255, 249, 249, 249),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 1.50,
+                                    color: Color(0xFFFFD233),
+                                  ),
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.password,
+                                  color: Color(0xFFFFD233),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter vehicle type';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            width: 263,
+                            height: 37,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                width: 0.5,
+                                color: Color.fromARGB(56, 25, 25, 25),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(164, 117, 117, 117),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: 0,
+                                ),
+                              ],
+                            ),
+                            child: TextFormField(
                               controller: _colourController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
@@ -381,10 +438,10 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     isLoading = true;
                                   });
                                   if (_formKey.currentState!.validate()) {
-                                    await signupRider();
-                                    await signIn();
-                                    await uploadVehicle();
-                                    await uploadImage();
+                                    final id = await signupRider();
+                                    // await signIn();
+                                    await uploadVehicle(id);
+                                    await uploadImage(id);
 
                                     showDialog(
                                         context: context,

@@ -177,9 +177,14 @@ class ChangePictureState extends State<RiderChangePicture> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
-                    supabase.auth.signOut();
+                    try {
+                      supabase.auth.signOut();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    } catch (e) {
+                      print(e.toString());
+                    }
+                    ;
                   },
                   child: Text(
                     'Sign Out',

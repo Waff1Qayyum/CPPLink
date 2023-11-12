@@ -132,9 +132,14 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/login', (route) => false);
-                        supabase.auth.signOut();
+                        try {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
+                          supabase.auth.signOut();
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                        ;
                       },
                       child: Text(
                         'Sign Out',
