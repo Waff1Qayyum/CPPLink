@@ -35,7 +35,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   Future<void> _signUp() async {
     try {
       final res = await supabase.auth.signUp(
-          email: _emailController.text, password: _passwordController.text);
+          email: _emailController.text, password: _passwordController.text, emailRedirectTo: 'io.supabase.flutterquickstart://login-callback/');
       await supabase.from('user').insert({
         'user_id': res.user!.id,
         'name': _nameController.text,

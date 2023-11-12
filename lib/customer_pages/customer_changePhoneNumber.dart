@@ -139,7 +139,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacementNamed('/customer_profile');
           },
         ),
         actions: [
@@ -511,7 +511,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                                               content: Text(
                                                   'Name Updated Successfully')));
                                       Navigator.pushNamedAndRemoveUntil(context,
-                                          '/customer_update', (route) => false);
+                                          '/customer_profile', (route) => false);
                                     }
                                     setState(() {
                                       isLoading = false;

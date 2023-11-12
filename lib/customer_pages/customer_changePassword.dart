@@ -143,7 +143,7 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacementNamed('/customer_profile');
           },
         ),
         actions: [
@@ -521,7 +521,7 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
                                                         Navigator
                                                             .pushNamedAndRemoveUntil(
                                                                 context,
-                                                                '/customer_update',
+                                                                '/customer_profile',
                                                                 (route) =>
                                                                     false);
                                                       },
@@ -532,6 +532,7 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
                                       //     context,
                                       //     '/customer_update',
                                       //     (route) => false);
+
                                     }
                                     setState(() {
                                       isLoading = false;

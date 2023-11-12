@@ -166,7 +166,7 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
           ),
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/customer_update', (route) => false);
+                context, '/customer_profile', (route) => false);
           },
         ),
         actions: [
@@ -497,7 +497,7 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                                     //             TextButton(
                                     //                 onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(context,
-                                        '/customer_update', (route) => false);
+                                        '/customer_profile', (route) => false);
                                     //                 },
                                     //                 child: Text('OK'))
                                     //           ],

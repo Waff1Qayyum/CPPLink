@@ -52,7 +52,7 @@ class _CustomerDeleteAccountState extends State<CustomerDeleteAccount> {
               color: Colors.white, // Icon color
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacementNamed('/customer_profile');
             },
           ),
           actions: [

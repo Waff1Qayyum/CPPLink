@@ -34,9 +34,12 @@ import 'splash.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
-      url: 'https://bzscuwrolzmocdshaemx.supabase.co',
+      // url: 'https://bzscuwrolzmocdshaemx.supabase.co',
+      // anonKey:
+      //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c2N1d3JvbHptb2Nkc2hhZW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkzNTE3MDksImV4cCI6MjAxNDkyNzcwOX0.iGlxlb_WNLjh2apj3u9DDkvfl7d8hChLgd2qrIj6JJk');
+      url: 'https://pzwswqqczazxllateqgd.supabase.co',
       anonKey:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6c2N1d3JvbHptb2Nkc2hhZW14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkzNTE3MDksImV4cCI6MjAxNDkyNzcwOX0.iGlxlb_WNLjh2apj3u9DDkvfl7d8hChLgd2qrIj6JJk');
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6d3N3cXFjemF6eGxsYXRlcWdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTk3NjMyNjAsImV4cCI6MjAxNTMzOTI2MH0.8ASy9AfdIPx0S58eI5WZqaCktGY8_vC30M9mqtkDaFU');
   runApp(MyApp());
 }
 
@@ -74,7 +77,6 @@ class MyApp extends StatelessWidget {
         '/admin_changePw': (_) => const AdminChangePassword(),
         '/admin_changePFP': (_) => const AdminChangePicture(),
         '/admin_changePhone': (_) => const AdminChangePhone(),
-        
 
         // rider
         '/rider_home': (_) => const RiderHomePage(), //temporary
@@ -87,7 +89,7 @@ class MyApp extends StatelessWidget {
 
         //customer
         '/customer_home': (_) => const CustomerHomepage(),
-        '/customer_update': (_) => const CustomerProfile(), //placeholder
+        '/customer_profile': (_) => const CustomerProfile(), //placeholder
         '/changeName': (_) => const CustomerChangeName(), //placeholder
         '/changePw': (_) => const CustomerChangePassword(), //placeholder
         '/changePFP': (_) => const CustomerChangePicture(),

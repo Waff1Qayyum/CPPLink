@@ -121,7 +121,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/customer_home');
           },
         ),
         actions: [
