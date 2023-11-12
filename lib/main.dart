@@ -1,25 +1,30 @@
+import 'package:cpplink/customer_pages/customer_register.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+//////////admin////////////
 import 'admin_pages/admin_homepage.dart';
+//////customer/////////
 import 'customer_pages/customer_changeName.dart';
 import 'customer_pages/customer_changePassword.dart';
 import 'customer_pages/customer_changePhoneNumber.dart';
 import 'customer_pages/customer_changeProfilePicture.dart';
 import 'customer_pages/customer_hompage.dart';
-import 'customer_pages/customer_register.dart';
+import 'forgotPassword.dart';
+//////////main files////////
 import 'login_page.dart';
 import 'otpVerification.dart';
 import 'registerType_page.dart';
+import 'resetPassword.dart';
+///////////rider////////////
 import 'rider_pages/rider_changeName.dart';
 import 'rider_pages/rider_changePassword.dart';
 import 'rider_pages/rider_changePhoneNumber.dart';
 import 'rider_pages/rider_homepage.dart';
 import 'rider_pages/rider_updateProfile.dart';
 import 'splash.dart';
-import 'resetPassword.dart';
-import 'forgotPassword.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -46,15 +51,13 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
-        '/login': (_) => const LoginPage(), //login_page
-        // '/login': (_) => const RegisterTypePage(), //login_page
+        // '/login': (_) => const LoginPage(), //login_page
+        // '/login': (_) => const CustomerHomepage(), //login_page
 
 ////////////////////register page////////////////
         '/register_type': (_) => const RegisterTypePage(), //login_page
-        '/customer_register': (_) => const CustomerRegisterPage(),
+        '/customer_registration': (_) => const CustomerRegisterPage(),
         // '/rider_register': (_) => const CustomerRegisterPage(),
-
-
 
 ////////////////////users homepage////////////////
 
@@ -62,7 +65,7 @@ class MyApp extends StatelessWidget {
         '/admin_home': (_) => const AdminHomePage(),
 
         // rider
-        // '/': (_) => const RiderHomePage(), //temporary
+        '/login': (_) => const RiderHomePage(), //temporary
         '/rider_changeName': (_) => const RiderChangeName(),
         '/rider_changePw': (_) => const RiderChangePassword(),
         '/rider_changePFP': (_) => const RiderChangeProfile(),

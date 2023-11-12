@@ -45,16 +45,15 @@ class _RegisterTypePageState extends State<RegisterTypePage> {
     setState(() {
       isLoading = true;
     });
-    if (userType == 'user'){
+    if (userType == 'user') {
       RegisterUserType = 'user';
-      print('go to user register');
-      Navigator.of(context).pushReplacementNamed('customer_register'); //normal user
-    }
-    else {
+      print('user register');
+    } else {
       RegisterUserType = 'rider';
-      print('go to rider register');
-      Navigator.of(context).pushReplacementNamed('/rider_register'); //rider, go  to vehicle page
+      print('rider register');
     }
+    print('go to register form');
+    Navigator.of(context).pushReplacementNamed('/customer_registration');
   }
 
   @override

@@ -1,5 +1,6 @@
 // import 'package:cpplink/main.dart';
 import 'package:flutter/material.dart';
+import '../controller.dart';
 import '../main.dart';
 
 class CustomerRegisterPage extends StatefulWidget {
@@ -41,24 +42,41 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         'phone': _phoneController.text,
         'email': _emailController.text,
       });
-      if (checked == false || checked == null) {
-        return;
+      print('created successfully');
+      // if (checked == false || checked == null) {
+      //   return;
+      // }
+      // await supabase.from('rider').insert({'user_id': res.user!.id});
+      // final rider = await supabase
+      //     .from('rider')
+      //     .select('rider_id')
+      //     .eq('user_id', res.user!.id)
+      //     .single();
+      // final riderId = rider['rider_id'];
+      // await supabase
+      //     .from('user')
+      //     .update({'rider_id': riderId}).eq('user_id', res.user!.id);
+      if (RegisterUserType == 'rider') {
+        //Set Rider details
+        registerEmail = _emailController.text;
+        registerPassword = _passwordController.text;
+        registerName = _nameController.text;
+        registerPhone = _phoneController.text;
+        print('rider details saved');
       }
-      await supabase.from('rider').insert({'user_id': res.user!.id});
-      final rider = await supabase
-          .from('rider')
-          .select('rider_id')
-          .eq('user_id', res.user!.id)
-          .single();
-      final riderId = rider['rider_id'];
-      await supabase
-          .from('user')
-          .update({'rider_id': riderId}).eq('user_id', res.user!.id);
+      return;
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Unexpected Error Occurred')));
     }
   }
+
+  // void _nextPage() {
+  //   registerEmail = _emailController.text;
+  //   registerPassword = _passwordController.text;
+  //   registerName = _nameController.text;
+  //   registerPhone = _phoneController.text;
+  // }
 
   Future<bool> _emailUnique() async {
     final _email = await supabase
@@ -110,8 +128,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               color: Colors.white, // Icon color
             ),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/login');
-            },
+                          Navigator.of(context)
+                              .pushReplacementNamed('/register_type');            },
           ),
         ),
         body: ListView(
@@ -514,25 +532,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                 )
                               ],
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 40.0),
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                      value: this.checked,
-                                      onChanged: (checked) {
-                                        setState(() {
-                                          this.checked = checked!;
-                                        });
-                                      }),
-                                  Text('Register as Rider'),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 20),
                             Container(
                               width: 263,
                               height: 37,
@@ -560,10 +560,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                   phoneValid = await _phoneValid();
                                   if (_formkey.currentState!.validate()) {
                                     _signUp();
-                                    if (checked) {
+                                    if (RegisterUserType == 'rider') {
+                                      print('go to vehicle page');
                                       Navigator.pushNamed(
                                           context, '/rider_vehicle');
                                     } else {
+                                      print('go to login page');
                                       Navigator.pushNamedAndRemoveUntil(
                                           context, '/login', (route) => false);
                                     }
