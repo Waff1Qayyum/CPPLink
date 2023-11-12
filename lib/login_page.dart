@@ -30,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
         .select('email')
         .eq('email', _emailController.text);
     final checkRider = await supabase
-        .from('rider')
-        .select('email')
+        .from('user')
+        .select('rider_id')
         .eq('email', _emailController.text);
     final checkCustomer = await supabase
         .from('user')

@@ -1,5 +1,6 @@
 import 'package:cpplink/customer_pages/customer_register.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
+import 'package:cpplink/rider_pages/rider_changeProfilePicture.dart';
 import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
-        // '/login': (_) => const LoginPage(), //login_page
+        '/login': (_) => const LoginPage(), //login_page
         // '/login': (_) => const CustomerHomepage(), //login_page
 
 ////////////////////register page////////////////
@@ -65,11 +66,12 @@ class MyApp extends StatelessWidget {
         '/admin_home': (_) => const AdminHomePage(),
 
         // rider
-        '/login': (_) => const RiderHomePage(), //temporary
+        // '/login': (_) => const RiderHomePage(), //temporary
         '/rider_changeName': (_) => const RiderChangeName(),
         '/rider_changePw': (_) => const RiderChangePassword(),
-        '/rider_changePFP': (_) => const RiderChangeProfile(),
+        '/rider_changePFP': (_) => const RiderChangePicture(),
         '/rider_changePhone': (_) => const RiderChangePhone(),
+        '/rider_update': (_) => const RiderChangeProfile(),
         // '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
         '/rider_vehicle': (_) => const RiderUploadVehicle(),
 
