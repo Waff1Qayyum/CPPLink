@@ -135,7 +135,8 @@ class _RiderChangePasswordState extends State<RiderChangePassword> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/rider_profile', (route) => false);
           },
         ),
         actions: [
@@ -146,9 +147,9 @@ class _RiderChangePasswordState extends State<RiderChangePassword> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        supabase.auth.signOut();
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/login', (route) => false);
+                        supabase.auth.signOut();
                       },
                       child: Text(
                         'Sign Out',
@@ -513,7 +514,7 @@ class _RiderChangePasswordState extends State<RiderChangePassword> {
                                                         Navigator
                                                             .pushNamedAndRemoveUntil(
                                                                 context,
-                                                                '/customer_update',
+                                                                '/rider_profile',
                                                                 (route) =>
                                                                     false);
                                                       },

@@ -139,7 +139,8 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/rider_profile', (route) => false);
           },
         ),
         actions: [
@@ -150,6 +151,8 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                 children: [
                   GestureDetector(
                       onTap: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
                         supabase.auth.signOut();
                       },
                       child: Text(
@@ -337,7 +340,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter fullname';
+                                  return 'Please enter phone number';
                                 } else {
                                   return null;
                                 }
@@ -412,7 +415,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                               controller: _passwordController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
-                                hintText: "enter password ",
+                                hintText: "enter password",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
                                     255, 249, 249, 249), // Background color
@@ -509,9 +512,9 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content: Text(
-                                                  'Name Updated Successfully')));
+                                                  'Phone number updated')));
                                       Navigator.pushNamedAndRemoveUntil(context,
-                                          '/customer_update', (route) => false);
+                                          '/rider_profile', (route) => false);
                                     }
                                     setState(() {
                                       isLoading = false;

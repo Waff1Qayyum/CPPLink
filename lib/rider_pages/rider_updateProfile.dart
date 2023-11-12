@@ -132,6 +132,8 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                 children: [
                   GestureDetector(
                       onTap: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
                         supabase.auth.signOut();
                       },
                       child: Text(
@@ -287,7 +289,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                         onTap: () {
                           // Your code to handle the tap event
                           Navigator.pushNamedAndRemoveUntil(
-                              context, '/changePFP', (route) => false);
+                              context, '/rider_changePFP', (route) => false);
                         },
                         child: Container(
                           width: 246,
@@ -329,7 +331,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                       InkWell(
                         onTap: () {
                           // Your code to handle the tap event
-                          Navigator.pushNamed(context, '/changeName');
+                          Navigator.pushNamed(context, '/rider_changeName');
                         },
                         child: Container(
                           width: 246,
@@ -371,7 +373,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                       InkWell(
                         onTap: () {
                           // Your code to handle the tap event
-                          Navigator.of(context).pushNamed('/changePw');
+                          Navigator.of(context).pushNamed('/rider_changePw');
                         },
                         child: Container(
                           width: 246,
@@ -413,7 +415,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                       InkWell(
                         onTap: () {
                           // Your code to handle the tap event
-                          Navigator.of(context).pushNamed('/changePhone');
+                          Navigator.of(context).pushNamed('/rider_changePhone');
                         },
                         child: Container(
                           width: 246,
@@ -439,6 +441,49 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                           ),
                           child: Text(
                             'Change Phone Number',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 15,
+                              fontFamily: 'Lexend',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // Your code to handle the tap event
+                          Navigator.of(context)
+                              .pushNamed('/rider_changeVehicle');
+                        },
+                        child: Container(
+                          width: 246,
+                          height: 53,
+                          alignment: Alignment.center,
+                          decoration: ShapeDecoration(
+                            color: Color(0xFFFFD233),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                width: 1.50,
+                                color: Color(0xFFFFD233), // Border color
+                              ),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            'Update Vehicle',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: const Color.fromARGB(255, 255, 255, 255),

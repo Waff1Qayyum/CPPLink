@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../controller.dart';
 
 import '../main.dart';
 
@@ -26,22 +27,37 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
   TextEditingController _modelController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  Future<void> signIn() async {
+    final res = await supabase.auth.signInWithPassword(
+      email: registerEmail,
+      password: registerPassword,
+    );
+  }
+
   Future<void> uploadImage() async {
     final imageExtension = fileImage!.path.split('.').last.toLowerCase();
     final imageBytes = await fileImage!.readAsBytes();
-    final userId = supabase.auth.currentUser!.id;
-    final imagePath = '/$userId/profile';
-    await supabase.storage.from('picture').uploadBinary(imagePath, imageBytes,
+
+    final res = supabase.auth.currentUser!.id;
+    final rider = await supabase
+        .from('rider')
+        .select('rider_id')
+        .eq('user_id', res)
+        .single();
+    final riderId = rider['rider_id'];
+
+    final imagePath = '/$riderId/vehicle';
+    await supabase.storage.from('vehicle').uploadBinary(imagePath, imageBytes,
         fileOptions:
             FileOptions(upsert: true, contentType: 'image/$imageExtension'));
 
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = supabase.storage.from('vehicle').getPublicUrl('/$riderId/vehicle');
     image = Uri.parse(image).replace(queryParameters: {
       't': DateTime.now().millisecondsSinceEpoch.toString()
     }).toString();
     await supabase
-        .from('user')
-        .update({'picture_url': image}).eq('user_id', userId);
+        .from('rider')
+        .update({'picture_url': image}).eq('rider_id', riderId);
   }
 
   void getImage() async {
@@ -62,7 +78,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
     try {
       final res = supabase.auth.currentUser!.id;
 
-      await supabase.from('rider').insert({
+      await supabase.from('rider').update({
         'vehicle_model': _modelController.text.toUpperCase(),
         'vehicle_colour': _colourController.text.toUpperCase(),
         'plate_number': _plateController.text.toUpperCase()
@@ -365,21 +381,28 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     isLoading = true;
                                   });
                                   if (_formKey.currentState!.validate()) {
-                                    uploadVehicle();
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (context) => AlertDialog(
-                                    //           actions: [
-                                    //             TextButton(
-                                    //                 onPressed: () {
-                                    // Navigator.pushNamedAndRemoveUntil(context,
-                                    //     '/customer_update', (route) => false);
-                                    //                 },
-                                    //                 child: Text('OK'))
-                                    //           ],
-                                    //           content: Text(
-                                    //               'Vehicle Successfully Uploaded'),
-                                    //         ));
+                                    await signupRider();
+                                    await signIn();
+                                    await uploadVehicle();
+                                    await uploadImage();
+
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator
+                                                          .pushNamedAndRemoveUntil(
+                                                              context,
+                                                              '/login',
+                                                              (route) => false);
+                                                    },
+                                                    child: Text('OK'))
+                                              ],
+                                              content: Text(
+                                                  'Vehicle Successfully Uploaded'),
+                                            ));
                                   }
 
                                   setState(() {
@@ -410,17 +433,29 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                       ),
                                     ],
                                   ),
-                                  child: Text(
-                                    'confirm',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  child: isLoading == false
+                                      ? Text(
+                                          'confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        )
+                                      : Text(
+                                          'Loading..',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ],

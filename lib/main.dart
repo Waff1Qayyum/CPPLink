@@ -1,6 +1,7 @@
 import 'package:cpplink/admin_pages/admin_updateProfille.dart';
 import 'package:cpplink/customer_register.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
+import 'package:cpplink/rider_pages/rider_changeProfilePicture.dart';
 import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,6 +11,7 @@ import 'admin_pages/admin_changePassword.dart';
 import 'admin_pages/admin_changePhoneNumber.dart';
 import 'admin_pages/admin_changeProfilePicture.dart';
 import 'admin_pages/admin_homepage.dart';
+import 'rider_pages/rider_changeVehicle.dart';
 //////////admin////////////
 import 'waffi_folder/admin_homepageBukhari.dart';
 //////customer/////////
@@ -52,7 +54,7 @@ final supabase = Supabase.instance.client;
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    clearUserSession();
+    // clearUserSession();
 
     return MaterialApp(
       title: 'CPP Link',
@@ -79,12 +81,13 @@ class MyApp extends StatelessWidget {
         '/admin_changePhone': (_) => const AdminChangePhone(),
 
         // rider
-        '/rider_home': (_) => const RiderHomePage(), //temporary
+        '/rider_home': (_) => const RiderChangeProfile(), //temporary
         '/rider_changeName': (_) => const RiderChangeName(),
         '/rider_changePw': (_) => const RiderChangePassword(),
-        '/rider_changePFP': (_) => const RiderChangeProfile(),
+        '/rider_changePFP': (_) => const RiderChangePicture(),
         '/rider_changePhone': (_) => const RiderChangePhone(),
-        // '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
+        '/rider_profile': (_) => const RiderChangeProfile(),
+        '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
         '/rider_vehicle': (_) => const RiderUploadVehicle(),
 
         //customer

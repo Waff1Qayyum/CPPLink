@@ -7,14 +7,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class RiderChangePicture extends StatefulWidget {
-  const RiderChangePicture({super.key});
+class RiderChangeVehicle extends StatefulWidget {
+  const RiderChangeVehicle({super.key});
 
   @override
-  State<RiderChangePicture> createState() => _RiderChangePictureState();
+  State<RiderChangeVehicle> createState() => _RiderChangeVehicleState();
 }
 
-class _RiderChangePictureState extends State<RiderChangePicture> {
+class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
   dynamic image;
   XFile? fileImage;
   File? imageFile;
@@ -92,23 +92,29 @@ class _RiderChangePictureState extends State<RiderChangePicture> {
   }
 
   Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('user')
+    final res = supabase.auth.currentUser!.id;
+    final rider = await supabase
+        .from('rider')
+        .select('rider_id')
+        .eq('user_id', res)
+        .single();
+    final riderid = rider['rider_id'];
+    final data = await supabase
+        .from('rider')
         .select('picture_url')
-        .eq('user_id', userId)
+        .eq('user_id', res)
         .single();
 
-    if (res['picture_url'] == null) {
+    if (data['picture_url'] == null) {
       return;
     }
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
+    // image = supabase.storage.from('picture').getPublicUrl('/$riderId/profile');
+    // image = Uri.parse(image).replace(queryParameters: {
+    //   't': DateTime.now().millisecondsSinceEpoch.toString()
+    // }).toString();
 
     setState(() {
-      image = res['picture_url'];
+      image = data['picture_url'];
     });
   }
 
@@ -166,7 +172,7 @@ class _RiderChangePictureState extends State<RiderChangePicture> {
           ),
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/customer_update', (route) => false);
+                context, '/rider_profile', (route) => false);
           },
         ),
         actions: [
@@ -177,6 +183,8 @@ class _RiderChangePictureState extends State<RiderChangePicture> {
               children: [
                 GestureDetector(
                   onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/login', (route) => false);
                     supabase.auth.signOut();
                   },
                   child: Text(
@@ -497,7 +505,7 @@ class _RiderChangePictureState extends State<RiderChangePicture> {
                                     //             TextButton(
                                     //                 onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(context,
-                                        '/customer_update', (route) => false);
+                                        '/rider_profile', (route) => false);
                                     //                 },
                                     //                 child: Text('OK'))
                                     //           ],

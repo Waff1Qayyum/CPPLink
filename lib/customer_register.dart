@@ -1,4 +1,4 @@
-// import 'package:cpplink/main.dart';
+// import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'controller.dart';
 import 'main.dart';
@@ -34,6 +34,15 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
   Future<void> _signUp() async {
     try {
+      if (RegisterUserType == 'rider') {
+        //Set Rider details
+        registerEmail = _emailController.text;
+        registerPassword = _passwordController.text;
+        registerName = _nameController.text;
+        registerPhone = _phoneController.text;
+        print('rider details saved');
+        return;
+      }
       final res = await supabase.auth.signUp(
           email: _emailController.text, password: _passwordController.text, emailRedirectTo: 'io.supabase.flutterquickstart://login-callback/');
       await supabase.from('user').insert({
@@ -56,14 +65,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       // await supabase
       //     .from('user')
       //     .update({'rider_id': riderId}).eq('user_id', res.user!.id);
-      if (RegisterUserType == 'rider') {
-        //Set Rider details
-        registerEmail = _emailController.text;
-        registerPassword = _passwordController.text;
-        registerName = _nameController.text;
-        registerPhone = _phoneController.text;
-        print('rider details saved');
-      }
       return;
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -128,8 +129,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               color: Colors.white, // Icon color
             ),
             onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/register_type');            },
+              Navigator.of(context).pushReplacementNamed('/register_type');
+            },
           ),
         ),
         body: ListView(
