@@ -252,6 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: TextFormField(
                                     controller: _passwordController,
                                     textAlignVertical: TextAlignVertical.bottom,
+                                    obscureText: true,
                                     decoration: InputDecoration(
                                       hintText: "enter password",
                                       filled: true,

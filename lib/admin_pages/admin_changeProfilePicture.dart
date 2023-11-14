@@ -379,6 +379,7 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                             ),
                             child: TextFormField(
                               controller: _passwordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter a password ",

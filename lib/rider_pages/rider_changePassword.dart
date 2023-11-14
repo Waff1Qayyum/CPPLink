@@ -329,6 +329,7 @@ class _RiderChangePasswordState extends State<RiderChangePassword> {
                                 }
                               },
                               controller: _newPasswordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter new password",
@@ -395,6 +396,7 @@ class _RiderChangePasswordState extends State<RiderChangePassword> {
                             ),
                             child: TextFormField(
                               controller: _oldPasswordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter old password ",

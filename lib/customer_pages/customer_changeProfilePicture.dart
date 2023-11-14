@@ -379,6 +379,7 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                             ),
                             child: TextFormField(
                               controller: _passwordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter a password ",

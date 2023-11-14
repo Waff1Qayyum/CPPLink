@@ -81,29 +81,55 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
     final userId = await supabase.auth.currentUser!.id;
     final data =
         await supabase.from('rider').select().eq('user_id', userId).single();
+    try {
+      _plateController.text = data['plate_number'];
+      _modelController.text = data['vehicle_model'];
+      _typeController.text = data['vehicle_type'];
+      _colourController.text = data['vehicle_colour'];
+    } catch (e) {
+      return;
+    }
+  }
 
-    _plateController.text = data['plate_number'];
-    _modelController.text = data['vehicle_model'];
-    _typeController.text = data['vehicle_type'];
-    _colourController.text = data['vehicle_colour'];
+  Future<void> changeVehicle() async {
+    final userId = await supabase.auth.currentUser!.id;
+    final res = await supabase.from('rider').update({
+      'vehicle_model': _modelController.text.toUpperCase(),
+      'vehicle_colour': _colourController.text.toUpperCase(),
+      'vehicle_type': _typeController.text.toUpperCase(),
+      'plate_number': _plateController.text.toUpperCase()
+    }).eq('user_id', userId);
   }
 
   Future<void> uploadImage() async {
+    if (fileImage == null) {
+      return;
+    }
+
+    final userId = supabase.auth.currentUser!.id;
     final imageExtension = fileImage!.path.split('.').last.toLowerCase();
     final imageBytes = await fileImage!.readAsBytes();
-    final userId = supabase.auth.currentUser!.id;
-    final imagePath = '/$userId/profile';
-    await supabase.storage.from('picture').uploadBinary(imagePath, imageBytes,
+
+    // final res = supabase.auth.currentUser!.id;
+    final rider = await supabase
+        .from('rider')
+        .select('rider_id')
+        .eq('user_id', userId)
+        .single();
+    final riderId = rider['rider_id'];
+
+    final imagePath = '/$riderId/vehicle';
+    await supabase.storage.from('vehicle').uploadBinary(imagePath, imageBytes,
         fileOptions:
             FileOptions(upsert: true, contentType: 'image/$imageExtension'));
 
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    image = supabase.storage.from('vehicle').getPublicUrl('/$riderId/vehicle');
     image = Uri.parse(image).replace(queryParameters: {
       't': DateTime.now().millisecondsSinceEpoch.toString()
     }).toString();
     await supabase
-        .from('user')
-        .update({'picture_url': image}).eq('user_id', userId);
+        .from('rider')
+        .update({'picture_url': image}).eq('rider_id', riderId);
   }
 
   void getImage() async {
@@ -267,9 +293,11 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                 ),
                                 child: TextFormField(
                                   controller: _plateController,
+                                  textCapitalization:
+                                      TextCapitalization.characters,
                                   textAlignVertical: TextAlignVertical.bottom,
                                   decoration: InputDecoration(
-                                    hintText: "enter vehicle plate no ",
+                                    hintText: "plate number",
                                     filled: true,
                                     fillColor: const Color.fromARGB(
                                         255, 249, 249, 249),
@@ -294,9 +322,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter a password';
-                                    } else if (passMatch == false) {
-                                      return 'Password does not match';
+                                      return 'Please enter plate number';
                                     } else {
                                       return null;
                                     }
@@ -332,9 +358,11 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                 ),
                                 child: TextFormField(
                                   controller: _modelController,
+                                  textCapitalization:
+                                      TextCapitalization.characters,
                                   textAlignVertical: TextAlignVertical.bottom,
                                   decoration: InputDecoration(
-                                    hintText: "enter a password ",
+                                    hintText: "vehicle model",
                                     filled: true,
                                     fillColor: const Color.fromARGB(
                                         255, 249, 249, 249),
@@ -359,9 +387,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter a password';
-                                    } else if (passMatch == false) {
-                                      return 'Password does not match';
+                                      return 'Please enter vehicle model';
                                     } else {
                                       return null;
                                     }
@@ -397,9 +423,11 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                 ),
                                 child: TextFormField(
                                   controller: _typeController,
+                                  textCapitalization:
+                                      TextCapitalization.characters,
                                   textAlignVertical: TextAlignVertical.bottom,
                                   decoration: InputDecoration(
-                                    hintText: "enter a password ",
+                                    hintText: "vehicle type ",
                                     filled: true,
                                     fillColor: const Color.fromARGB(
                                         255, 249, 249, 249),
@@ -424,9 +452,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter a password';
-                                    } else if (passMatch == false) {
-                                      return 'Password does not match';
+                                      return 'Please enter a vehicle type';
                                     } else {
                                       return null;
                                     }
@@ -462,9 +488,11 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                 ),
                                 child: TextFormField(
                                   controller: _colourController,
+                                  textCapitalization:
+                                      TextCapitalization.characters,
                                   textAlignVertical: TextAlignVertical.bottom,
                                   decoration: InputDecoration(
-                                    hintText: "enter a password ",
+                                    hintText: "vehicle colour ",
                                     filled: true,
                                     fillColor: const Color.fromARGB(
                                         255, 249, 249, 249),
@@ -489,9 +517,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter a password';
-                                    } else if (passMatch == false) {
-                                      return 'Password does not match';
+                                      return 'Please enter vehicle colour';
                                     } else {
                                       return null;
                                     }
@@ -534,6 +560,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                             ),
                             child: TextFormField(
                               controller: _passwordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter a password ",
@@ -580,25 +607,31 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                     ? null
                                     : () async {
                                         // Your code to handle the tap event
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        passMatch = await checkPassword();
-                                        if (_formKey.currentState!.validate()) {
-                                          await uploadImage();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      'Vehicle Detail Updated Successfully')));
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              '/rider_profile',
-                                              (route) => false);
-                                        }
+                                        try {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          passMatch = await checkPassword();
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            await uploadImage();
+                                            await changeVehicle();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'Vehicle Detail Updated Successfully')));
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                '/rider_profile',
+                                                (route) => false);
+                                          }
 
-                                        setState(() {
-                                          isLoading = false;
-                                        });
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        } catch (e) {
+                                          return;
+                                        }
                                       },
                                 child: Container(
                                   width: 135,
@@ -624,17 +657,19 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                       ),
                                     ],
                                   ),
-                                  child: Text(
-                                    'confirm',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  child: isLoading == true
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                          'confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ],

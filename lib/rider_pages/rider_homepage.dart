@@ -14,7 +14,7 @@ class RiderHomePage extends StatefulWidget {
 
 class _RiderHomePageState extends State<RiderHomePage> {
   bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
+  // late final StreamSubscription<AuthState> _authStateSubscription;
   double _sliderValue = 0.0;
   // @override
   // void initState() {

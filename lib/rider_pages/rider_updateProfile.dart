@@ -17,8 +17,8 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
   String? phone;
   String? email;
   dynamic image;
-  bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
+  // bool _redirecting = false;
+  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {

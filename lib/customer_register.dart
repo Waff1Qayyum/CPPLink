@@ -212,6 +212,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                       }
                                     },
                                     controller: _nameController,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
                                     textAlignVertical: TextAlignVertical.bottom,
                                     decoration: InputDecoration(
                                       hintText: "enter full name",
@@ -406,6 +408,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                   ),
                                   child: TextFormField(
                                     controller: _passwordController,
+                                    obscureText: true,
                                     textAlignVertical: TextAlignVertical.bottom,
                                     decoration: InputDecoration(
                                       hintText: "enter password",
@@ -472,6 +475,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                   child: TextFormField(
                                     controller: _confirmPasswordController,
                                     textAlignVertical: TextAlignVertical.bottom,
+                                    obscureText: true,
                                     decoration: InputDecoration(
                                       hintText: "enter confirm password",
                                       filled: true,

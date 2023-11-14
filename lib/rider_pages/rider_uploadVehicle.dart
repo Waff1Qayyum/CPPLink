@@ -141,22 +141,16 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                       child: Column(
                         children: [
                           SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: isImageSelected == true
-                                ? Image(image: FileImage(imageFile!))
-                                : ((image != null)
-                                    ? Image.network(
-                                        image!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Container(
-                                        color: Colors.grey,
-                                        child: const Center(
-                                          child: Text('No image'),
-                                        ),
-                                      )),
-                          ),
+                              width: 150,
+                              height: 150,
+                              child: isImageSelected == true
+                                  ? Image(image: FileImage(imageFile!))
+                                  : Container(
+                                      color: Colors.grey,
+                                      child: const Center(
+                                        child: Text('No image'),
+                                      ),
+                                    )),
                           ElevatedButton(
                             onPressed: () async {
                               getImage();
@@ -388,52 +382,20 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                             ),
                           ),
                           SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  // Your code to handle the tap event
-                                },
-                                child: Container(
-                                  width: 135,
-                                  height: 53,
-                                  alignment: Alignment.center,
-                                  decoration: ShapeDecoration(
-                                    color:
-                                        const Color.fromARGB(255, 208, 24, 11),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      side: BorderSide(
-                                        width: 1.50,
-                                        color: Color.fromARGB(255, 208, 24, 11),
-                                      ),
-                                    ),
-                                    shadows: [
-                                      BoxShadow(
-                                        color: Color(0x3F000000),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    'cancel',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 236, 236, 236),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ),
                               SizedBox(width: 30),
                               InkWell(
                                 onTap: () async {
-                                  // Your code to handle the tap event
+                                  if (isImageSelected == false) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text('Please Upload Image')));
+                                    return;
+                                  }
+
                                   setState(() {
                                     isLoading = true;
                                   });
@@ -493,6 +455,101 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                   child: isLoading == false
                                       ? Text(
                                           'confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        )
+                                      : Text(
+                                          'Loading..',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              InkWell(
+                                onTap: isLoading == true
+                                    ? null
+                                    : () async {
+                                        // Your code to handle the tap event
+                                        if (mounted) {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                        }
+
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () async {
+                                                          try {
+                                                            await signupRider();
+                                                            Navigator
+                                                                .pushNamedAndRemoveUntil(
+                                                                    context,
+                                                                    '/login',
+                                                                    (route) =>
+                                                                        false);
+                                                          } catch (e) {
+                                                            return;
+                                                          }
+                                                        },
+                                                        child: Text('Confirm')),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text('Cancel'))
+                                                  ],
+                                                  content: Text(
+                                                      'Your current information will not be saved. Are you sure you want to proceed? You can update your vehicle details on the \'Update Profile\' page.'),
+                                                ));
+
+                                        if (mounted) {
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        }
+                                      },
+                                child: Container(
+                                  width: 135,
+                                  height: 53,
+                                  alignment: Alignment.center,
+                                  decoration: ShapeDecoration(
+                                    color: Color.fromARGB(255, 255, 42, 42),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      side: BorderSide(
+                                        width: 1.50,
+                                        color: Color.fromARGB(255, 255, 60, 54),
+                                      ),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x3F000000),
+                                        blurRadius: 4,
+                                        offset: Offset(0, 4),
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: isLoading == false
+                                      ? Text(
+                                          'upload later',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: const Color.fromARGB(

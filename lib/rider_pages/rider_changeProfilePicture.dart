@@ -116,6 +116,9 @@ class ChangePictureState extends State<RiderChangePicture> {
   }
 
   Future<void> uploadImage() async {
+    if (fileImage == null) {
+      return;
+    }
     final imageExtension = fileImage!.path.split('.').last.toLowerCase();
     final imageBytes = await fileImage!.readAsBytes();
     final userId = supabase.auth.currentUser!.id;
@@ -379,6 +382,7 @@ class ChangePictureState extends State<RiderChangePicture> {
                             ),
                             child: TextFormField(
                               controller: _passwordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter a password ",

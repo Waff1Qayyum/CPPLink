@@ -390,6 +390,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                             ),
                             child: TextFormField(
                               controller: _passwordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter password ",

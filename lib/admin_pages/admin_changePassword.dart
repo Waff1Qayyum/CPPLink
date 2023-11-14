@@ -325,6 +325,7 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                                 }
                               },
                               controller: _newPasswordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter new password",
@@ -391,6 +392,7 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                             ),
                             child: TextFormField(
                               controller: _oldPasswordController,
+                              obscureText: true,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: InputDecoration(
                                 hintText: "enter old password ",
