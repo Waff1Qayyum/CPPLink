@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; //comment
 
 import 'main.dart';
@@ -164,7 +165,10 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Container(
                                   width: 263,
-                                  height: 37,
+// Adjust the width as needed
+                                  // padding: EdgeInsets.symmetric(
+                                  //     vertical: 8,
+                                  //     horizontal: 12), // Adjust padding
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
@@ -185,19 +189,19 @@ class _LoginPageState extends State<LoginPage> {
                                   child: TextFormField(
                                     controller: _emailController,
                                     textAlignVertical: TextAlignVertical.bottom,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],
                                     decoration: InputDecoration(
-                                      hintText: "enter email",
+                                      hintText: "Enter email",
                                       filled: true,
-                                      fillColor: const Color.fromARGB(255, 249,
-                                          249, 249), // Background color
+                                      fillColor: const Color.fromARGB(
+                                          255, 249, 249, 249),
                                       border: OutlineInputBorder(
-                                        // Use OutlineInputBorder for rounded borders
-                                        borderRadius: BorderRadius.circular(
-                                            10), // This sets the rounded corners for the text field
-                                        borderSide: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none,
-                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide.none,
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -206,6 +210,9 @@ class _LoginPageState extends State<LoginPage> {
                                           color: Color(0xFFFFD233),
                                         ),
                                       ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 12,
+                                          horizontal: 10), // Adjust padding
                                       prefixIcon: Icon(
                                         Icons.email,
                                         color: Color(0xFFFFD233),
@@ -215,13 +222,13 @@ class _LoginPageState extends State<LoginPage> {
                                       if (value!.isEmpty) {
                                         return 'Please enter an email';
                                       } else if (emailInvalid == true) {
-                                        return 'Email do not exist';
+                                        return 'Email does not exist';
                                       } else {
                                         return null;
                                       }
                                     },
                                   ),
-                                )
+                                ),
                               ],
                             ),
 
@@ -231,7 +238,6 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Container(
                                   width: 263,
-                                  height: 37,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
@@ -254,18 +260,13 @@ class _LoginPageState extends State<LoginPage> {
                                     textAlignVertical: TextAlignVertical.bottom,
                                     obscureText: true,
                                     decoration: InputDecoration(
-                                      hintText: "enter password",
+                                      hintText: "Enter password",
                                       filled: true,
-                                      fillColor: const Color.fromARGB(255, 249,
-                                          249, 249), // Background color
+                                      fillColor: const Color.fromARGB(
+                                          255, 249, 249, 249),
                                       border: OutlineInputBorder(
-                                        // Use OutlineInputBorder for rounded borders
-                                        borderRadius: BorderRadius.circular(
-                                            10), // This sets the rounded corners for the text field
-                                        borderSide: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none,
-                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide.none,
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -274,8 +275,10 @@ class _LoginPageState extends State<LoginPage> {
                                           color: Color(0xFFFFD233),
                                         ),
                                       ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 10),
                                       prefixIcon: Icon(
-                                        Icons.password,
+                                        Icons.lock,
                                         color: Color(0xFFFFD233),
                                       ),
                                     ),
@@ -290,7 +293,7 @@ class _LoginPageState extends State<LoginPage> {
                                       }
                                     },
                                   ),
-                                )
+                                ),
                               ],
                             ),
 
