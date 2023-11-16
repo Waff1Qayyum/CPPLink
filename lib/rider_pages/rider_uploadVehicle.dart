@@ -39,29 +39,34 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
   }
 
   Future<void> uploadImage(dynamic id) async {
-    final imageExtension = fileImage!.path.split('.').last.toLowerCase();
-    final imageBytes = await fileImage!.readAsBytes();
+    try {
+      final imageExtension = fileImage!.path.split('.').last.toLowerCase();
+      final imageBytes = await fileImage!.readAsBytes();
 
-    // final res = supabase.auth.currentUser!.id;
-    final rider = await supabase
-        .from('rider')
-        .select('rider_id')
-        .eq('user_id', id)
-        .single();
-    final riderId = rider['rider_id'];
+      // final res = supabase.auth.currentUser!.id;
+      final rider = await supabase
+          .from('rider')
+          .select('rider_id')
+          .eq('user_id', id)
+          .single();
+      final riderId = rider['rider_id'];
 
-    final imagePath = '/$riderId/vehicle';
-    await supabase.storage.from('vehicle').uploadBinary(imagePath, imageBytes,
-        fileOptions:
-            FileOptions(upsert: true, contentType: 'image/$imageExtension'));
+      final imagePath = '/$riderId/vehicle';
+      await supabase.storage.from('vehicle').uploadBinary(imagePath, imageBytes,
+          fileOptions:
+              FileOptions(upsert: true, contentType: 'image/$imageExtension'));
 
-    image = supabase.storage.from('vehicle').getPublicUrl('/$riderId/vehicle');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
-    await supabase
-        .from('rider')
-        .update({'picture_url': image}).eq('rider_id', riderId);
+      image =
+          supabase.storage.from('vehicle').getPublicUrl('/$riderId/vehicle');
+      image = Uri.parse(image).replace(queryParameters: {
+        't': DateTime.now().millisecondsSinceEpoch.toString()
+      }).toString();
+      await supabase
+          .from('rider')
+          .update({'picture_url': image}).eq('rider_id', riderId);
+    } catch (e) {
+      return;
+    }
   }
 
   void getImage() async {
@@ -118,9 +123,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
           },
         ),
       ),
-      body: 
-      
-      ListView(
+      body: ListView(
         children: [
           Column(
             children: [
@@ -427,47 +430,54 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                             children: [
                               SizedBox(width: 30),
                               InkWell(
-                                onTap: () async {
-                                  if (isImageSelected == false) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content:
-                                                Text('Please Upload Image')));
-                                    return;
-                                  }
+                                onTap: isLoading == true
+                                    ? null
+                                    : () async {
+                                        if (isImageSelected == false) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      'Please Upload Image')));
+                                          return;
+                                        }
 
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  if (_formKey.currentState!.validate()) {
-                                    final id = await signupRider();
-                                    // await signIn();
-                                    await uploadVehicle(id);
-                                    await uploadImage(id);
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        if (_formKey.currentState!.validate()) {
+                                          final id = await signupRider();
+                                          // await signIn();
+                                          await uploadVehicle(id);
+                                          await uploadImage(id);
 
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator
-                                                          .pushNamedAndRemoveUntil(
-                                                              context,
-                                                              '/login',
-                                                              (route) => false);
-                                                    },
-                                                    child: Text('OK'))
-                                              ],
-                                              content: Text(
-                                                  'Vehicle Successfully Uploaded'),
-                                            ));
-                                  }
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            try {
+                                                              Navigator
+                                                                  .pushNamedAndRemoveUntil(
+                                                                      context,
+                                                                      '/login',
+                                                                      (route) =>
+                                                                          false);
+                                                            } catch (e) {
+                                                              return;
+                                                            }
+                                                          },
+                                                          child: Text('OK'))
+                                                    ],
+                                                    content: Text(
+                                                        'Vehicle Successfully Uploaded'),
+                                                  ));
+                                        }
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                },
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
                                 child: Container(
                                   width: 263,
                                   height: 53,
