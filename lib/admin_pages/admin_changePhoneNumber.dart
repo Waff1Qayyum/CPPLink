@@ -25,7 +25,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late final StreamSubscription<AuthState> _authStateSubscription;
+  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
