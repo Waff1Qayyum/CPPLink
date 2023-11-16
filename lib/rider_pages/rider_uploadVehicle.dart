@@ -118,530 +118,552 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
           },
         ),
       ),
-      body: 
-      ListView(
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'Upload Vehicle Picture',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF9B9B9B),
-                  fontSize: 17,
-                  fontFamily: 'Lexend',
-                  fontWeight: FontWeight.w700,
+      body: Stack(children: [
+        ListView(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: 20.0,
                 ),
-              ),
-              Column(
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          SizedBox(
+                Text(
+                  'Upload Vehicle Picture',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFF9B9B9B),
+                    fontSize: 17,
+                    fontFamily: 'Lexend',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Column(
+                  children: [
+                    Form(
+                      key: _formKey,
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                                width: 150,
+                                height: 150,
+                                child: isImageSelected == true
+                                    ? Image(image: FileImage(imageFile!))
+                                    : Container(
+                                        color: const Color.fromARGB(
+                                            255, 154, 154, 154),
+                                        child: const Center(
+                                          child: Text('No image'),
+                                        ),
+                                      )),
+                            Container(
                               width: 150,
-                              height: 150,
-                              child: isImageSelected == true
-                                  ? Image(image: FileImage(imageFile!))
-                                  : Container(
-                                      color: const Color.fromARGB(
-                                          255, 154, 154, 154),
-                                      child: const Center(
-                                        child: Text('No image'),
-                                      ),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  getImage();
+                                },
+                                child: Text('Upload Photo',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w700,
                                     )),
-                          Container(
-                            width: 150,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                getImage();
-                              },
-                              child: Text('Upload Photo',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w700,
-                                  )),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Container(
-                            width: 263,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                width: 0.5,
-                                color: Color.fromARGB(56, 25, 25, 25),
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(164, 117, 117, 117),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
-                                ),
-                              ],
                             ),
-                            child: TextFormField(
-                              controller: _plateController,
-                              textAlignVertical: TextAlignVertical.center,
-                              maxLines: 1,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.singleLineFormatter,
-                              ],
-                              decoration: InputDecoration(
-                                hintText: "enter vehicle plate number",
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(255, 249, 249, 249),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  ),
+                            SizedBox(height: 20),
+                            Container(
+                              width: 263,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  width: 0.5,
+                                  color: Color.fromARGB(56, 25, 25, 25),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 1.50,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(164, 117, 117, 117),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                controller: _plateController,
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                ],
+                                decoration: InputDecoration(
+                                  hintText: "enter vehicle plate number",
+                                  filled: true,
+                                  fillColor:
+                                      const Color.fromARGB(255, 249, 249, 249),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                  prefixIcon: Icon(
+                                    Icons.pin,
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 10),
-                                prefixIcon: Icon(
-                                  Icons.pin,
-                                  color: Color(0xFFFFD233),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter a vehicle plate number';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Container(
-                            width: 263,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                width: 0.5,
-                                color: Color.fromARGB(56, 25, 25, 25),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(164, 117, 117, 117),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
-                                ),
-                              ],
-                            ),
-                            child: TextFormField(
-                              controller: _modelController,
-                              textAlignVertical: TextAlignVertical.center,
-                              maxLines: 1,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.singleLineFormatter,
-                              ],
-                              decoration: InputDecoration(
-                                hintText: "enter vehicle model",
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(255, 249, 249, 249),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 1.50,
-                                    color: Color(0xFFFFD233),
-                                  ),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 10),
-                                prefixIcon: Icon(
-                                  Icons.delivery_dining_outlined,
-                                  color: Color(0xFFFFD233),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter vehicle model';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Container(
-                            width: 263,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                width: 0.5,
-                                color: Color.fromARGB(56, 25, 25, 25),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(164, 117, 117, 117),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
-                                ),
-                              ],
-                            ),
-                            child: DropdownButtonFormField<String>(
-                              value: _selectedVehicleType,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedVehicleType = newValue!;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(255, 249, 249, 249),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 1.50,
-                                    color: Color(0xFFFFD233),
-                                  ),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 10),
-                                prefixIcon: Icon(
-                                  Icons.delivery_dining_outlined,
-                                  color: Color(0xFFFFD233),
-                                ),
-                              ),
-                              items: ["Motorcycle", "Car"].map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select vehicle type';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Container(
-                            width: 263,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                width: 0.5,
-                                color: Color.fromARGB(56, 25, 25, 25),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(164, 117, 117, 117),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
-                                ),
-                              ],
-                            ),
-                            child: TextFormField(
-                              controller: _colourController,
-                              textAlignVertical: TextAlignVertical.center,
-                              maxLines: 1,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.singleLineFormatter,
-                              ],
-                              decoration: InputDecoration(
-                                hintText: "enter vehicle colour",
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(255, 249, 249, 249),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    width: 1.50,
-                                    color: Color(0xFFFFD233),
-                                  ),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 10),
-                                prefixIcon: Icon(
-                                  Icons.water_drop,
-                                  color: Color(0xFFFFD233),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter vehicle colour';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 40),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(width: 30),
-                              InkWell(
-                                onTap: () async {
-                                  if (isImageSelected == false) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content:
-                                                Text('Please Upload Image')));
-                                    return;
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a vehicle plate number';
+                                  } else {
+                                    return null;
                                   }
-
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  if (_formKey.currentState!.validate()) {
-                                    final id = await signupRider();
-                                    // await signIn();
-                                    await uploadVehicle(id);
-                                    await uploadImage(id);
-
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator
-                                                          .pushNamedAndRemoveUntil(
-                                                              context,
-                                                              '/login',
-                                                              (route) => false);
-                                                    },
-                                                    child: Text('OK'))
-                                              ],
-                                              content: Text(
-                                                  'Vehicle Successfully Uploaded'),
-                                            ));
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              width: 263,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  width: 0.5,
+                                  color: Color.fromARGB(56, 25, 25, 25),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(164, 117, 117, 117),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                controller: _modelController,
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                ],
+                                decoration: InputDecoration(
+                                  hintText: "enter vehicle model",
+                                  filled: true,
+                                  fillColor:
+                                      const Color.fromARGB(255, 249, 249, 249),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                  prefixIcon: Icon(
+                                    Icons.delivery_dining_outlined,
+                                    color: Color(0xFFFFD233),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter vehicle model';
+                                  } else {
+                                    return null;
                                   }
-
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              width: 263,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  width: 0.5,
+                                  color: Color.fromARGB(56, 25, 25, 25),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(164, 117, 117, 117),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              child: DropdownButtonFormField<String>(
+                                value: _selectedVehicleType,
+                                onChanged: (newValue) {
                                   setState(() {
-                                    isLoading = false;
+                                    _selectedVehicleType = newValue!;
                                   });
                                 },
-                                child: Container(
-                                  width: 263,
-                                  height: 53,
-                                  alignment: Alignment.center,
-                                  decoration: ShapeDecoration(
-                                    color:
-                                        const Color.fromARGB(255, 44, 174, 48),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      side: BorderSide(
-                                        width: 1.50,
-                                        color: const Color.fromARGB(
-                                            255, 44, 174, 48),
-                                      ),
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor:
+                                      const Color.fromARGB(255, 249, 249, 249),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
                                     ),
-                                    shadows: [
-                                      BoxShadow(
-                                        color: Color(0x3F000000),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
                                   ),
-                                  child: isLoading == false
-                                      ? Text(
-                                          'Confirm',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontSize: 15,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        )
-                                      : Text(
-                                          'Loading..',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontSize: 15,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                  prefixIcon: Icon(
+                                    Icons.delivery_dining_outlined,
+                                    color: Color(0xFFFFD233),
+                                  ),
                                 ),
+                                items:
+                                    ["Motorcycle", "Car"].map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please select vehicle type';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                               ),
-                              SizedBox(height: 10),
-                              InkWell(
-                                onTap: isLoading == true
-                                    ? null
-                                    : () async {
-                                        // Your code to handle the tap event
-                                        if (mounted) {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
-                                        }
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              width: 263,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  width: 0.5,
+                                  color: Color.fromARGB(56, 25, 25, 25),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(164, 117, 117, 117),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                controller: _colourController,
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                ],
+                                decoration: InputDecoration(
+                                  hintText: "enter vehicle colour",
+                                  filled: true,
+                                  fillColor:
+                                      const Color.fromARGB(255, 249, 249, 249),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                  prefixIcon: Icon(
+                                    Icons.water_drop,
+                                    color: Color(0xFFFFD233),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter vehicle colour';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 40),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 30),
+                                InkWell(
+                                  onTap: () async {
+                                    if (isImageSelected == false) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content:
+                                                  Text('Please Upload Image')));
+                                      return;
+                                    }
 
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                                  actions: [
-                                                    TextButton(
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    if (_formKey.currentState!.validate()) {
+                                      final id = await signupRider();
+                                      // await signIn();
+                                      await uploadVehicle(id);
+                                      await uploadImage(id);
+
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                actions: [
+                                                  TextButton(
                                                       onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Close the dialog
+                                                        Navigator
+                                                            .pushNamedAndRemoveUntil(
+                                                                context,
+                                                                '/login',
+                                                                (route) =>
+                                                                    false);
                                                       },
-                                                      child: Text(
-                                                        'Cancel',
-                                                        style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 15,
-                                                          fontFamily: 'Lexend',
-                                                          fontWeight:
-                                                              FontWeight.w700,
+                                                      child: Text('OK'))
+                                                ],
+                                                content: Text(
+                                                    'Vehicle Successfully Uploaded'),
+                                              ));
+                                    }
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 263,
+                                    height: 53,
+                                    alignment: Alignment.center,
+                                    decoration: ShapeDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 44, 174, 48),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        side: BorderSide(
+                                          width: 1.50,
+                                          color: const Color.fromARGB(
+                                              255, 44, 174, 48),
+                                        ),
+                                      ),
+                                      shadows: [
+                                        BoxShadow(
+                                          color: Color(0x3F000000),
+                                          blurRadius: 4,
+                                          offset: Offset(0, 4),
+                                          spreadRadius: 0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: isLoading == false
+                                        ? Text(
+                                            'Confirm',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          )
+                                        : Text(
+                                            'Loading..',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                InkWell(
+                                  onTap: isLoading == true
+                                      ? null
+                                      : () async {
+                                          // Your code to handle the tap event
+                                          if (mounted) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                          }
+
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop(); // Close the dialog
+                                                        },
+                                                        child: Text(
+                                                          'Cancel',
+                                                          style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 15,
+                                                            fontFamily:
+                                                                'Lexend',
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    TextButton(
-                                                        onPressed: () async {
-                                                          try {
-                                                            await signupRider();
-                                                            Navigator
-                                                                .pushNamedAndRemoveUntil(
-                                                                    context,
-                                                                    '/login',
-                                                                    (route) =>
-                                                                        false);
-                                                          } catch (e) {
-                                                            return;
-                                                          }
-                                                        },
-                                                        child: Text('Confirm',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.blue,
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Lexend',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                            ))),
-                                                  ],
-                                                  content: Text(
-                                                      'Your current information will not be saved. Are you sure you want to proceed? You can update your vehicle details on the \'Update Profile\' page.'),
-                                                ));
+                                                      TextButton(
+                                                          onPressed: () async {
+                                                            try {
+                                                              await signupRider();
+                                                              Navigator
+                                                                  .pushNamedAndRemoveUntil(
+                                                                      context,
+                                                                      '/login',
+                                                                      (route) =>
+                                                                          false);
+                                                            } catch (e) {
+                                                              return;
+                                                            }
+                                                          },
+                                                          child: Text('Confirm',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.blue,
+                                                                fontSize: 15,
+                                                                fontFamily:
+                                                                    'Lexend',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              ))),
+                                                    ],
+                                                    content: Text(
+                                                        'Your current information will not be saved. Are you sure you want to proceed? You can update your vehicle details on the \'Update Profile\' page.'),
+                                                  ));
 
-                                        if (mounted) {
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                        }
-                                      },
-                                child: Container(
-                                  width: 263,
-                                  height: 53,
-                                  alignment: Alignment.center,
-                                  decoration: ShapeDecoration(
-                                    color: Color.fromARGB(255, 255, 42, 42),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      side: BorderSide(
-                                        width: 1.50,
-                                        color: Color.fromARGB(255, 255, 60, 54),
-                                      ),
-                                    ),
-                                    shadows: [
-                                      BoxShadow(
-                                        color: Color(0x3F000000),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: isLoading == false
-                                      ? Text(
-                                          'Upload later',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontSize: 15,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        )
-                                      : Text(
-                                          'Loading..',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontSize: 15,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w400,
-                                          ),
+                                          if (mounted) {
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                          }
+                                        },
+                                  child: Container(
+                                    width: 263,
+                                    height: 53,
+                                    alignment: Alignment.center,
+                                    decoration: ShapeDecoration(
+                                      color: Color.fromARGB(255, 255, 42, 42),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        side: BorderSide(
+                                          width: 1.50,
+                                          color:
+                                              Color.fromARGB(255, 255, 60, 54),
                                         ),
+                                      ),
+                                      shadows: [
+                                        BoxShadow(
+                                          color: Color(0x3F000000),
+                                          blurRadius: 4,
+                                          offset: Offset(0, 4),
+                                          spreadRadius: 0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: isLoading == false
+                                        ? Text(
+                                            'Upload later',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          )
+                                        : Text(
+                                            'Loading..',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        if (isLoading)
+          Container(
+            color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  LottieBuilder.asset('assets/yellow_loading.json'),
                 ],
               ),
-            ],
+            ),
           ),
-        ],
+      ]
       ),
     );
   }
