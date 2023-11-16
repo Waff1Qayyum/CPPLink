@@ -118,8 +118,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
           },
         ),
       ),
-      body: 
-      ListView(
+      body: ListView(
         children: [
           Column(
             children: [
@@ -533,22 +532,6 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                             builder: (context) => AlertDialog(
                                                   actions: [
                                                     TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Close the dialog
-                                                      },
-                                                      child: Text(
-                                                        'Cancel',
-                                                        style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 15,
-                                                          fontFamily: 'Lexend',
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    TextButton(
                                                         onPressed: () async {
                                                           try {
                                                             await signupRider();
@@ -573,6 +556,22 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                                                   FontWeight
                                                                       .w700,
                                                             ))),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // Close the dialog
+                                                      },
+                                                      child: Text(
+                                                        'Cancel',
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 15,
+                                                          fontFamily: 'Lexend',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ],
                                                   content: Text(
                                                       'Your current information will not be saved. Are you sure you want to proceed? You can update your vehicle details on the \'Update Profile\' page.'),
