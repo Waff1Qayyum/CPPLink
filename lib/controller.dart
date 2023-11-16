@@ -19,38 +19,6 @@ var registerPassword;
 var registerName;
 var registerPhone;
 
-String getRiderEmail() {
-  return registerEmail;
-}
-
-void setRiderEmail(String email) {
-  registerEmail = email;
-}
-
-String getRiderPassword() {
-  return registerPassword;
-}
-
-void setRiderPassword(String password) {
-  registerPassword = password;
-}
-
-String getRiderName() {
-  return registerName;
-}
-
-void setRiderName(String name) {
-  registerName = name;
-}
-
-String getRiderPhone() {
-  return registerPhone;
-}
-
-void setRiderPhone(String phone) {
-  registerPhone = phone;
-}
-
 Future<dynamic> signupRider() async {
   try {
     final user = await supabase.auth.signUp(
@@ -81,6 +49,34 @@ Future<dynamic> signupRider() async {
   }
 }
 
+//Validation
 
-//////////////////// rider 
-///////////////////
+//phone validation
+bool _phoneValid(String phone) {
+  if (!RegExp(r'^01\d{8,9}$').hasMatch(phone)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+//name validation
+
+//email validation
+
+//formatting
+
+//format phone
+String formatPhone(String phone) {
+  return phone.replaceAll(RegExp(r'\s+'), '').trim();
+}
+
+//format name
+String formatName(String name) {
+  return name.replaceAll(RegExp(r'\s+'), ' ').trim().toUpperCase();
+}
+
+//format email
+String formatEmail(String email) {
+  return email.trim();
+}

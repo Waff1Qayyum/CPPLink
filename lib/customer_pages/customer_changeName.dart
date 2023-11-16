@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,6 +18,7 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
   String? name;
   String? phone;
   String? email;
+  String? _name;
   bool? passMatch;
   dynamic image;
   TextEditingController _nameController = TextEditingController();
@@ -110,9 +112,9 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
       return false;
   }
 
-  Future<void> setUsername() async {
+  Future<void> setUsername(String _name) async {
     String userId = supabase.auth.currentUser!.id;
-    String name = _nameController.text.toUpperCase();
+    String name = _name.toUpperCase();
     await supabase
         .from('user')
         .update({'name': name}).match({'user_id': userId});
@@ -442,9 +444,11 @@ class _CustomerChangeNameState extends State<CustomerChangeName> {
                                             isLoading = true;
                                           });
                                           passMatch = await checkPassword();
+                                          _name =
+                                              formatName(_nameController.text);
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            await setUsername();
+                                            await setUsername(_name!);
                                             //change snackbar design
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(

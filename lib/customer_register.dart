@@ -20,38 +20,41 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   bool? emailUnique;
   bool? phoneUnique;
   bool? phoneValid;
+  String? _email;
+  String? _name;
+  String? _phone;
   bool checked = false;
   final _formkey = GlobalKey<FormState>();
   bool isLoading = false;
 
   bool? _phoneValid() {
-    if (!RegExp(r'^\d{10,11}$').hasMatch(_phoneController.text)) {
+    if (!RegExp(r'^\d{10,11}$').hasMatch(_phone!)) {
       return false;
     } else {
       return true;
     }
   }
 
-  Future<void> _signUp() async {
+  Future<void> _signUp(String _name, String _phone, String _email) async {
     try {
       if (RegisterUserType == 'rider') {
         //Set Rider details
-        registerEmail = _emailController.text;
+        registerEmail = _email;
         registerPassword = _passwordController.text;
-        registerName = _nameController.text;
-        registerPhone = _phoneController.text;
+        registerName = _name;
+        registerPhone = _phone;
         print('rider details saved');
         return;
       }
       final res = await supabase.auth.signUp(
-          email: _emailController.text,
+          email: _email,
           password: _passwordController.text,
           emailRedirectTo: 'io.supabase.flutterquickstart://login-callback/');
       await supabase.from('user').insert({
         'user_id': res.user!.id,
-        'name': _nameController.text,
-        'phone': _phoneController.text,
-        'email': _emailController.text,
+        'name': _name,
+        'phone': _phone,
+        'email': _email,
       });
       print('created successfully');
       return;
@@ -62,13 +65,13 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   }
 
   Future<bool> _emailUnique() async {
-    final _email = await supabase
+    final email = await supabase
         .from('user')
         .select('email')
-        .eq('email', _emailController.text)
+        .eq('email', _email)
         .limit(1);
 
-    if (_email.isNotEmpty && _email[0]['email'] != null) {
+    if (email.isNotEmpty && email[0]['email'] != null) {
       return false;
     } else {
       return true;
@@ -79,7 +82,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     final phoneNo = await supabase
         .from('user')
         .select('phone')
-        .eq('phone', _phoneController.text)
+        .eq('phone', _phone)
         .limit(1);
     if (phoneNo.isNotEmpty && phoneNo[0]['phone'] != null) {
       return false;
@@ -544,11 +547,18 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                         setState(() {
                                           isLoading = true;
                                         });
+
+                                        _email =
+                                            formatEmail(_emailController.text);
+                                        _phone =
+                                            formatPhone(_phoneController.text);
+                                        _name =
+                                            formatName(_nameController.text);
                                         emailUnique = await _emailUnique();
                                         phoneUnique = await _phoneUnique();
                                         phoneValid = await _phoneValid();
                                         if (_formkey.currentState!.validate()) {
-                                          _signUp();
+                                          _signUp(_name!, _phone!, _email!);
                                           if (RegisterUserType == 'rider') {
                                             print('go to vehicle page');
                                             Navigator.pushNamed(

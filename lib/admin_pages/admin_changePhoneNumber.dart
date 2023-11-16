@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
+import '../controller.dart';
 
 class AdminChangePhone extends StatefulWidget {
   const AdminChangePhone({super.key});
@@ -18,6 +19,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
   String? name;
   String? phone;
   String? email;
+  String? _phone;
   bool? passMatch;
   dynamic image;
   TextEditingController _phoneController = TextEditingController();
@@ -113,9 +115,9 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
       return false;
   }
 
-  Future<void> setPhone() async {
+  Future<void> setPhone(String _phone) async {
     String userId = supabase.auth.currentUser!.id;
-    String phone = _phoneController.text;
+    String phone = _phone!;
     final data = await supabase
         .from('admin')
         .update({'phone': phone}).match({'user_id': userId});
@@ -445,9 +447,11 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                             isLoading = true;
                                           });
                                           passMatch = await checkPassword();
+                                          _phone = formatPhone(
+                                              _phoneController.text);
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            await setPhone();
+                                            await setPhone(_phone!);
                                             //change snackbar design
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(

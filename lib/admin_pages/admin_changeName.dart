@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
+import '../controller.dart';
 
 class AdminChangeName extends StatefulWidget {
   const AdminChangeName({super.key});
@@ -17,6 +18,7 @@ class _AdminChangeNameState extends State<AdminChangeName> {
   String? name;
   String? phone;
   String? email;
+  String? _name;
   bool? passMatch;
   dynamic image;
   TextEditingController _nameController = TextEditingController();
@@ -111,9 +113,9 @@ class _AdminChangeNameState extends State<AdminChangeName> {
       return false;
   }
 
-  Future<void> setUsername() async {
+  Future<void> setUsername(String _name) async {
     String userId = supabase.auth.currentUser!.id;
-    String name = _nameController.text.toUpperCase();
+    String name = _name;
     final data = await supabase
         .from('admin')
         .update({'name': name}).match({'user_id': userId});
@@ -444,9 +446,11 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                             isLoading = true;
                                           });
                                           passMatch = await checkPassword();
+                                          _name =
+                                              formatPhone(_nameController.text);
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            await setUsername();
+                                            await setUsername(_name!);
                                             //change snackbar design
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(

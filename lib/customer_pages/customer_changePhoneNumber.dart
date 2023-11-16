@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -18,6 +19,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
   String? name;
   String? phone;
   String? email;
+  String? _phone;
   bool? passMatch;
   dynamic image;
   TextEditingController _phoneController = TextEditingController();
@@ -113,9 +115,9 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
       return false;
   }
 
-  Future<void> setPhone() async {
+  Future<void> setPhone(String _phone) async {
     String userId = supabase.auth.currentUser!.id;
-    String phone = _phoneController.text;
+    String phone = _phone;
     final data = await supabase
         .from('user')
         .update({'phone': phone}).match({'user_id': userId});
@@ -445,9 +447,11 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                                             isLoading = true;
                                           });
                                           passMatch = await checkPassword();
+                                          _phone = formatPhone(
+                                              _phoneController.text);
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            await setPhone();
+                                            await setPhone(_phone!);
                                             //change snackbar design
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
