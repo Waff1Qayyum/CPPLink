@@ -82,9 +82,18 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         children: [
           const SizedBox(height: 18),
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Email'),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                TextFormField(
+                  maxLines:
+                      null, // Set to null for unlimited lines, or specify a higher number
+                  controller: _emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                ),
+                // Add more form fields or widgets as needed
+              ],
+            ),
           ),
           SizedBox(height: 20),
           TextFormField(
