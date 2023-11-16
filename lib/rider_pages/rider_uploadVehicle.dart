@@ -30,14 +30,6 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
   // TextEditingController _typeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  Future<void> signIn() async {
-    // final res = await supabase.auth.signInWithPassword(
-    //   email: registerEmail,
-    //   password: registerPassword,
-    // );
-    // final res = await supabase.auth.currentUser!.id;
-  }
-
   Future<void> uploadImage(dynamic id) async {
     final imageExtension = fileImage!.path.split('.').last.toLowerCase();
     final imageBytes = await fileImage!.readAsBytes();
