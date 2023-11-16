@@ -444,7 +444,33 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     // await signIn();
                                     await uploadVehicle(id);
                                     await uploadImage(id);
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  if (_formKey.currentState!.validate()) {
+                                    final id = await signupRider();
+                                    // await signIn();
+                                    await uploadVehicle(id);
+                                    await uploadImage(id);
 
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator
+                                                          .pushNamedAndRemoveUntil(
+                                                              context,
+                                                              '/login',
+                                                              (route) => false);
+                                                    },
+                                                    child: Text('OK'))
+                                              ],
+                                              content: Text(
+                                                  'Vehicle Successfully Uploaded'),
+                                            ));
+                                  }
                                     showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -528,7 +554,120 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                             isLoading = true;
                                           });
                                         }
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                },
+                                child: Container(
+                                  width: 263,
+                                  height: 53,
+                                  alignment: Alignment.center,
+                                  decoration: ShapeDecoration(
+                                    color:
+                                        const Color.fromARGB(255, 44, 174, 48),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      side: BorderSide(
+                                        width: 1.50,
+                                        color: const Color.fromARGB(
+                                            255, 44, 174, 48),
+                                      ),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x3F000000),
+                                        blurRadius: 4,
+                                        offset: Offset(0, 4),
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: isLoading == false
+                                      ? Text(
+                                          'Confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        )
+                                      : Text(
+                                          'Loading..',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              InkWell(
+                                onTap: isLoading == true
+                                    ? null
+                                    : () async {
+                                        // Your code to handle the tap event
+                                        if (mounted) {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                        }
 
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // Close the dialog
+                                                      },
+                                                      child: Text(
+                                                        'Cancel',
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 15,
+                                                          fontFamily: 'Lexend',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    TextButton(
+                                                        onPressed: () async {
+                                                          try {
+                                                            await signupRider();
+                                                            Navigator
+                                                                .pushNamedAndRemoveUntil(
+                                                                    context,
+                                                                    '/login',
+                                                                    (route) =>
+                                                                        false);
+                                                          } catch (e) {
+                                                            return;
+                                                          }
+                                                        },
+                                                        child: Text('Confirm',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontSize: 15,
+                                                              fontFamily:
+                                                                  'Lexend',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ))),
+                                                  ],
+                                                  content: Text(
+                                                      'Your current information will not be saved. Are you sure you want to proceed? You can update your vehicle details on the \'Update Profile\' page.'),
+                                                ));
                                         showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
