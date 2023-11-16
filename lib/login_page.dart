@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; //comment
 
 import 'main.dart';
@@ -127,148 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            /////////////////////////////////////////////
-                            /// input email
-                            Column(
-                              children: [
-                                Container(
-                                  width: 263,
-// Adjust the width as needed
-                                  // padding: EdgeInsets.symmetric(
-                                  //     vertical: 8,
-                                  //     horizontal: 12), // Adjust padding
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Color.fromARGB(56, 25, 25, 25),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromARGB(164, 117, 117, 117),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: TextFormField(
-                                    controller: _emailController,
-                                    textAlignVertical: TextAlignVertical.bottom,
-                                    maxLines: 1,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter
-                                          .singleLineFormatter,
-                                    ],
-                                    decoration: InputDecoration(
-                                      hintText: "Enter email",
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(
-                                          255, 249, 249, 249),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                          width: 1.50,
-                                          color: Color(0xFFFFD233),
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 12,
-                                          horizontal: 10), // Adjust padding
-                                      prefixIcon: Icon(
-                                        Icons.email,
-                                        color: Color(0xFFFFD233),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter an email';
-                                      } else if (emailInvalid == true) {
-                                        return 'Email does not exist';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            ///input password
-                            SizedBox(height: 20),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 263,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Color.fromARGB(56, 25, 25, 25),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromARGB(164, 117, 117, 117),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: TextFormField(
-                                    controller: _passwordController,
-                                    textAlignVertical: TextAlignVertical.bottom,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      hintText: "Enter password",
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(
-                                          255, 249, 249, 249),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                          width: 1.50,
-                                          color: Color(0xFFFFD233),
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 12, horizontal: 10),
-                                      prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: Color(0xFFFFD233),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter a password';
-                                      } else if (passwordInvalid == true &&
-                                          emailInvalid == false) {
-                                        return 'Wrong Password';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 40),
                             Container(
-                              width: 170,
-                              height: 170,
+                              width: 200,
+                              height: 200,
                               child: Image.asset(
                                   'images/cpp_logo.png'), // Replace 'your_image.png' with the actual image file name
                             ),
@@ -294,7 +156,6 @@ class _LoginPageState extends State<LoginPage> {
                                   children: [
                                     Container(
                                       width: 263,
-                                      height: 37,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.rectangle,
                                         borderRadius: BorderRadius.circular(10),
@@ -315,23 +176,21 @@ class _LoginPageState extends State<LoginPage> {
                                       child: TextFormField(
                                         controller: _emailController,
                                         textAlignVertical:
-                                            TextAlignVertical.bottom,
+                                            TextAlignVertical.center,
+                                        maxLines: 1,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .singleLineFormatter,
+                                        ],
                                         decoration: InputDecoration(
                                           hintText: "enter email",
                                           filled: true,
                                           fillColor: const Color.fromARGB(
-                                              255,
-                                              249,
-                                              249,
-                                              249), // Background color
+                                              255, 249, 249, 249),
                                           border: OutlineInputBorder(
-                                            // Use OutlineInputBorder for rounded borders
-                                            borderRadius: BorderRadius.circular(
-                                                10), // This sets the rounded corners for the text field
-                                            borderSide: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none,
-                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: BorderSide.none,
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
@@ -341,6 +200,9 @@ class _LoginPageState extends State<LoginPage> {
                                               color: Color(0xFFFFD233),
                                             ),
                                           ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12,
+                                              horizontal: 10), // Adjust padding
                                           prefixIcon: Icon(
                                             Icons.email,
                                             color: Color(0xFFFFD233),
@@ -350,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                                           if (value!.isEmpty) {
                                             return 'Please enter an email';
                                           } else if (emailInvalid == true) {
-                                            return 'Email do not exist';
+                                            return 'Email does not exist';
                                           } else {
                                             return null;
                                           }
@@ -366,7 +228,6 @@ class _LoginPageState extends State<LoginPage> {
                                   children: [
                                     Container(
                                       width: 263,
-                                      height: 37,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.rectangle,
                                         borderRadius: BorderRadius.circular(10),
@@ -387,7 +248,12 @@ class _LoginPageState extends State<LoginPage> {
                                       child: TextFormField(
                                         controller: _passwordController,
                                         textAlignVertical:
-                                            TextAlignVertical.bottom,
+                                            TextAlignVertical.center,
+                                        maxLines: 1,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .singleLineFormatter,
+                                        ],
                                         decoration: InputDecoration(
                                           hintText: "enter password",
                                           filled: true,
@@ -400,10 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                                             // Use OutlineInputBorder for rounded borders
                                             borderRadius: BorderRadius.circular(
                                                 10), // This sets the rounded corners for the text field
-                                            borderSide: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none,
-                                            ),
+                                            borderSide: BorderSide.none,
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
@@ -413,6 +276,9 @@ class _LoginPageState extends State<LoginPage> {
                                               color: Color(0xFFFFD233),
                                             ),
                                           ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12,
+                                              horizontal: 10), 
                                           prefixIcon: Icon(
                                             Icons.password,
                                             color: Color(0xFFFFD233),
@@ -571,7 +437,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      LottieBuilder.asset('assets/yellow_bubble.json'),
+                      LottieBuilder.asset('assets/yellow_loading.json'),
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'main.dart';
 
 class SplashPage extends StatefulWidget {
@@ -50,8 +51,20 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+    return  Scaffold(
+      body: Center(child:
+              Container(
+                color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LottieBuilder.asset('assets/yellow_loading.json'),
+                    ],
+                  ),
+                ),
+              ),),
     );
   }
 }

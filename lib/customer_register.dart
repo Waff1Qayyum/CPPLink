@@ -1,5 +1,7 @@
 // import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'controller.dart';
 import 'main.dart';
 
@@ -169,7 +171,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 50.0),
+                SizedBox(height: 30.0),
                 /////Input Column
                 Container(
                   decoration: BoxDecoration(
@@ -188,7 +190,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                               children: [
                                 Container(
                                   width: 263,
-                                  height: 37,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
@@ -217,7 +218,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                     controller: _nameController,
                                     textCapitalization:
                                         TextCapitalization.characters,
-                                    textAlignVertical: TextAlignVertical.bottom,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],
                                     decoration: InputDecoration(
                                       hintText: "enter full name",
                                       filled: true,
@@ -239,6 +245,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                           color: Color(0xFFFFD233),
                                         ),
                                       ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 10),
                                       prefixIcon: Icon(
                                         Icons.person,
                                         color: Color(0xFFFFD233),
@@ -255,7 +263,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                               children: [
                                 Container(
                                   width: 263,
-                                  height: 37,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
@@ -286,7 +293,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                       }
                                     },
                                     controller: _phoneController,
-                                    textAlignVertical: TextAlignVertical.bottom,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],
                                     decoration: InputDecoration(
                                       hintText: "enter mobile number",
                                       filled: true,
@@ -308,6 +320,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                           color: Color(0xFFFFD233),
                                         ),
                                       ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12,
+                                              horizontal: 10),
                                       prefixIcon: Icon(
                                         Icons.call,
                                         color: Color(0xFFFFD233),
@@ -324,7 +339,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                               children: [
                                 Container(
                                   width: 263,
-                                  height: 37,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
@@ -344,8 +358,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                   ),
                                   child: TextFormField(
                                     controller: _emailController,
-                                    textAlignVertical: TextAlignVertical.bottom,
-                                    decoration: InputDecoration(
+                                    textAlignVertical: TextAlignVertical.center,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],                                    decoration: InputDecoration(
                                       hintText: "enter email",
                                       filled: true,
                                       fillColor: const Color.fromARGB(255, 249,
@@ -366,6 +384,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                           color: Color(0xFFFFD233),
                                         ),
                                       ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12,
+                                              horizontal: 10),
                                       prefixIcon: Icon(
                                         Icons.email,
                                         color: Color(0xFFFFD233),
@@ -391,7 +412,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                               children: [
                                 Container(
                                   width: 263,
-                                  height: 37,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
@@ -412,8 +432,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                   child: TextFormField(
                                     controller: _passwordController,
                                     obscureText: true,
-                                    textAlignVertical: TextAlignVertical.bottom,
-                                    decoration: InputDecoration(
+                                    textAlignVertical: TextAlignVertical.center,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],                                    decoration: InputDecoration(
                                       hintText: "enter password",
                                       filled: true,
                                       fillColor: const Color.fromARGB(255, 249,
@@ -434,6 +458,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                           color: Color(0xFFFFD233),
                                         ),
                                       ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12,
+                                              horizontal: 10),
                                       prefixIcon: Icon(
                                         Icons.password,
                                         color: Color(0xFFFFD233),
@@ -457,7 +484,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                               children: [
                                 Container(
                                   width: 263,
-                                  height: 37,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
@@ -477,8 +503,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                   ),
                                   child: TextFormField(
                                     controller: _confirmPasswordController,
-                                    textAlignVertical: TextAlignVertical.bottom,
-                                    obscureText: true,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],                                    obscureText: true,
                                     decoration: InputDecoration(
                                       hintText: "enter confirm password",
                                       filled: true,
@@ -500,6 +530,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                           color: Color(0xFFFFD233),
                                         ),
                                       ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12,
+                                              horizontal: 10),
                                       prefixIcon: Icon(
                                         Icons.password,
                                         color:

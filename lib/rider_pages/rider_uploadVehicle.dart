@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../controller.dart';
 
+import '../controller.dart';
 import '../main.dart';
 
 class RiderUploadVehicle extends StatefulWidget {
@@ -21,11 +23,11 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
   File? imageFile;
   bool isImageSelected = false;
   bool isLoading = false;
-
+  String _selectedVehicleType = 'Motorcycle';
   TextEditingController _plateController = TextEditingController();
   TextEditingController _colourController = TextEditingController();
   TextEditingController _modelController = TextEditingController();
-  TextEditingController _typeController = TextEditingController();
+  // TextEditingController _typeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   Future<void> signIn() async {
@@ -78,11 +80,12 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
 
   Future<void> uploadVehicle(dynamic id) async {
     try {
+      print('uploading rider..');
       await supabase.from('rider').update({
         'vehicle_model': _modelController.text.toUpperCase(),
         'vehicle_colour': _colourController.text.toUpperCase(),
         'plate_number': _plateController.text.toUpperCase(),
-        'vehicle_type': _typeController.text.toUpperCase(),
+        'vehicle_type': _selectedVehicleType.toUpperCase(),
       }).eq('user_id', id);
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -97,7 +100,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
         backgroundColor: Color.fromRGBO(250, 195, 44, 1),
         centerTitle: true,
         title: Text(
-          'Update Profile',
+          'Setup Your Profile',
           style: TextStyle(
             fontFamily: 'roboto',
             fontWeight: FontWeight.bold,
@@ -115,7 +118,8 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
           },
         ),
       ),
-      body: ListView(
+      body: 
+      ListView(
         children: [
           Column(
             children: [
@@ -146,21 +150,30 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                               child: isImageSelected == true
                                   ? Image(image: FileImage(imageFile!))
                                   : Container(
-                                      color: Colors.grey,
+                                      color: const Color.fromARGB(
+                                          255, 154, 154, 154),
                                       child: const Center(
                                         child: Text('No image'),
                                       ),
                                     )),
-                          ElevatedButton(
-                            onPressed: () async {
-                              getImage();
-                            },
-                            child: Text('Upload Photo'),
+                          Container(
+                            width: 150,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                getImage();
+                              },
+                              child: Text('Upload Photo',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontFamily: 'Lexend',
+                                    fontWeight: FontWeight.w700,
+                                  )),
+                            ),
                           ),
                           SizedBox(height: 20),
                           Container(
                             width: 263,
-                            height: 37,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(10),
@@ -179,7 +192,11 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                             ),
                             child: TextFormField(
                               controller: _plateController,
-                              textAlignVertical: TextAlignVertical.bottom,
+                              textAlignVertical: TextAlignVertical.center,
+                              maxLines: 1,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.singleLineFormatter,
+                              ],
                               decoration: InputDecoration(
                                 hintText: "enter vehicle plate number",
                                 filled: true,
@@ -199,8 +216,10 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 10),
                                 prefixIcon: Icon(
-                                  Icons.password,
+                                  Icons.pin,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
@@ -216,7 +235,6 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                           SizedBox(height: 20),
                           Container(
                             width: 263,
-                            height: 37,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(10),
@@ -235,7 +253,11 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                             ),
                             child: TextFormField(
                               controller: _modelController,
-                              textAlignVertical: TextAlignVertical.bottom,
+                              textAlignVertical: TextAlignVertical.center,
+                              maxLines: 1,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.singleLineFormatter,
+                              ],
                               decoration: InputDecoration(
                                 hintText: "enter vehicle model",
                                 filled: true,
@@ -255,8 +277,10 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 10),
                                 prefixIcon: Icon(
-                                  Icons.password,
+                                  Icons.delivery_dining_outlined,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
@@ -272,7 +296,6 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                           SizedBox(height: 20),
                           Container(
                             width: 263,
-                            height: 37,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(10),
@@ -289,11 +312,14 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                 ),
                               ],
                             ),
-                            child: TextFormField(
-                              controller: _typeController,
-                              textAlignVertical: TextAlignVertical.bottom,
+                            child: DropdownButtonFormField<String>(
+                              value: _selectedVehicleType,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _selectedVehicleType = newValue!;
+                                });
+                              },
                               decoration: InputDecoration(
-                                hintText: "enter vehicle type",
                                 filled: true,
                                 fillColor:
                                     const Color.fromARGB(255, 249, 249, 249),
@@ -311,14 +337,22 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 10),
                                 prefixIcon: Icon(
-                                  Icons.password,
+                                  Icons.delivery_dining_outlined,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
+                              items: ["Motorcycle", "Car"].map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter vehicle type';
+                                  return 'Please select vehicle type';
                                 } else {
                                   return null;
                                 }
@@ -328,7 +362,6 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                           SizedBox(height: 20),
                           Container(
                             width: 263,
-                            height: 37,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(10),
@@ -347,7 +380,11 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                             ),
                             child: TextFormField(
                               controller: _colourController,
-                              textAlignVertical: TextAlignVertical.bottom,
+                              textAlignVertical: TextAlignVertical.center,
+                              maxLines: 1,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.singleLineFormatter,
+                              ],
                               decoration: InputDecoration(
                                 hintText: "enter vehicle colour",
                                 filled: true,
@@ -367,8 +404,10 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 10),
                                 prefixIcon: Icon(
-                                  Icons.password,
+                                  Icons.water_drop,
                                   color: Color(0xFFFFD233),
                                 ),
                               ),
@@ -429,7 +468,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                   });
                                 },
                                 child: Container(
-                                  width: 135,
+                                  width: 263,
                                   height: 53,
                                   alignment: Alignment.center,
                                   decoration: ShapeDecoration(
@@ -454,7 +493,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                   ),
                                   child: isLoading == false
                                       ? Text(
-                                          'confirm',
+                                          'Confirm',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: const Color.fromARGB(
@@ -494,6 +533,22 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                             builder: (context) => AlertDialog(
                                                   actions: [
                                                     TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // Close the dialog
+                                                      },
+                                                      child: Text(
+                                                        'Cancel',
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 15,
+                                                          fontFamily: 'Lexend',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    TextButton(
                                                         onPressed: () async {
                                                           try {
                                                             await signupRider();
@@ -507,13 +562,17 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                                             return;
                                                           }
                                                         },
-                                                        child: Text('Confirm')),
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text('Cancel'))
+                                                        child: Text('Confirm',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontSize: 15,
+                                                              fontFamily:
+                                                                  'Lexend',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ))),
                                                   ],
                                                   content: Text(
                                                       'Your current information will not be saved. Are you sure you want to proceed? You can update your vehicle details on the \'Update Profile\' page.'),
@@ -526,7 +585,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                         }
                                       },
                                 child: Container(
-                                  width: 135,
+                                  width: 263,
                                   height: 53,
                                   alignment: Alignment.center,
                                   decoration: ShapeDecoration(
@@ -549,7 +608,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                   ),
                                   child: isLoading == false
                                       ? Text(
-                                          'upload later',
+                                          'Upload later',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: const Color.fromARGB(

@@ -59,7 +59,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
           backgroundColor: Color.fromRGBO(250, 195, 44, 1),
           centerTitle: true,
           title: Text(
-            'forgot password',
+            'Forgot Password',
             style: TextStyle(
               fontFamily: 'roboto',
               fontWeight: FontWeight.bold,
