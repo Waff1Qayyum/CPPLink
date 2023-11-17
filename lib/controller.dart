@@ -1,12 +1,18 @@
 import 'main.dart';
 
+
+/////////////////
+// final currentUser =  supabase.auth.currentUser;
+// final currentID = currentUser!.id;
+// final currentUName =  supabase.from('user').select('name').eq('user_id',currentID);
+
+
 /////////////////////////
 //////////////////////// for otp
 var email; // for otp
 void setEmail(String _email) {
   email = _email;
 }
-
 String getEmail() {
   return email;
 }

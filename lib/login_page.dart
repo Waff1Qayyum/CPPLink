@@ -254,9 +254,11 @@ class _LoginPageState extends State<LoginPage> {
                                           FilteringTextInputFormatter
                                               .singleLineFormatter,
                                         ],
+                                        obscureText: true,
                                         decoration: InputDecoration(
                                           hintText: "enter password",
                                           filled: true,
+
                                           fillColor: const Color.fromARGB(
                                               255,
                                               249,
@@ -276,9 +278,8 @@ class _LoginPageState extends State<LoginPage> {
                                               color: Color(0xFFFFD233),
                                             ),
                                           ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                              vertical: 12,
-                                              horizontal: 10), 
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12, horizontal: 10),
                                           prefixIcon: Icon(
                                             Icons.password,
                                             color: Color(0xFFFFD233),

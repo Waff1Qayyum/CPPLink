@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../controller.dart';
 import '../main.dart';
 
 class CustomerHomepage extends StatefulWidget {
@@ -8,9 +9,11 @@ class CustomerHomepage extends StatefulWidget {
 
   @override
   State<CustomerHomepage> createState() => _CustomerHomepageState();
+
 }
 
 class _CustomerHomepageState extends State<CustomerHomepage> {
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +63,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
           ],
         ),
         body: ListView(
+
           children: [
             Column(
               children: [

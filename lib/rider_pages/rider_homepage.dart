@@ -350,6 +350,8 @@ class _RiderHomePageState extends State<RiderHomePage> {
                       children: [
                         InkWell(
                           onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/rider_profile');
                             // Your code to handle the tap event
                           },
                           child: Container(

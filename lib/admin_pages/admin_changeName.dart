@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
@@ -147,7 +149,9 @@ class _AdminChangeNameState extends State<AdminChangeName> {
           },
         ),
       ),
-      body: ListView(
+      body: 
+      Stack(children:[
+      ListView(
         children: [
           Column(
             children: [
@@ -276,7 +280,7 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                             ])),
                   ]),
               /////////////////////////////////////
-              SizedBox(height: 50),
+              SizedBox(height: 70),
               Text(
                 'Change Your Account\'s Name ?',
                 textAlign: TextAlign.center,
@@ -298,7 +302,6 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                         children: [
                           Container(
                             width: 263,
-                            height: 37,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(10),
@@ -325,8 +328,12 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                               },
                               controller: _nameController,
                               textCapitalization: TextCapitalization.characters,
-                              textAlignVertical: TextAlignVertical.bottom,
-                              decoration: InputDecoration(
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                ],                              decoration: InputDecoration(
                                 hintText: "enter new full name",
                                 filled: true,
                                 fillColor: const Color.fromARGB(
@@ -347,6 +354,8 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
                                 prefixIcon: Icon(
                                   Icons.person,
                                   color: Color(0xFFFFD233),
@@ -372,7 +381,6 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                           //////////////////////
                           Container(
                             width: 263,
-                            height: 37,
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(10),
@@ -392,7 +400,12 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                             child: TextFormField(
                               controller: _passwordController,
                               obscureText: true,
-                              textAlignVertical: TextAlignVertical.bottom,
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                ],
                               decoration: InputDecoration(
                                 hintText: "enter password ",
                                 filled: true,
@@ -414,6 +427,8 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                     color: Color(0xFFFFD233),
                                   ),
                                 ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
                                 prefixIcon: Icon(
                                   Icons.password,
                                   color: Color(0xFFFFD233),
@@ -434,9 +449,6 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                //////////////////
-                                SizedBox(width: 30),
-                                //////////////////
                                 InkWell(
                                   onTap: isLoading == true
                                       ? null
@@ -466,7 +478,7 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                           });
                                         },
                                   child: Container(
-                                    width: 135,
+                            width: 263,
                                     height: 53,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
@@ -522,6 +534,21 @@ class _AdminChangeNameState extends State<AdminChangeName> {
           ),
         ],
       ),
+        // Loading indicator overlay
+        if (isLoading)
+          Container(
+            color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  LottieBuilder.asset('assets/yellow_loading.json'),
+                ],
+              ),
+            ),
+          ),
+      ]),
     );
   }
 }
