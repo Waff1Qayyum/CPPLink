@@ -113,8 +113,10 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pop();
-          },
+                            Navigator.of(context)
+                                .pushReplacementNamed('/rider_home');
+                            // Your code to handle the tap event
+                          },
         ),
         actions: [
           Padding(
@@ -222,7 +224,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      name ?? 'null',
+                                      name ?? 'Loading...',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 22,
@@ -239,7 +241,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          phone ?? 'null',
+                                          phone ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,
@@ -258,7 +260,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          email ?? 'null',
+                                          email ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,

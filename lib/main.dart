@@ -63,12 +63,10 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
         '/login': (_) => const LoginPage(), //login_page
-        // '/login': (_) => const AdminHomePage(), //login_page
 
 ////////////////////register page////////////////
         '/register_type': (_) => const RegisterTypePage(), //login_page
         '/customer_registration': (_) => const CustomerRegisterPage(),
-        // '/rider_register': (_) => const CustomerRegisterPage(),
 
 ////////////////////users homepage////////////////
 
@@ -81,7 +79,7 @@ class MyApp extends StatelessWidget {
         '/admin_changePhone': (_) => const AdminChangePhone(),
 
         // rider
-        '/rider_home': (_) => const RiderChangeProfile(), //temporary
+        '/rider_home': (_) => const RiderHomePage(), 
         '/rider_changeName': (_) => const RiderChangeName(),
         '/rider_changePw': (_) => const RiderChangePassword(),
         '/rider_changePFP': (_) => const RiderChangePicture(),
@@ -104,7 +102,6 @@ class MyApp extends StatelessWidget {
         '/resetPassword': (_) => const ResetPassword(),
 
 //////////////////user_updateProfile//////////////////
-        '/customer_profile': (_) => const CustomerProfile(),
       },
     );
   }

@@ -227,7 +227,7 @@ class _AdminProfileState extends State<AdminProfile> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      name ?? 'null',
+                                      name ?? 'Loading...',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 22,
@@ -244,7 +244,7 @@ class _AdminProfileState extends State<AdminProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          phone ?? 'null',
+                                          phone ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,
@@ -263,7 +263,7 @@ class _AdminProfileState extends State<AdminProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          email ?? 'null',
+                                          email ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,

@@ -124,6 +124,10 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 children: [
                   GestureDetector(
                       onTap: () {
+                        if (mounted) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
+                        }
                         supabase.auth.signOut();
                       },
                       child: Text(
@@ -218,7 +222,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      name ?? 'null',
+                                      name ?? 'Loading...',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 22,
@@ -235,7 +239,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          phone ?? 'null',
+                                          phone ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,
@@ -254,7 +258,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          email ?? 'null',
+                                          email ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,
