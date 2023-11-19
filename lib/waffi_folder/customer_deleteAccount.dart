@@ -52,7 +52,7 @@ class _CustomerDeleteAccountState extends State<CustomerDeleteAccount> {
               color: Colors.white, // Icon color
             ),
             onPressed: () {
-                            Navigator.of(context).pushReplacementNamed('/customer_profile');
+              Navigator.of(context).pushReplacementNamed('/customer_profile');
             },
           ),
           actions: [
@@ -215,14 +215,13 @@ class _CustomerDeleteAccountState extends State<CustomerDeleteAccount> {
                   'Delete Your Account ?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: const Color.fromARGB(
-                                          255, 208, 24, 11),
+                    color: const Color.fromARGB(255, 208, 24, 11),
                     fontSize: 25,
                     fontFamily: 'Lexend',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(height:30),
+                SizedBox(height: 30),
                 Text(
                   'Enter email for confirmation',
                   textAlign: TextAlign.center,
@@ -416,7 +415,7 @@ class _CustomerDeleteAccountState extends State<CustomerDeleteAccount> {
                                   ),
                                 ),
 //////////////////
-SizedBox(width: 30),
+                                SizedBox(width: 30),
 //////////////////
                                 InkWell(
                                   onTap: () {
