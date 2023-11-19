@@ -91,10 +91,7 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
     if (res['picture_url'] == null) {
       return;
     }
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
+
     if (mounted) {
       setState(() {
         image = res['picture_url'];

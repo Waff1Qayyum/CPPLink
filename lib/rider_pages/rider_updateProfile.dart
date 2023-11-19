@@ -82,14 +82,12 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
     if (res['picture_url'] == null) {
       return;
     }
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
 
-    setState(() {
-      image = res['picture_url'];
-    });
+    if (mounted) {
+      setState(() {
+        image = res['picture_url'];
+      });
+    }
   }
 
   @override
@@ -113,10 +111,9 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/rider_home');
-                            // Your code to handle the tap event
-                          },
+            Navigator.of(context).pushReplacementNamed('/rider_home');
+            // Your code to handle the tap event
+          },
         ),
         actions: [
           Padding(

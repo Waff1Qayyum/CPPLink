@@ -90,14 +90,12 @@ class _AdminProfileState extends State<AdminProfile> {
     if (res['picture_url'] == null) {
       return;
     }
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
 
-    setState(() {
-      image = res['picture_url'];
-    });
+    if (mounted) {
+      setState(() {
+        image = res['picture_url'];
+      });
+    }
   }
 
   @override
@@ -116,15 +114,14 @@ class _AdminProfileState extends State<AdminProfile> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back, // You can replace this with your custom logo
-            color: Colors.white, // Icon color
-          ),
-          onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/admin_home', (route) => false);
-                        }
-        ),
+            icon: Icon(
+              Icons.arrow_back, // You can replace this with your custom logo
+              color: Colors.white, // Icon color
+            ),
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/admin_home', (route) => false);
+            }),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 20.0),
