@@ -85,9 +85,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
       't': DateTime.now().millisecondsSinceEpoch.toString()
     }).toString();
 
-    setState(() {
-      image = res['picture_url'];
-    });
+    if (mounted) {
+      setState(() {
+        image = res['picture_url'];
+      });
+    }
   }
 
   @override

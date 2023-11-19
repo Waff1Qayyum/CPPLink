@@ -54,12 +54,6 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
 
   Future<void> displayImage() async {
     final res = supabase.auth.currentUser!.id;
-    final rider = await supabase
-        .from('rider')
-        .select('rider_id')
-        .eq('user_id', res)
-        .single();
-    final riderid = rider['rider_id'];
     final data = await supabase
         .from('rider')
         .select('picture_url')

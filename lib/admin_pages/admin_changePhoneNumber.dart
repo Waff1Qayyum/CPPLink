@@ -21,6 +21,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
   String? email;
   String? _phone;
   bool? passMatch;
+  bool? phoneUnique;
   dynamic image;
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -101,6 +102,19 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
       setState(() {
         image = res['picture_url'];
       });
+    }
+  }
+
+  Future<bool> _phoneUnique() async {
+    final phoneNo = await supabase
+        .from('user')
+        .select('phone')
+        .eq('phone', _phone)
+        .limit(1);
+    if (phoneNo.isNotEmpty && phoneNo[0]['phone'] != null) {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -320,6 +334,8 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter fullname';
+                                } else if (phoneUnique == false) {
+                                  return 'Phone number already exist';
                                 } else {
                                   return null;
                                 }
@@ -449,6 +465,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                           passMatch = await checkPassword();
                                           _phone = formatPhone(
                                               _phoneController.text);
+                                          phoneUnique = await _phoneUnique();
                                           if (_formKey.currentState!
                                               .validate()) {
                                             await setPhone(_phone!);

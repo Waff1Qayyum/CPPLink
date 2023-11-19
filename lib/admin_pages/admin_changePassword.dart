@@ -487,17 +487,19 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                                         ),
                                       ],
                                     ),
-                                    child: Text(
-                                      'confirm',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
+                                    child: isLoading == true
+                                        ? CircularProgressIndicator()
+                                        : Text(
+                                            'confirm',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ])

@@ -94,10 +94,10 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
     if (res['picture_url'] == null) {
       return;
     }
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
+    // image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    // image = Uri.parse(image).replace(queryParameters: {
+    //   't': DateTime.now().millisecondsSinceEpoch.toString()
+    // }).toString();
     if (mounted) {
       setState(() {
         image = res['picture_url'];
@@ -116,21 +116,25 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
   }
 
   Future<void> uploadImage() async {
-    final imageExtension = fileImage!.path.split('.').last.toLowerCase();
-    final imageBytes = await fileImage!.readAsBytes();
-    final userId = supabase.auth.currentUser!.id;
-    final imagePath = '/$userId/profile';
-    await supabase.storage.from('picture').uploadBinary(imagePath, imageBytes,
-        fileOptions:
-            FileOptions(upsert: true, contentType: 'image/$imageExtension'));
+    try {
+      final imageExtension = fileImage!.path.split('.').last.toLowerCase();
+      final imageBytes = await fileImage!.readAsBytes();
+      final userId = supabase.auth.currentUser!.id;
+      final imagePath = '/$userId/profile';
+      await supabase.storage.from('picture').uploadBinary(imagePath, imageBytes,
+          fileOptions:
+              FileOptions(upsert: true, contentType: 'image/$imageExtension'));
 
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
-    await supabase
-        .from('user')
-        .update({'picture_url': image}).eq('user_id', userId);
+      image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+      image = Uri.parse(image).replace(queryParameters: {
+        't': DateTime.now().millisecondsSinceEpoch.toString()
+      }).toString();
+      await supabase
+          .from('user')
+          .update({'picture_url': image}).eq('user_id', userId);
+    } catch (e) {
+      return;
+    }
   }
 
   void getImage() async {
@@ -470,17 +474,19 @@ class CustomerChangePictureState extends State<CustomerChangePicture> {
                                       ),
                                     ],
                                   ),
-                                  child: Text(
-                                    'confirm',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  child: isLoading == true
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                          'confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ],

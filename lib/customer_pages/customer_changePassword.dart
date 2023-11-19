@@ -434,47 +434,6 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    // Your code to handle the tap event
-                                  },
-                                  child: Container(
-                                    width: 135,
-                                    height: 53,
-                                    alignment: Alignment.center,
-                                    decoration: ShapeDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 208, 24, 11),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        side: BorderSide(
-                                          width: 1.50,
-                                          color: Color.fromARGB(
-                                              255, 208, 24, 11), // Border color
-                                        ),
-                                      ),
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Color(0x3F000000),
-                                          blurRadius: 4,
-                                          offset: Offset(0, 4),
-                                          spreadRadius: 0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      'cancel',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 236, 236, 236),
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                                 //////////////////
                                 SizedBox(width: 30),
                                 //////////////////

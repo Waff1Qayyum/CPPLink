@@ -21,6 +21,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
   String? email;
   String? _phone;
   bool? passMatch;
+  bool? phoneUnique;
   dynamic image;
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -80,6 +81,19 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
 
   void dispose() {
     super.dispose();
+  }
+
+  Future<bool> _phoneUnique() async {
+    final phoneNo = await supabase
+        .from('user')
+        .select('phone')
+        .eq('phone', _phone)
+        .limit(1);
+    if (phoneNo.isNotEmpty && phoneNo[0]['phone'] != null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Future<bool> checkPassword() async {
@@ -321,6 +335,8 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter phone number';
+                                } else if (phoneUnique == false) {
+                                  return 'Phone number already exist';
                                 } else {
                                   return null;
                                 }
@@ -450,6 +466,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
                                           passMatch = await checkPassword();
                                           _phone = await formatPhone(
                                               _phoneController.text);
+                                          phoneUnique = await _phoneUnique();
                                           if (_formKey.currentState!
                                               .validate()) {
                                             await setPhone(_phone!);

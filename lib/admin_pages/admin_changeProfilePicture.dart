@@ -94,10 +94,10 @@ class AdminChangePictureState extends State<AdminChangePicture> {
     if (res['picture_url'] == null) {
       return;
     }
-    image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
-    image = Uri.parse(image).replace(queryParameters: {
-      't': DateTime.now().millisecondsSinceEpoch.toString()
-    }).toString();
+    // image = supabase.storage.from('picture').getPublicUrl('/$userId/profile');
+    // image = Uri.parse(image).replace(queryParameters: {
+    //   't': DateTime.now().millisecondsSinceEpoch.toString()
+    // }).toString();
     if (mounted) {
       setState(() {
         image = res['picture_url'];
@@ -473,17 +473,19 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                                       ),
                                     ],
                                   ),
-                                  child: Text(
-                                    'confirm',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  child: isLoading == true
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                          'confirm',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ],
