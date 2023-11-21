@@ -90,7 +90,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     Text(
                       'CPP',
                       style: TextStyle(
-                        color: Color(0xFF050505),
+                        color: Color(0xFFFFFF00),
                         fontSize: 48,
                         fontFamily: 'Montagu Slab',
                         fontWeight: FontWeight.w700,
@@ -100,7 +100,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     Text(
                       'Link',
                       style: TextStyle(
-                        color: Color(0xFFFFD233),
+                        color: Color(0xFF000080),
                         fontSize: 32,
                         fontFamily: 'Montagu Slab',
                         fontWeight: FontWeight.w700,
