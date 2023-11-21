@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../main.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -38,9 +40,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
           title: Text(
             'Admin Homepage',
             style: TextStyle(
-              fontFamily: 'roboto',
+              fontFamily: 'Montagu Slab',
               fontWeight: FontWeight.bold,
-              fontSize: 15,
+              fontSize: 18,
               color: Colors.white,
             ),
           ),
@@ -77,110 +79,130 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 SizedBox(
                   height: 20.0,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Column(
                   children: [
                     Container(
-                        child: Image.asset(
-                      './images/cpp_logo.png',
-                      width: 70,
-                      height: 70,
-                    )),
-                    Text(
-                      'CPP',
-                      style: TextStyle(
-                        color: Color(0xFFFFFF00),
-                        fontSize: 48,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.,
+                        children: [
+                          Text(
+                            'CPP',
+                            style: TextStyle(
+                              color: Color.fromRGBO(250, 195, 44, 1),
+                              fontSize: 48,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                              shadows: [
+                                Shadow(
+                                  color: Color.fromARGB(255, 145, 145, 145),
+                                  offset: Offset(0, 3),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            'Link',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 7, 7, 131),
+                              fontSize: 32,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      'Link',
-                      style: TextStyle(
-                        color: Color(0xFF000080),
-                        fontSize: 32,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
+                    )
                   ],
                 ),
-                SizedBox(height: 40.0),
-                Row(
-                    //row to put the image+name and notification icon
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                          //padding for all column
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                              //row to put image + name
-                              children: [
-                                Row(children: [
-                                  Container(
-                                    width: 50, // Adjust the width as needed
-                                    height: 50, // Adjust the height as needed
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color:
-                                            Color(0xFFFFD233), // Border color
-                                        width: 1.0, // Border width
+                SizedBox(height: 60.0),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: Row(
+
+                      //row to put the image+name and notification icon
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                            //padding for all column
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                                //row to put image + name
+                                children: [
+                                  Row(children: [
+                                    Container(
+                                      width: 50, // Adjust the width as needed
+                                      height: 50, // Adjust the height as needed
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color.fromARGB(
+                                                255, 215, 172, 15),
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                            offset: Offset(0, 2),
+                                          ),
+                                        ],
+                                        border: Border.all(
+                                          color:
+                                              Color(0xFFFFD233), // Border color
+                                          width: 1.0, // Border width
+                                        ),
+                                      ),
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                          './images/profile.jpg', // Replace with your image URL
+                                          width:
+                                              50, // Adjust the width as needed
+                                          height:
+                                              50, // Adjust the height as needed
+                                          fit: BoxFit
+                                              .cover, // Adjust the fit as needed
+                                        ),
                                       ),
                                     ),
-                                    child: ClipOval(
-                                      child: Image.asset(
-                                        './images/cpp_logo.png', // Replace with your image URL
-                                        width: 50, // Adjust the width as needed
-                                        height:
-                                            50, // Adjust the height as needed
-                                        fit: BoxFit
-                                            .cover, // Adjust the fit as needed
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 10.0),
-                                  Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Welcome back, ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 17,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w700,
-                                            height: 0,
+                                    SizedBox(width: 10.0),
+                                    Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Welcome back, ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w700,
+                                              height: 0,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          'Muhd Aiman',
-                                          style: TextStyle(
-                                            color: Color(0xFFFFD233),
-                                            fontSize: 22,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w700,
-                                            height: 0,
+                                          Text(
+                                            'Muhd Aiman',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 7, 7, 131),
+                                              fontSize: 22,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w700,
+                                              height: 0,
+                                            ),
                                           ),
-                                        ),
-                                      ])
-                                ]),
-                              ])),
-                      IconButton(
-                        iconSize: 30.0,
-                        icon: Icon(Icons.notifications, color: Colors.black),
-                        onPressed: () {
-                          // Add your action here
-                        },
-                      ),
-                    ]),
+                                        ])
+                                  ]),
+                                ])),
+                        IconButton(
+                          iconSize: 30.0,
+                          icon: Icon(Icons.notifications, color: Colors.black),
+                          onPressed: () {
+                            // Add your action here
+                          },
+                        ),
+                      ]),
+                ),
                 SizedBox(height: 70),
                 Text(
                   'What would you want to do for Today ?',

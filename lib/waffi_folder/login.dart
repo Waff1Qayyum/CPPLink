@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: const InputDecoration(labelText: 'Email'),
                 ),
                 // Add more form fields or widgets as needed
+                
               ],
             ),
           ),
