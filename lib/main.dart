@@ -5,15 +5,13 @@ import 'package:cpplink/rider_pages/rider_changeProfilePicture.dart';
 import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+//////////admin////////////
 import 'admin_pages/admin_changeName.dart';
 import 'admin_pages/admin_changePassword.dart';
 import 'admin_pages/admin_changePhoneNumber.dart';
 import 'admin_pages/admin_changeProfilePicture.dart';
 import 'admin_pages/admin_homepage.dart';
 import 'rider_pages/rider_changeVehicle.dart';
-//////////admin////////////
-import 'waffi_folder/admin_homepageBukhari.dart';
 //////customer/////////
 import 'customer_pages/customer_changeName.dart';
 import 'customer_pages/customer_changePassword.dart';
@@ -79,7 +77,7 @@ class MyApp extends StatelessWidget {
         '/admin_changePhone': (_) => const AdminChangePhone(),
 
         // rider
-        '/rider_home': (_) => const RiderHomePage(), 
+        '/rider_home': (_) => const RiderHomePage(),
         '/rider_changeName': (_) => const RiderChangeName(),
         '/rider_changePw': (_) => const RiderChangePassword(),
         '/rider_changePFP': (_) => const RiderChangePicture(),

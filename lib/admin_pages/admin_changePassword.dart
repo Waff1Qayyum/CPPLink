@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 
+import '../controller.dart';
 import '../main.dart';
 
 class AdminChangePassword extends StatefulWidget {
@@ -16,10 +17,6 @@ class AdminChangePassword extends StatefulWidget {
 }
 
 class _AdminChangePasswordState extends State<AdminChangePassword> {
-  String? name;
-  String? phone;
-  String? email;
-  dynamic image;
   bool isLoading = false;
   bool? passMatch;
   TextEditingController _oldPasswordController = TextEditingController();
@@ -29,75 +26,11 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
   @override
   void initState() {
     super.initState();
-    getName();
-    getEmail();
-    getPhone();
-    displayImage();
   }
 
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        name = data['name'];
-      });
-    }
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        phone = data['phone'];
-      });
-    }
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        email = data['email'];
-      });
-    }
-  }
-
+  @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('admin')
-        .select('picture_url')
-        .eq('user_id', userId)
-        .single();
-
-    if (res['picture_url'] == null) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        image = res['picture_url'];
-      });
-    }
   }
 
   //use supabase function to check password
@@ -213,13 +146,8 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                                     ),
                                   ),
                                   child: ClipOval(
-                                      child: image != null
-                                          ? Image.network(
-                                              image!,
-                                              fit: BoxFit.cover,
-                                              width: 70,
-                                              height: 70,
-                                            )
+                                      child: picture_url != null
+                                          ? admin_picture!
                                           : Container(
                                               color: Colors.grey,
                                             )),
@@ -231,7 +159,7 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        name ?? 'Loading..',
+                                        admin_name ?? 'Loading..',
                                         style: TextStyle(
                                           color: Color.fromARGB(255, 0, 0, 0),
                                           fontSize: 22,
@@ -248,7 +176,7 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                                           ),
                                           SizedBox(width: 5),
                                           Text(
-                                            phone ?? 'Loading..',
+                                            admin_phone ?? 'Loading..',
                                             style: TextStyle(
                                               color:
                                                   Color.fromARGB(255, 0, 0, 0),
@@ -268,7 +196,7 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                                           ),
                                           SizedBox(width: 5),
                                           Text(
-                                            email ?? 'Loading..',
+                                            admin_email ?? 'Loading..',
                                             style: TextStyle(
                                               color:
                                                   Color.fromARGB(255, 0, 0, 0),
@@ -466,6 +394,7 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               await setPassword();
+                                              await getAdminData(getID());
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                       content: Text(

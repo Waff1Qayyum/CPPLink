@@ -16,9 +16,6 @@ class AdminChangeName extends StatefulWidget {
 
 class _AdminChangeNameState extends State<AdminChangeName> {
   bool isLoading = false;
-  String? name;
-  String? phone;
-  String? email;
   String? _name;
   bool? passMatch;
   dynamic image;
@@ -29,75 +26,11 @@ class _AdminChangeNameState extends State<AdminChangeName> {
   @override
   void initState() {
     super.initState();
-    getName();
-    getEmail();
-    getPhone();
-    displayImage();
   }
 
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        name = data['name'];
-      });
-    }
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        phone = data['phone'];
-      });
-    }
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        email = data['email'];
-      });
-    }
-  }
-
+  @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('admin')
-        .select('picture_url')
-        .eq('user_id', userId)
-        .single();
-
-    if (res['picture_url'] == null) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        image = res['picture_url'];
-      });
-    }
   }
 
   Future<bool> checkPassword() async {
@@ -212,13 +145,8 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                     ),
                                   ),
                                   child: ClipOval(
-                                      child: image != null
-                                          ? Image.network(
-                                              image!,
-                                              fit: BoxFit.cover,
-                                              width: 70,
-                                              height: 70,
-                                            )
+                                      child: picture_url != null
+                                          ? admin_picture!
                                           : Container(
                                               color: Colors.grey,
                                             )),
@@ -230,7 +158,7 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        name ?? 'Loading..',
+                                        admin_name ?? 'Loading..',
                                         style: TextStyle(
                                           color: Color.fromARGB(255, 0, 0, 0),
                                           fontSize: 22,
@@ -247,7 +175,7 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                           ),
                                           SizedBox(width: 5),
                                           Text(
-                                            phone ?? 'Loading..',
+                                            admin_phone ?? 'Loading..',
                                             style: TextStyle(
                                               color:
                                                   Color.fromARGB(255, 0, 0, 0),
@@ -267,7 +195,7 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                           ),
                                           SizedBox(width: 5),
                                           Text(
-                                            email ?? 'Loading..',
+                                            admin_email ?? 'Loading..',
                                             style: TextStyle(
                                               color:
                                                   Color.fromARGB(255, 0, 0, 0),
@@ -463,11 +391,12 @@ class _AdminChangeNameState extends State<AdminChangeName> {
                                               isLoading = true;
                                             });
                                             passMatch = await checkPassword();
-                                            _name = formatPhone(
+                                            _name = formatName(
                                                 _nameController.text);
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               await setUsername(_name!);
+                                              await getAdminData(getID());
                                               //change snackbar design
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(

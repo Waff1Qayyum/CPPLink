@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,81 +14,11 @@ class RiderChangeProfile extends StatefulWidget {
 }
 
 class _RiderChangeProfileState extends State<RiderChangeProfile> {
-  String? name;
-  String? phone;
-  String? email;
-  dynamic image;
-  // bool _redirecting = false;
-  // late final StreamSubscription<AuthState> _authStateSubscription;
+  final user = supabase.auth.currentUser?.id;
 
   @override
   void initState() {
     super.initState();
-    getName();
-    getEmail();
-    getPhone();
-    displayImage();
-  }
-
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        name = data['name'];
-      });
-    }
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        phone = data['phone'];
-      });
-    }
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        email = data['email'];
-      });
-    }
-  }
-
-  Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('user')
-        .select('picture_url')
-        .eq('user_id', userId)
-        .single();
-
-    if (res['picture_url'] == null) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        image = res['picture_url'];
-      });
-    }
   }
 
   @override
@@ -204,13 +135,8 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                    child: image != null
-                                        ? Image.network(
-                                            image!,
-                                            fit: BoxFit.cover,
-                                            width: 70,
-                                            height: 70,
-                                          )
+                                    child: user_picture != null
+                                        ? picture!
                                         : Container(
                                             color: Colors.grey,
                                           )),
@@ -221,7 +147,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      name ?? 'Loading...',
+                                      user_name ?? 'Loading...',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 22,
@@ -238,7 +164,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          phone ?? 'Loading...',
+                                          user_phone ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,
@@ -257,7 +183,7 @@ class _RiderChangeProfileState extends State<RiderChangeProfile> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          email ?? 'Loading...',
+                                          user_email ?? 'Loading...',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,

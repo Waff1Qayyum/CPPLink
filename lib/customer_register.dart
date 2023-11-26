@@ -31,7 +31,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   bool isLoading = false;
 
   bool? _phoneValid() {
-    if (!RegExp(r'^\d{10,11}$').hasMatch(_phone!)) {
+    if (!RegExp(r'^\d{9,10}$').hasMatch(_phone!)) {
       return false;
     } else {
       return true;

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../controller.dart';
 import '../main.dart';
 
 class RiderChangePicture extends StatefulWidget {
@@ -19,64 +20,14 @@ class ChangePictureState extends State<RiderChangePicture> {
   XFile? fileImage;
   File? imageFile;
   bool isImageSelected = false;
-  String? name;
-  String? phone;
-  String? email;
   bool? passMatch;
   bool isLoading = false;
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
     super.initState();
-    displayImage();
-    getName();
-    getEmail();
-    getPhone();
-  }
-
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        name = data['name'];
-      });
-    }
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        phone = data['phone'];
-      });
-    }
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        email = data['email'];
-      });
-    }
   }
 
   Future<bool> checkPassword() async {
@@ -87,25 +38,6 @@ class ChangePictureState extends State<RiderChangePicture> {
       return true;
     } else
       return false;
-  }
-
-  Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('user')
-        .select('picture_url')
-        .eq('user_id', userId)
-        .single();
-
-    if (res['picture_url'] == null) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        image = res['picture_url'];
-      });
-    }
   }
 
   @override
@@ -216,94 +148,88 @@ class ChangePictureState extends State<RiderChangePicture> {
               ),
               SizedBox(height: 40.0),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Color(0xFFFFD233),
-                              width: 1.0,
-                            ),
-                          ),
-                          child: ClipOval(
-                              child: image != null
-                                  ? Image.network(
-                                      image!,
-                                      fit: BoxFit.cover,
-                                      width: 70,
-                                      height: 70,
-                                    )
-                                  : Container(
-                                      color: Colors.grey,
-                                    )),
-                        ),
-                        SizedBox(width: 10.0),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name ?? 'Loading..',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontSize: 22,
-                                fontFamily: 'Lexend',
-                                fontWeight: FontWeight.w700,
-                                height: 0,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  //row to put the buttons
+                  children: [
+                    Padding(
+                        //padding for all column
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                            //row to put image + name
+                            children: [
+                              Container(
+                                width: 100, // Adjust the width as needed
+                                height: 100, // Adjust the height as needed
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Color(0xFFFFD233), // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                ),
+                                child: ClipOval(
+                                    child: user_picture != null
+                                        ? picture!
+                                        : Container(
+                                            color: Colors.grey,
+                                          )),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.call,
-                                  color: Color(0xFFFFD233),
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  phone ?? 'Loading..',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w100,
-                                    height: 0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.email,
-                                  color: Color(0xFFFFD233),
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  email ?? 'Loading..',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w100,
-                                    height: 0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                              SizedBox(width: 10.0),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      user_name ?? 'Loading..',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontSize: 22,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.call,
+                                          color: Color(0xFFFFD233),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          user_phone ?? 'Loading..',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w100,
+                                            height: 0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.email,
+                                          color: Color(0xFFFFD233),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          user_email ?? 'Loading..',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            fontSize: 15,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w100,
+                                            height: 0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ])
+                            ])),
+                  ]),
               SizedBox(height: 50),
               Text(
                 'Change Your Account\'s Profile Picture',
@@ -328,11 +254,8 @@ class ChangePictureState extends State<RiderChangePicture> {
                             height: 150,
                             child: isImageSelected == true
                                 ? Image(image: FileImage(imageFile!))
-                                : ((image != null)
-                                    ? Image.network(
-                                        image!,
-                                        fit: BoxFit.cover,
-                                      )
+                                : (user_picture != null
+                                    ? picture!
                                     : Container(
                                         color: Colors.grey,
                                         child: const Center(
@@ -433,6 +356,8 @@ class ChangePictureState extends State<RiderChangePicture> {
                                         passMatch = await checkPassword();
                                         if (_formKey.currentState!.validate()) {
                                           await uploadImage();
+                                          await getData(getID());
+
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                                   content: Text(

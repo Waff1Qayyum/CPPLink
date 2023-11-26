@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../controller.dart';
 import '../main.dart';
 
 class AdminChangePicture extends StatefulWidget {
@@ -21,9 +22,6 @@ class AdminChangePictureState extends State<AdminChangePicture> {
   XFile? fileImage;
   File? imageFile;
   bool isImageSelected = false;
-  String? name;
-  String? phone;
-  String? email;
   bool? passMatch;
   bool isLoading = false;
   TextEditingController _passwordController = TextEditingController();
@@ -33,75 +31,11 @@ class AdminChangePictureState extends State<AdminChangePicture> {
   @override
   void initState() {
     super.initState();
-    displayImage();
-    getName();
-    getEmail();
-    getPhone();
   }
 
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        name = data['name'];
-      });
-    }
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        phone = data['phone'];
-      });
-    }
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        email = data['email'];
-      });
-    }
-  }
-
+  @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('admin')
-        .select('picture_url')
-        .eq('user_id', userId)
-        .single();
-
-    if (res['picture_url'] == null) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        image = res['picture_url'];
-      });
-    }
   }
 
   Future<bool> checkPassword() async {
@@ -219,94 +153,91 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                 ),
                 SizedBox(height: 40.0),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Color(0xFFFFD233),
-                                width: 1.0,
-                              ),
-                            ),
-                            child: ClipOval(
-                                child: image != null
-                                    ? Image.network(
-                                        image!,
-                                        fit: BoxFit.cover,
-                                        width: 70,
-                                        height: 70,
-                                      )
-                                    : Container(
-                                        color: Colors.grey,
-                                      )),
-                          ),
-                          SizedBox(width: 10.0),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                name ?? 'Loading..',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontSize: 22,
-                                  fontFamily: 'Lexend',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    //row to put the buttons
+                    children: [
+                      Padding(
+                          //padding for all column
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                              //row to put image + name
+                              children: [
+                                Container(
+                                  width: 100, // Adjust the width as needed
+                                  height: 100, // Adjust the height as needed
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Color(0xFFFFD233), // Border color
+                                      width: 1.0, // Border width
+                                    ),
+                                  ),
+                                  child: ClipOval(
+                                      child: picture_url != null
+                                          ? admin_picture!
+                                          : Container(
+                                              color: Colors.grey,
+                                            )),
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.call,
-                                    color: Color(0xFFFFD233),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    phone ?? 'Loading..',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w100,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.email,
-                                    color: Color(0xFFFFD233),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    email ?? 'Loading..',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w100,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                                SizedBox(width: 10.0),
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        admin_name ?? 'Loading..',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 0),
+                                          fontSize: 22,
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w700,
+                                          height: 0,
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.call,
+                                            color: Color(0xFFFFD233),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                            admin_phone ?? 'Loading..',
+                                            style: TextStyle(
+                                              color:
+                                                  Color.fromARGB(255, 0, 0, 0),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w100,
+                                              height: 0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.email,
+                                            color: Color(0xFFFFD233),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                            admin_email ?? 'Loading..',
+                                            style: TextStyle(
+                                              color:
+                                                  Color.fromARGB(255, 0, 0, 0),
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w100,
+                                              height: 0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ])
+                              ])),
+                    ]),
                 SizedBox(height: 30),
                 Text(
                   'Change Your Account\'s Profile Picture',
@@ -331,11 +262,8 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                               height: 150,
                               child: isImageSelected == true
                                   ? Image(image: FileImage(imageFile!))
-                                  : ((image != null)
-                                      ? Image.network(
-                                          image!,
-                                          fit: BoxFit.cover,
-                                        )
+                                  : ((picture_url != null)
+                                      ? admin_picture
                                       : Container(
                                           color: Colors.grey,
                                           child: const Center(
@@ -453,6 +381,7 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                                               .validate()) {
                                             print('process image');
                                             await uploadImage();
+                                            await getAdminData(getID());
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
                                                     content: Text(

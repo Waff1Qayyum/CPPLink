@@ -14,92 +14,22 @@ class CustomerChangePhone extends StatefulWidget {
 }
 
 class _CustomerChangePhoneState extends State<CustomerChangePhone> {
-  bool _redirecting = false;
   bool isLoading = false;
-  String? name;
-  String? phone;
-  String? email;
   String? _phone;
   bool? passMatch;
   bool? phoneUnique;
-  dynamic image;
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
     super.initState();
-    getName();
-    getEmail();
-    getPhone();
-    displayImage();
   }
 
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        name = data['name'];
-      });
-    }
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        phone = data['phone'];
-      });
-    }
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('user')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        email = data['email'];
-      });
-    }
-  }
-
+  @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('user')
-        .select('picture_url')
-        .eq('user_id', userId)
-        .single();
-
-    if (res['picture_url'] == null) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        image = res['picture_url'];
-      });
-    }
   }
 
   Future<bool> _phoneUnique() async {
@@ -220,13 +150,8 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                    child: image != null
-                                        ? Image.network(
-                                            image!,
-                                            fit: BoxFit.cover,
-                                            width: 70,
-                                            height: 70,
-                                          )
+                                    child: user_picture != null
+                                        ? picture!
                                         : Container(
                                             color: Colors.grey,
                                           )),
@@ -237,7 +162,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      name ?? 'Loading..',
+                                      user_name ?? 'Loading..',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 22,
@@ -254,7 +179,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          phone ?? 'Loading..',
+                                          user_phone ?? 'Loading..',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,
@@ -273,7 +198,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          email ?? 'Loading..',
+                                          user_email ?? 'Loading..',
                                           style: TextStyle(
                                             color: Color.fromARGB(255, 0, 0, 0),
                                             fontSize: 15,
@@ -466,6 +391,8 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                                           if (_formKey.currentState!
                                               .validate()) {
                                             await setPhone(_phone!);
+                                            await getData(getID());
+
                                             //change snackbar design
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
