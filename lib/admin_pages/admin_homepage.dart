@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,20 +14,14 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-  bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
-
   @override
   void initState() {
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session == null) {
-        _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -152,16 +147,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                         ),
                                       ),
                                       child: ClipOval(
-                                        child: Image.asset(
-                                          './images/profile.jpg', // Replace with your image URL
-                                          width:
-                                              50, // Adjust the width as needed
-                                          height:
-                                              50, // Adjust the height as needed
-                                          fit: BoxFit
-                                              .cover, // Adjust the fit as needed
-                                        ),
-                                      ),
+                                          child: picture_url != null
+                                              ? admin_picture
+                                              : Container(
+                                                  color: Colors.grey,
+                                                )),
                                     ),
                                     SizedBox(width: 10.0),
                                     Column(
@@ -181,7 +171,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                             ),
                                           ),
                                           Text(
-                                            'Muhd Aiman',
+                                            admin_name ?? 'Loading..',
                                             style: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 7, 7, 131),

@@ -18,6 +18,11 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -123,15 +128,11 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                                       ),
                                     ),
                                     child: ClipOval(
-                                      child: Image.asset(
-                                        './images/cpp_logo.png', // Replace with your image URL
-                                        width: 50, // Adjust the width as needed
-                                        height:
-                                            50, // Adjust the height as needed
-                                        fit: BoxFit
-                                            .cover, // Adjust the fit as needed
-                                      ),
-                                    ),
+                                        child: user_picture != null
+                                            ? picture!
+                                            : Container(
+                                                color: Colors.grey,
+                                              )),
                                   ),
                                   SizedBox(width: 10.0),
                                   Column(
@@ -151,7 +152,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                                           ),
                                         ),
                                         Text(
-                                          'Muhd Aiman',
+                                          user_name ?? 'Loading..',
                                           style: TextStyle(
                                             color: Color(0xFFFFD233),
                                             fontSize: 22,

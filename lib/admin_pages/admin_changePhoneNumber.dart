@@ -17,9 +17,6 @@ class AdminChangePhone extends StatefulWidget {
 class _AdminChangePhoneState extends State<AdminChangePhone> {
   bool _redirecting = false;
   bool isLoading = false;
-  String? name;
-  String? phone;
-  String? email;
   String? _phone;
   bool? passMatch;
   bool? phoneUnique;
@@ -32,75 +29,11 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
   @override
   void initState() {
     super.initState();
-    getName();
-    getEmail();
-    getPhone();
-    displayImage();
   }
 
-  Future<void> getName() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('name')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        name = data['name'];
-      });
-    }
-  }
-
-  Future<void> getPhone() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('phone')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        phone = data['phone'];
-      });
-    }
-  }
-
-  Future<void> getEmail() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data = await supabase
-        .from('admin')
-        .select('email')
-        .eq('user_id', userId)
-        .single();
-    if (mounted) {
-      setState(() {
-        email = data['email'];
-      });
-    }
-  }
-
+  @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> displayImage() async {
-    final userId = supabase.auth.currentUser!.id;
-    final res = await supabase
-        .from('admin')
-        .select('picture_url')
-        .eq('user_id', userId)
-        .single();
-
-    if (res['picture_url'] == null) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        image = res['picture_url'];
-      });
-    }
   }
 
   Future<bool> _phoneUnique() async {
@@ -129,7 +62,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
 
   Future<void> setPhone(String _phone) async {
     String userId = supabase.auth.currentUser!.id;
-    String phone = _phone!;
+    String phone = _phone;
     final data = await supabase
         .from('admin')
         .update({'phone': phone}).match({'user_id': userId});
@@ -227,13 +160,8 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                     ),
                                   ),
                                   child: ClipOval(
-                                      child: image != null
-                                          ? Image.network(
-                                              image!,
-                                              fit: BoxFit.cover,
-                                              width: 70,
-                                              height: 70,
-                                            )
+                                      child: picture_url != null
+                                          ? admin_picture!
                                           : Container(
                                               color: Colors.grey,
                                             )),
@@ -245,7 +173,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        name ?? 'Loading..',
+                                        admin_name ?? 'Loading..',
                                         style: TextStyle(
                                           color: Color.fromARGB(255, 0, 0, 0),
                                           fontSize: 22,
@@ -262,7 +190,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                           ),
                                           SizedBox(width: 5),
                                           Text(
-                                            phone ?? 'Loading..',
+                                            admin_phone ?? 'Loading..',
                                             style: TextStyle(
                                               color:
                                                   Color.fromARGB(255, 0, 0, 0),
@@ -282,7 +210,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                           ),
                                           SizedBox(width: 5),
                                           Text(
-                                            email ?? 'Loading..',
+                                            admin_email ?? 'Loading..',
                                             style: TextStyle(
                                               color:
                                                   Color.fromARGB(255, 0, 0, 0),
@@ -483,6 +411,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               await setPhone(_phone!);
+                                              await getAdminData(getID());
                                               //change snackbar design
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(

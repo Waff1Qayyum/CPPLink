@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../controller.dart';
 import '../main.dart';
 
 class RiderChangeVehicle extends StatefulWidget {
@@ -21,6 +22,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
   bool isImageSelected = false;
   bool? passMatch;
   bool isLoading = false;
+  String _selectedVehicleType = 'Motorcycle';
 
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _plateController = TextEditingController();
@@ -230,11 +232,8 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                             height: 150,
                             child: isImageSelected == true
                                 ? Image(image: FileImage(imageFile!))
-                                : ((image != null)
-                                    ? Image.network(
-                                        image!,
-                                        fit: BoxFit.cover,
-                                      )
+                                : ((vehicle_url != null)
+                                    ? vehicle_picture!
                                     : Container(
                                         color: Colors.grey,
                                         child: const Center(
@@ -398,7 +397,6 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                               SizedBox(height: 10),
                               Container(
                                 width: 263,
-                                height: 37,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle,
                                   borderRadius: BorderRadius.circular(10),
@@ -415,13 +413,14 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                     ),
                                   ],
                                 ),
-                                child: TextFormField(
-                                  controller: _typeController,
-                                  textCapitalization:
-                                      TextCapitalization.characters,
-                                  textAlignVertical: TextAlignVertical.bottom,
+                                child: DropdownButtonFormField<String>(
+                                  value: _selectedVehicleType,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedVehicleType = newValue!;
+                                    });
+                                  },
                                   decoration: InputDecoration(
-                                    hintText: "vehicle type ",
                                     filled: true,
                                     fillColor: const Color.fromARGB(
                                         255, 249, 249, 249),
@@ -439,14 +438,23 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                         color: Color(0xFFFFD233),
                                       ),
                                     ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 10),
                                     prefixIcon: Icon(
-                                      Icons.password,
+                                      Icons.delivery_dining_outlined,
                                       color: Color(0xFFFFD233),
                                     ),
                                   ),
+                                  items:
+                                      ["Motorcycle", "Car"].map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter a vehicle type';
+                                      return 'Please select vehicle type';
                                     } else {
                                       return null;
                                     }
@@ -610,6 +618,8 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
                                               .validate()) {
                                             await uploadImage();
                                             await changeVehicle();
+                                            await getData(getID());
+
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
                                                     content: Text(

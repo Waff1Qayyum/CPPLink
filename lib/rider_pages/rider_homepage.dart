@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../controller.dart';
 import '../main.dart';
 
 class RiderHomePage extends StatefulWidget {
@@ -165,15 +166,11 @@ class _RiderHomePageState extends State<RiderHomePage> {
                                       ),
                                     ),
                                     child: ClipOval(
-                                      child: Image.asset(
-                                        './images/cpp_logo.png', // Replace with your image URL
-                                        width: 50, // Adjust the width as needed
-                                        height:
-                                            50, // Adjust the height as needed
-                                        fit: BoxFit
-                                            .cover, // Adjust the fit as needed
-                                      ),
-                                    ),
+                                        child: user_picture != null
+                                            ? picture!
+                                            : Container(
+                                                color: Colors.grey,
+                                              )),
                                   ),
                                   SizedBox(width: 10.0),
                                   Column(
@@ -193,7 +190,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
                                           ),
                                         ),
                                         Text(
-                                          'Muhd Aiman',
+                                          user_name ?? 'Loading..',
                                           style: TextStyle(
                                             color: Color(0xFFFFD233),
                                             fontSize: 22,
