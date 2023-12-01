@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
@@ -267,7 +264,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           ),
                           InkWell(
                             onTap: () {
-                              // Your code to handle the tap event
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/admin_updateParcel');
                             },
                             child: Container(
                               width: 155,
@@ -300,7 +298,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                         255), // Change the icon color
                                   ),
                                   Text(
-                                    'Check Parcel',
+                                    'Manage Parcel',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.white,
