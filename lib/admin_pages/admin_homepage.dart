@@ -265,7 +265,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           InkWell(
                             onTap: () {
                               Navigator.of(context)
-                                  .pushReplacementNamed('/admin_updateParcel');
+                                  .pushReplacementNamed('/admin_manageParcel');
                             },
                             child: Container(
                               width: 155,
