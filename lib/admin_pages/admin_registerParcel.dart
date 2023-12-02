@@ -14,6 +14,8 @@ class AdminRegisterParcel extends StatefulWidget {
 
 class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   bool isLoading = false;
+  bool? phoneValid;
+  String? phone;
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
@@ -37,9 +39,9 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
     String formattedDate = DateFormat('yyyy-MM-dd').format(current!);
     try {
       await supabase.from('parcel').insert({
-        'tracking_id': _trackingNumber.text,
-        'name': _customerName.text,
-        'phone': _phoneNumber.text,
+        'tracking_id': _trackingNumber.text.toUpperCase(),
+        'name': _customerName.text.toUpperCase(),
+        'phone': phone,
         'date_arrived': formattedDate,
         'status': 'waiting',
       });
@@ -457,6 +459,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please fill in';
+                                  } else if (phoneValid == false) {
+                                    return 'Invalid Phone Number';
                                   } else {
                                     return null;
                                   }
@@ -516,6 +520,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                           setState(() {
                             isLoading = true;
                           });
+                          phone = await formatPhone(_phoneNumber.text);
+                          phoneValid = await phone_check(phone!);
                           if (_formKey.currentState!.validate()) {
                             await registerParcel();
                             //change snackbar design
