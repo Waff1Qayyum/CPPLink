@@ -209,7 +209,7 @@ Future<void> findParcel(dynamic searchParcel) async {
         .select()
         .eq('tracking_id', searchParcel)
         .single();
-    
+
     if (parcelData != null) {
       tracking_id = parcelData['tracking_id'];
       customerName = parcelData['name'];
