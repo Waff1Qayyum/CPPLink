@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../main.dart';
 
 class AdminRegisterParcel extends StatefulWidget {
   const AdminRegisterParcel({super.key});
@@ -8,8 +11,13 @@ class AdminRegisterParcel extends StatefulWidget {
 }
 
 class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
-  String selectedPaymentStatus = 'not paid';
-  String selectedDeliveryStatus = 'on delivery';
+  bool isLoading = false;
+  TextEditingController _trackingNumber = TextEditingController();
+  TextEditingController _customerName = TextEditingController();
+  TextEditingController _phoneNumber = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -20,17 +28,29 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
     super.dispose();
   }
 
+  void registerParcel() async {
+    try {
+      await supabase.from('parcel').insert({
+        'tracking_id': _trackingNumber.text,
+        'name': _customerName.text,
+        'phone': _phoneNumber.text,
+        'status': 'waiting',
+      });
+      print('register successfully!');
+    } catch (error) {
+      print('Error updating parcel: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // ignore: unnecessary_const
-    // const  = const EdgeInsets.symmetric(horizontal:20 );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(250, 195, 44, 1),
+          backgroundColor: Color.fromRGBO(250, 195, 44, 1),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Register Parcel',
             style: TextStyle(
               fontFamily: 'roboto',
@@ -40,21 +60,21 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
             ),
           ),
           leading: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back, // You can replace this with your custom logo
               color: Colors.white, // Icon color
             ),
             onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/admin_home', (route) => false);
+              Navigator.of(context).pushReplacementNamed('/admin_manageParcel');
             },
           ),
         ),
         body: ListView(
           children: [
-            Column(
-              children: [
-                const SizedBox(
+            Form(
+              key: _formKey,
+              child: Column(children: [
+                SizedBox(
                   height: 50.0,
                 ),
                 Container(
@@ -75,7 +95,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                         width: double.infinity,
                         height: double.infinity,
                         decoration: ShapeDecoration(
-                          color: const Color(0xFF0F0AF9),
+                          color: Color(0xFF0F0AF9),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 25), // Increased border radius
@@ -93,17 +113,17 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                             BoxShadow(
                               color: Colors.black.withOpacity(0.5),
                               blurRadius: 8,
-                              offset: const Offset(0, 4),
+                              offset: Offset(0, 4),
                             ),
                           ],
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Parcel Data ',
+                              'Register Parcel',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
@@ -123,16 +143,15 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                 ///////Dalam Kotak Kuning/////////
                 Container(
                     width: 390,
-                    // height: 450,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 12),
+                        horizontal: 20, vertical: 12),
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
-                      color: const Color(0xFFFFD233),
+                      color: Color(0xFFFFD233),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      shadows: const [
+                      shadows: [
                         BoxShadow(
                           color: Color(0x3F000000),
                           blurRadius: 4,
@@ -147,137 +166,229 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                       children: [
                         Align(
                           alignment: Alignment.topLeft,
-                          child: Row(children: [
-                            Container(
-                              width: 120,
-                              height: 60,
-                              padding: EdgeInsets.all(0),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 4, color: Color(0xFF333333)),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                              child: const Row(
-                                children: [
-                                  Expanded(
-                                    child: Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: 'Tracking Number',
-                                            style: TextStyle(
-                                              color: Color(0xFF333333),
-                                              fontSize: 20,
-                                              fontFamily: 'Roboto',
-                                              fontWeight: FontWeight.w400,
-                                              height: 0.00,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      textAlign: TextAlign.center,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 60,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 4, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20.0,
-                            ),
-                            Container(
-                              width: 210,
-                              height: 60,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 4, color: Color(0xFF333333)),
-                                  borderRadius: BorderRadius.circular(15),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: 'Tracking Number',
+                                                style: TextStyle(
+                                                  color: Color(0xFF333333),
+                                                  fontSize: 17,
+                                                  fontFamily: 'Roboto',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                          ]),
+                                SizedBox(
+                                  width: 20.0,
+                                ),
+                                Container(
+                                  width: 230,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 4, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                      fontSize: 15,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please fill in';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    controller: _trackingNumber,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],
+                                    decoration: InputDecoration(
+                                      hintText: "enter tracking number",
+                                      filled: true,
+                                      fillColor: const Color.fromARGB(255, 249,
+                                          249, 249), // Background color
+                                      border: OutlineInputBorder(
+                                        // Use OutlineInputBorder for rounded borders
+                                        borderRadius: BorderRadius.circular(
+                                            10), // This sets the rounded corners for the text field
+                                        borderSide: BorderSide(
+                                          width: 0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                          width: 1.50,
+                                          color: Color(0xFFFFD233),
+                                        ),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 10),
+                                    ),
+                                  ),
+                                ),
+                              ]),
                         ),
                         /////////////////////////////////////////////////
                         /////Name........
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Align(
                           alignment: Alignment.topLeft,
-                          child: Row(children: [
-                            Container(
-                              width: 110,
-                              height: 60,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 4, color: Color(0xFF333333)),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                              child: const Row(
-                                children: [
-                                  Expanded(
-                                    child: Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: 'Name',
-                                            style: TextStyle(
-                                              color: Color(0xFF333333),
-                                              fontSize: 20,
-                                              fontFamily: 'Roboto',
-                                              fontWeight: FontWeight.w400,
-                                              height: 0.00,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      textAlign: TextAlign.center,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 60,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 4, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20.0,
-                            ),
-                            Expanded(
-                                child: Container(
-                              width: 220,
-                              height: 60,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 4, color: Color(0xFF333333)),
-                                  borderRadius: BorderRadius.circular(15),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: 'Name',
+                                                style: TextStyle(
+                                                  color: Color(0xFF333333),
+                                                  fontSize: 17,
+                                                  fontFamily: 'Roboto',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )),
-                          ]),
+                                SizedBox(
+                                  width: 20.0,
+                                ),
+                                Container(
+                                  width: 230,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 4, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                      fontSize: 15,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please fill in';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    controller: _customerName,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter
+                                          .singleLineFormatter,
+                                    ],
+                                    decoration: InputDecoration(
+                                      hintText: "enter customer name",
+                                      filled: true,
+                                      fillColor: const Color.fromARGB(255, 249,
+                                          249, 249), // Background color
+                                      border: OutlineInputBorder(
+                                        // Use OutlineInputBorder for rounded borders
+                                        borderRadius: BorderRadius.circular(
+                                            10), // This sets the rounded corners for the text field
+                                        borderSide: BorderSide(
+                                          width: 0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(
+                                          width: 1.50,
+                                          color: Color(0xFFFFD233),
+                                        ),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 10),
+                                    ),
+                                  ),
+                                ),
+                              ]),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         //////////////////////////////////////////////////////
                         ///Phone......
                         Align(
                           alignment: Alignment.topLeft,
                           child: Row(children: [
                             Container(
-                              width: 110,
+                              width: 100,
                               height: 60,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15),
@@ -285,12 +396,14 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                               decoration: ShapeDecoration(
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
+                                  side: BorderSide(
                                       width: 4, color: Color(0xFF333333)),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                              child: const Row(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Text.rich(
@@ -300,7 +413,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                             text: 'Phone',
                                             style: TextStyle(
                                               color: Color(0xFF333333),
-                                              fontSize: 20,
+                                              fontSize: 17,
                                               fontFamily: 'Roboto',
                                               fontWeight: FontWeight.w400,
                                               height: 0.00,
@@ -314,56 +427,115 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                 ],
                               ),
                             ),
-                            const SizedBox(
+                            SizedBox(
                               width: 20.0,
                             ),
                             Container(
-                              width: 220,
-                              height: 60,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
-                              clipBehavior: Clip.antiAlias,
+                              width: 230,
                               decoration: ShapeDecoration(
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
+                                  side: BorderSide(
                                       width: 4, color: Color(0xFF333333)),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                            )
+                              child: TextFormField(
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 15,
+                                  fontFamily: 'Lexend',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please fill in';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: _phoneNumber,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                ],
+                                decoration: InputDecoration(
+                                  hintText: "enter mobile numbers",
+                                  filled: true,
+                                  fillColor: const Color.fromARGB(
+                                      255, 249, 249, 249), // Background color
+                                  border: OutlineInputBorder(
+                                    // Use OutlineInputBorder for rounded borders
+                                    borderRadius: BorderRadius.circular(
+                                        10), // This sets the rounded corners for the text field
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                ),
+                              ),
+                            ),
                           ]),
                         ),
-                        /////////////////////////////////////////////////////
-                        ///Date Arrive.....
-
-                        //////////////////////////////////////////////////////
-                        ///Payment Status..........
-
-                        ///////////////////////////////////////////////////
-                        ///Delivery Status...............
                       ],
                     )),
-                ///////////////////////////////////////
-                /////////////////////////////////////
-                const SizedBox(
+
+                /////////////////////////
+                /////////////////////////
+                SizedBox(
                   height: 30.0,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    // Add your delete parcel logic here
-                    print("Delete Parcel tapped!");
-                    // You can replace the print statement with the actual logic to delete the parcel.
-                  },
+                /////////////////////////
+                /////////////////////////
+                InkWell(
+                  onTap: isLoading == true
+                      ? null
+                      : () async {
+                          // Your code to handle the tap event
+                          setState(() {
+                            isLoading = true;
+                          });
+                          if (_formKey.currentState!.validate()) {
+                            registerParcel();
+                            //change snackbar design
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                '/admin_registerParcel', (route) => false);
+                          } else {
+                            print('cannot register');
+                          }
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
                   child: Container(
-                    width: 294,
-                    height: 36,
+                    width: 180,
+                    height: 53,
+                    alignment: Alignment.center,
                     decoration: ShapeDecoration(
-                      color: const Color(0xFFCF0000),
+                      color: const Color.fromARGB(255, 44, 174, 48),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(
+                          width: 1.50,
+                          color: const Color.fromARGB(
+                              255, 44, 174, 48), // Border color
+                        ),
                       ),
-                      shadows: const [
+                      shadows: [
                         BoxShadow(
                           color: Color(0x3F000000),
                           blurRadius: 4,
@@ -372,84 +544,23 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                         ),
                       ],
                     ),
-                    child: const Row(
-                      children: [
-                        Expanded(
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Cancel',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.00,
-                                  ),
-                                ),
-                              ],
-                            ),
+                    // if loading show indicator(optional)
+                    child: isLoading == true
+                        ? CircularProgressIndicator()
+                        : Text(
+                            'Confirm',
                             textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 15,
+                              fontFamily: 'Lexend',
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Add your delete parcel logic here
-                    print("Delete Parcel tapped!");
-                    // You can replace the print statement with the actual logic to delete the parcel.
-                  },
-                  child: Container(
-                    width: 294,
-                    height: 36,
-                    decoration: ShapeDecoration(
-                      color: const Color(0xFFFFD233),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(0x3F000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                    child: const Row(
-                      children: [
-                        Expanded(
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Register Parcel',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.00,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )
+              ]),
+            ),
           ],
         ),
       ),
