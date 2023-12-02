@@ -37,8 +37,6 @@ class _SplashPageState extends State<SplashPage> {
       if (checkAdmin.isNotEmpty) {
         print('User is an admin');
         await getAdminData(userID);
-        await getUserList();
-        await getParcelList();
         Navigator.of(context).pushReplacementNamed('/admin_home');
       } else if (checkRider.isNotEmpty) {
         print('User is a rider');

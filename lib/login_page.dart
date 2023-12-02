@@ -19,12 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
-  bool _redirecting = false;
   bool? emailInvalid;
   bool? passwordInvalid;
   bool? workornot;
-  late final StreamSubscription<AuthState>
-      _authStateSubscription; //use to monitor any changes on auth
 
   Future<bool?> _emailError() async {
     final checkAdmin = await supabase

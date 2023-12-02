@@ -1,3 +1,4 @@
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,11 +15,15 @@ class AdminRegisterParcel extends StatefulWidget {
 
 class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   bool isLoading = false;
+  bool? phoneValid;
+  String? phone;
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  DateTime? current;
 
   @override
   void initState() {
@@ -33,9 +38,9 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   Future<void> registerParcel() async {
     try {
       await supabase.from('parcel').insert({
-        'tracking_id': _trackingNumber.text,
-        'name': _customerName.text,
-        'phone': _phoneNumber.text,
+        'tracking_id': _trackingNumber.text.toUpperCase(),
+        'name': _customerName.text.toUpperCase(),
+        'phone': phone,
         'status': 'waiting',
       });
       print('register successfully!');
@@ -452,6 +457,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please fill in';
+                                  } else if (phoneValid == false) {
+                                    return 'Invalid Phone Number';
                                   } else {
                                     return null;
                                   }
@@ -511,6 +518,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                           setState(() {
                             isLoading = true;
                           });
+                          phone = await formatPhone(_phoneNumber.text);
+                          phoneValid = await phone_check(phone!);
                           if (_formKey.currentState!.validate()) {
                             await registerParcel();
                             await getParcelList();
@@ -518,8 +527,9 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                               msg: "The parcel has been Added!",
                             );
                             //change snackbar design
+                            await getParcelList();
                             Navigator.pushNamedAndRemoveUntil(context,
-                                '/admin_registerParcel', (route) => false);
+                                '/admin_manageParcel', (route) => false);
                           } else {
                             print('cannot register');
                           }

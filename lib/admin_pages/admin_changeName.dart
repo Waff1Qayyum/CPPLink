@@ -34,7 +34,6 @@ class _AdminChangeNameState extends State<AdminChangeName> {
   }
 
   Future<bool> checkPassword() async {
-    String? email;
     bool? match;
     match = await supabase.rpc('check_password',
         params: {'password_input': _passwordController.text});
@@ -47,7 +46,7 @@ class _AdminChangeNameState extends State<AdminChangeName> {
   Future<void> setUsername(String _name) async {
     String userId = supabase.auth.currentUser!.id;
     String name = _name;
-    final data = await supabase
+    await supabase
         .from('admin')
         .update({'name': name}).match({'user_id': userId});
   }

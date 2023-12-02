@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'controller.dart'; //comment
 
@@ -18,8 +15,6 @@ class _RegisterTypePageState extends State<RegisterTypePage> {
   String? userType;
   double iconSize1 = 120;
   double iconSize2 = 120;
-  late final StreamSubscription<AuthState>
-      _authStateSubscription; //use to monitor any changes on auth
   var containerColor1 = Colors.white;
   var containerColor2 = Colors.white;
   void setUser(int y) {

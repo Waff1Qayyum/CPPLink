@@ -35,7 +35,6 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
 
   //use supabase function to check password
   Future<bool> checkPassword() async {
-    String? email;
     bool? match;
     match = await supabase.rpc('check_password',
         params: {'password_input': _oldPasswordController.text});
@@ -46,8 +45,6 @@ class _AdminChangePasswordState extends State<AdminChangePassword> {
   }
 
   Future<void> setPassword() async {
-    bool? changed;
-    final res = supabase.auth.currentUser!.id;
     return await supabase.rpc('change_password', params: {
       'old_password': _oldPasswordController.text,
       'new_password': _newPasswordController.text

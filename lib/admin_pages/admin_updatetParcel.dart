@@ -380,7 +380,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                       ),
                                     ),
                                     child: TextFormField(
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 15,
                                         fontFamily: 'Lexend',
@@ -424,7 +424,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                               BorderRadius.circular(10),
                                           borderSide: BorderSide(
                                             width: 1.50,
-                                            color: Color(0xFFFFD233),
+                                            color: const Color(0xFFFFD233),
                                           ),
                                         ),
                                         contentPadding: EdgeInsets.symmetric(

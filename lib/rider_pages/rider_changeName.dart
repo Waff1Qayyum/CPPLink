@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 import '../controller.dart';
@@ -14,14 +13,12 @@ class RiderChangeName extends StatefulWidget {
 }
 
 class _RiderChangeNameState extends State<RiderChangeName> {
-  bool _redirecting = false;
   bool isLoading = false;
   String? _name;
   bool? passMatch;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
@@ -34,7 +31,6 @@ class _RiderChangeNameState extends State<RiderChangeName> {
   }
 
   Future<bool> checkPassword() async {
-    String? email;
     bool? match;
     match = await supabase.rpc('check_password',
         params: {'password_input': _passwordController.text});
@@ -47,7 +43,7 @@ class _RiderChangeNameState extends State<RiderChangeName> {
   Future<void> setUsername(String name) async {
     String userId = supabase.auth.currentUser!.id;
     String name = _name!.toUpperCase();
-    final data = await supabase
+    await supabase
         .from('user')
         .update({'name': name}).match({'user_id': userId});
   }
@@ -372,7 +368,7 @@ class _RiderChangeNameState extends State<RiderChangeName> {
                                             isLoading = true;
                                           });
                                           _name = await formatName(
-                                              _nameController!.text);
+                                              _nameController.text);
                                           passMatch = await checkPassword();
                                           if (_formKey.currentState!
                                               .validate()) {

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
@@ -46,7 +45,6 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
   }
 
   Future<bool> checkPassword() async {
-    String? email;
     bool? match;
     match = await supabase.rpc('check_password',
         params: {'password_input': _passwordController.text});
@@ -59,7 +57,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
   Future<void> setPhone(String _phone) async {
     String userId = supabase.auth.currentUser!.id;
     String phone = _phone;
-    final data = await supabase
+    await supabase
         .from('user')
         .update({'phone': phone}).match({'user_id': userId});
   }

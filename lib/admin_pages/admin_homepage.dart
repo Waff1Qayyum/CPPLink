@@ -46,9 +46,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   children: [
                     GestureDetector(
                         onTap: () {
+                          if (mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/login', (route) => false);
+                          }
                           supabase.auth.signOut();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
                         },
                         child: Text(
                           'Sign Out',
@@ -263,7 +265,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             width: 20,
                           ),
                           InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              await getParcelList();
                               Navigator.of(context)
                                   .pushReplacementNamed('/admin_manageParcel');
                             },

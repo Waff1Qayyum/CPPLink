@@ -13,7 +13,6 @@ class AdminManageParcel extends StatefulWidget {
 
 class _AdminManageParcelState extends State<AdminManageParcel> {
   bool isLoading = false;
-  final _formKey = GlobalKey<FormState>();
   dynamic user_list = user_data;
   dynamic parcel_list = parcel_data;
   dynamic sorted_list;

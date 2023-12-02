@@ -15,16 +15,15 @@ class AdminChangePhone extends StatefulWidget {
 }
 
 class _AdminChangePhoneState extends State<AdminChangePhone> {
-  bool _redirecting = false;
   bool isLoading = false;
   String? _phone;
   bool? passMatch;
   bool? phoneUnique;
+  bool? phoneValid;
   dynamic image;
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  // late final StreamSubscription<AuthState> _authStateSubscription;
 
   @override
   void initState() {
@@ -50,7 +49,6 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
   }
 
   Future<bool> checkPassword() async {
-    String? email;
     bool? match;
     match = await supabase.rpc('check_password',
         params: {'password_input': _passwordController.text});
@@ -63,7 +61,7 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
   Future<void> setPhone(String _phone) async {
     String userId = supabase.auth.currentUser!.id;
     String phone = _phone;
-    final data = await supabase
+    await supabase
         .from('admin')
         .update({'phone': phone}).match({'user_id': userId});
   }
@@ -267,7 +265,11 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                               child: TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter fullname';
+                                    return 'Please enter phone number';
+                                  } else if (phoneValid == false) {
+                                    return 'Enter Valid Phone Number';
+                                  } else if (phoneUnique == false) {
+                                    return 'Phone Number Already Exist';
                                   } else {
                                     return null;
                                   }
@@ -408,6 +410,9 @@ class _AdminChangePhoneState extends State<AdminChangePhone> {
                                             passMatch = await checkPassword();
                                             _phone = formatPhone(
                                                 _phoneController.text);
+                                            phoneValid = phone_check(_phone!);
+                                            phoneUnique =
+                                                await phone_unique(_phone!);
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               await setPhone(_phone!);
