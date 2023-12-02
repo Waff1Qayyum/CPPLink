@@ -185,21 +185,33 @@ var customerName;
 var customerNumber;
 var dateArrived;
 var status;
-var searchParcel = 'JEG3412';
+// var searchParcel = 'JEG3412';
 
 // final mydata = findParcel(parcelData);
-Future<void> findParcel() async {
-  final parcelData = await supabase
-      .from('parcel')
-      .select()
-      .eq('tracking_id', searchParcel)
-      .single();
-  tracking_id = parcelData['tracking_id'];
-  customerName = parcelData['name'];
-  customerNumber = parcelData['phone'];
-  dateArrived = parcelData['date_arrived'];
-  status = parcelData['status'];
-  print('my track id is ' + tracking_id + ' and the status is ' + status);
+Future<void> findParcel(dynamic searchParcel) async {
+  try {
+    final parcelData = await supabase
+        .from('parcel')
+        .select()
+        .eq('tracking_id', searchParcel)
+        .single();
+    
+    if (parcelData != null) {
+      tracking_id = parcelData['tracking_id'];
+      customerName = parcelData['name'];
+      customerNumber = parcelData['phone'];
+      dateArrived = parcelData['date_arrived'];
+      status = parcelData['status'];
+
+      print('my track id is $tracking_id and the status is $status');
+    } else {
+      // Handle the case where parcelData is null (e.g., parcel not found)
+      print('Parcel not found for tracking_id: $searchParcel');
+    }
+  } catch (error) {
+    // Handle errors during data retrieval
+    print('Error fetching parcel data: $error');
+  }
 }
 
 //List of elements

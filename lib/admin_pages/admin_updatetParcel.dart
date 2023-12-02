@@ -13,13 +13,15 @@ class AdminUpdateParcel extends StatefulWidget {
 }
 
 class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
-  String selectedPaymentStatus = 'not paid';
-  String selectedDeliveryStatus = 'on delivery';
+  // String selectedPaymentStatus = 'not paid';
+  // String selectedDeliveryStatus = 'on delivery';
   bool isLoading = false;
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
   TextEditingController _dateController = TextEditingController();
+  TextEditingController deliveryStatusController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -32,43 +34,50 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
 
     if (pickedDate != null) {
       // Format the picked date to display only the date without the time
-      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       setState(() {
         _dateController.text = formattedDate;
       });
     }
   }
 
+  void initializevariables() async {
+    _trackingNumber.text = tracking_id;
+    _customerName.text = customerName;
+    _phoneNumber.text = customerNumber;
+    _dateController.text = dateArrived;
+    deliveryStatusController.text = status;
+
+    print('all variables initialized.');
+  }
+
   Future<void> updateParcel() async {
-    final data = await supabase
-        .from('parcel')
-        .update({'tracking_id': tracking_id}).match({
-      'name': _customerName.text,
-      'phone': _phoneNumber.text,
-      'status': selectedDeliveryStatus,
-      'date_arrived': selectedPaymentStatus,
-    });
-    print('updated parcel successfully!');
+    try {
+      await supabase.from('parcel').update({
+        'name': _customerName.text,
+        'phone': _phoneNumber.text,
+        'status': deliveryStatusController.text,
+        'date_arrived': _dateController.text,
+      }).match({'tracking_id': tracking_id});
+
+      print('Updated parcel successfully!');
+    } catch (error) {
+      // Handle the error appropriately
+
+      // Log the error for debugging purposes
+      print('Error updating parcel: $error');
+
+      // Show a user-friendly error message
+      print('Failed to update parcel. Please try again.');
+
+      // You might want to reset the form or take other corrective actions
+    }
   }
 
   @override
   void initState() {
     super.initState();
-
-    ///Only for testing delete if this page is finalized
-    getParcel();
-    _trackingNumber.text = tracking_id;
-    print(_trackingNumber);
-  }
-
-  ///Only for testing delete if this page is finalized
-  Future<void> getParcel() async {
-    try {
-      await findParcel();
-      setState(() {});
-    } catch (error) {
-      print('Error fetching parcel data: $error');
-    }
+    initializevariables();
   }
 
   @override
@@ -99,8 +108,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
               color: Colors.white, // Icon color
             ),
             onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/admin_home', (route) => false);
+              Navigator.of(context).pushReplacementNamed('/admin_manageParcel');
             },
           ),
         ),
@@ -266,7 +274,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                       controller: _trackingNumber,
-                                      enabled: true,
+                                      // enabled: true,
                                       textCapitalization:
                                           TextCapitalization.characters,
                                       textAlignVertical:
@@ -490,7 +498,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                       return null;
                                     }
                                   },
-                                  controller: _customerName,
+                                  controller: _phoneNumber,
                                   textCapitalization:
                                       TextCapitalization.characters,
                                   textAlignVertical: TextAlignVertical.center,
@@ -647,78 +655,78 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                           ),
                           //////////////////////////////////////////////////////
                           ///Payment Status..........
-                          SizedBox(height: 10),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 100,
-                                  height: 60,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          width: 4, color: Color(0xFF333333)),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Payment Status',
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                        fontSize: 16,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 20.0),
-                                Container(
-                                  width: 160,
-                                  height: 60,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          width: 4, color: Color(0xFF333333)),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: DropdownButton<String>(
-                                          value: selectedPaymentStatus,
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              selectedPaymentStatus = newValue!;
-                                            });
-                                          },
-                                          items: <String>['paid', 'not paid']
-                                              .map((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // SizedBox(height: 10),
+                          // Align(
+                          //   alignment: Alignment.topLeft,
+                          //   child: Row(
+                          //     children: [
+                          //       Container(
+                          //         width: 100,
+                          //         height: 60,
+                          //         padding: const EdgeInsets.symmetric(
+                          //             horizontal: 13),
+                          //         clipBehavior: Clip.antiAlias,
+                          //         decoration: ShapeDecoration(
+                          //           color: Colors.white,
+                          //           shape: RoundedRectangleBorder(
+                          //             side: BorderSide(
+                          //                 width: 4, color: Color(0xFF333333)),
+                          //             borderRadius: BorderRadius.circular(15),
+                          //           ),
+                          //         ),
+                          //         child: Center(
+                          //           child: Text(
+                          //             'Payment Status',
+                          //             style: TextStyle(
+                          //               color: Color(0xFF333333),
+                          //               fontSize: 16,
+                          //               fontFamily: 'Roboto',
+                          //               fontWeight: FontWeight.w400,
+                          //               height: 0.00,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       SizedBox(width: 20.0),
+                          //       Container(
+                          //         width: 160,
+                          //         height: 60,
+                          //         padding: const EdgeInsets.symmetric(
+                          //             horizontal: 24, vertical: 12),
+                          //         clipBehavior: Clip.antiAlias,
+                          //         decoration: ShapeDecoration(
+                          //           color: Colors.white,
+                          //           shape: RoundedRectangleBorder(
+                          //             side: BorderSide(
+                          //                 width: 4, color: Color(0xFF333333)),
+                          //             borderRadius: BorderRadius.circular(15),
+                          //           ),
+                          //         ),
+                          //         child: Row(
+                          //           children: [
+                          //             Expanded(
+                          //               child: DropdownButton<String>(
+                          //                 value: selectedPaymentStatus,
+                          //                 onChanged: (String? newValue) {
+                          //                   setState(() {
+                          //                     selectedPaymentStatus = newValue!;
+                          //                   });
+                          //                 },
+                          //                 items: <String>['paid', 'not paid']
+                          //                     .map((String value) {
+                          //                   return DropdownMenuItem<String>(
+                          //                     value: value,
+                          //                     child: Text(value),
+                          //                   );
+                          //                 }).toList(),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           ///////////////////////////////////////////////////
                           ///Delivery Status...............
                           SizedBox(height: 10),
@@ -780,16 +788,20 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                     ),
                                   ),
                                   child: DropdownButton<String>(
-                                    value:
-                                        selectedDeliveryStatus, // Default value
+                                    value: deliveryStatusController
+                                        .text, // Default value
                                     onChanged: (String? newValue) {
                                       setState(() {
-                                        selectedDeliveryStatus = newValue!;
+                                        deliveryStatusController.text =
+                                            newValue!;
                                       });
                                     },
-                                    items: <String>['delivered', 'on delivery']
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
+                                    items: <String>[
+                                      'delivered',
+                                      'on delivery',
+                                      'cancelled'
+                                    ].map<DropdownMenuItem<String>>(
+                                        (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(value),
@@ -815,19 +827,6 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                               // Your code to handle the tap event
                               setState(() {
                                 isLoading = true;
-                              });
-                              if (_formKey.currentState!.validate()) {
-                                await updateParcel();
-                                //change snackbar design
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Name Updated Successfully')));
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    '/admin_updateParcel', (route) => false);
-                              }
-                              setState(() {
-                                isLoading = false;
                               });
                             },
                       child: Container(
@@ -883,6 +882,14 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                               setState(() {
                                 isLoading = true;
                               });
+                              if (_formKey.currentState!.validate()) {
+                                await updateParcel();
+                                //change snackbar design
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    '/admin_updateParcel', (route) => false);
+                              } else {
+                                print('cannot update');
+                              }
                               setState(() {
                                 isLoading = false;
                               });
