@@ -819,8 +819,8 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                       });
                                     },
                                     items: <String>[
-                                      'delivered',
-                                      'on delivery',
+                                      'waiting',
+                                      'collected',
                                       'cancelled'
                                     ].map<DropdownMenuItem<String>>(
                                         (String value) {
