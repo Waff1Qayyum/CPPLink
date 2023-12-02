@@ -224,59 +224,57 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: isLoading == true ? null : () async {},
-                        child: Container(
-                          width: 120, // Adjust the width as needed
-                          height: 40,
-                          alignment: Alignment.center,
-                          decoration: ShapeDecoration(
-                            color: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                width: 1.50,
-                                color: Colors.green, // Border color
-                              ),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0x3F000000),
-                                blurRadius: 4,
-                                offset: Offset(0, 4),
-                                spreadRadius: 0,
-                              ),
-                            ],
-                          ),
-                          // if loading show indicator(optional)
-                          child: isLoading == true
-                              ? CircularProgressIndicator()
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                        width:
-                                            5), // Adjust the spacing as needed
-                                    Text(
-                                      'Add parcel',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                      )
+InkWell(
+  onTap: isLoading == true ? null : () async {},
+  child: Container(
+    width: 80, // Adjust the width as needed
+    height: 40,
+    alignment: Alignment.center,
+    decoration: ShapeDecoration(
+      color: Colors.green,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          width: 1.50,
+          color: Colors.green, // Border color
+        ),
+      ),
+      shadows: [
+        BoxShadow(
+          color: Color(0x3F000000),
+          blurRadius: 4,
+          offset: Offset(0, 4),
+          spreadRadius: 0,
+        ),
+      ],
+    ),
+    // if loading show indicator(optional)
+    child: isLoading == true
+        ? CircularProgressIndicator()
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 20,
+              ),
+              SizedBox(width: 5), // Adjust the spacing as needed
+              Text(
+                'Add',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 15,
+                  fontFamily: 'Lexend',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+  ),
+)
+
                     ],
                   ),
                 ),

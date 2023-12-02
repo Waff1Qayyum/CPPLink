@@ -191,6 +191,31 @@ Future<void> getAdminData(dynamic id) async {
   }
 }
 
+///////////////////
+///////////////////
+//selected parcel
+var tracking_id;
+var customerName;
+var customerNumber;
+var dateArrived;
+var status;
+var searchParcel = 'JEG3412';
+
+// final mydata = findParcel(parcelData);
+Future<void> findParcel() async {
+  final parcelData = await supabase
+      .from('parcel')
+      .select()
+      .eq('tracking_id', searchParcel)
+      .single();
+  tracking_id = parcelData['tracking_id'];
+  customerName = parcelData['name'];
+  customerNumber = parcelData['phone'];
+  dateArrived = parcelData['date_arrived'];
+  status = parcelData['status'];
+  print('my track id is ' + tracking_id + ' and the status is ' + status);
+}
+
 //List of elements
 var user_data;
 var parcel_data;
