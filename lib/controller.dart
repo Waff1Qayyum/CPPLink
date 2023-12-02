@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'main.dart';
 
@@ -188,12 +189,27 @@ var searchParcel = 'JEG3412';
 
 // final mydata = findParcel(parcelData);
 Future<void> findParcel() async {
-  final parcelData =
-      await supabase.from('parcel').select().eq('tracking_id', searchParcel).single();
+  final parcelData = await supabase
+      .from('parcel')
+      .select()
+      .eq('tracking_id', searchParcel)
+      .single();
   tracking_id = parcelData['tracking_id'];
   customerName = parcelData['name'];
   customerNumber = parcelData['phone'];
   dateArrived = parcelData['date_arrived'];
   status = parcelData['status'];
-  print('my track id is ' + tracking_id +' and the status is ' + status);
+  print('my track id is ' + tracking_id + ' and the status is ' + status);
+}
+
+//List of elements
+var user_data;
+var parcel_data;
+
+Future<void> getUserList() async {
+  user_data = await supabase.from('user').select<PostgrestList>();
+}
+
+Future<void> getParcelList() async {
+  parcel_data = await supabase.from('parcel').select<PostgrestList>();
 }

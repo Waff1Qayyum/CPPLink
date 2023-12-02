@@ -39,6 +39,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
     assignData();
   }
 
+  @override
   void dispose() {
     super.dispose();
   }

@@ -13,6 +13,7 @@ import 'admin_pages/admin_changePhoneNumber.dart';
 import 'admin_pages/admin_changeProfilePicture.dart';
 import 'admin_pages/admin_homepage.dart';
 import 'admin_pages/admin_manageParcel.dart';
+import 'admin_pages/admin_registerParcel.dart';
 import 'admin_pages/admin_updatetParcel.dart';
 //////customer/////////
 import 'customer_pages/customer_changeName.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
         '/admin_changePhone': (_) => const AdminChangePhone(),
         '/admin_manageParcel': (_) => const AdminManageParcel(),
         '/admin_updateParcel': (_) => const AdminUpdateParcel(),
+        '/admin_registerParcel': (_) => const AdminRegisterParcel(),
 
         // rider
         '/rider_home': (_) => const RiderHomePage(),

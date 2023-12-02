@@ -288,13 +288,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                   ),
                                 ],
                               ),
-                              child: Column(
+                              child: const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(
                                     Icons.widgets,
                                     size: 50, // Adjust the size as needed
-                                    color: const Color.fromARGB(255, 255, 255,
+                                    color: Color.fromARGB(255, 255, 255,
                                         255), // Change the icon color
                                   ),
                                   Text(
