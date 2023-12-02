@@ -1,5 +1,7 @@
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import '../main.dart';
 
@@ -18,6 +20,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
 
   final _formKey = GlobalKey<FormState>();
 
+  DateTime? current;
+
   @override
   void initState() {
     super.initState();
@@ -28,12 +32,15 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
     super.dispose();
   }
 
-  void registerParcel() async {
+  Future<void> registerParcel() async {
+    current = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(current!);
     try {
       await supabase.from('parcel').insert({
         'tracking_id': _trackingNumber.text,
         'name': _customerName.text,
         'phone': _phoneNumber.text,
+        'date_arrived': formattedDate,
         'status': 'waiting',
       });
       print('register successfully!');
@@ -510,10 +517,11 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                             isLoading = true;
                           });
                           if (_formKey.currentState!.validate()) {
-                            registerParcel();
+                            await registerParcel();
                             //change snackbar design
+                            await getParcelList();
                             Navigator.pushNamedAndRemoveUntil(context,
-                                '/admin_registerParcel', (route) => false);
+                                '/admin_manageParcel', (route) => false);
                           } else {
                             print('cannot register');
                           }

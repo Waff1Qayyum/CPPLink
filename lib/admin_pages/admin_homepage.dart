@@ -263,7 +263,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             width: 20,
                           ),
                           InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              await getParcelList();
                               Navigator.of(context)
                                   .pushReplacementNamed('/admin_manageParcel');
                             },
