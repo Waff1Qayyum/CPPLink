@@ -54,7 +54,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
   Future<void> updateParcel() async {
     try {
       await supabase.from('parcel').update({
-        'name': _customerName.text,
+        'name': _customerName.text.toUpperCase(),
         'phone': _phoneNumber.text,
         'status': deliveryStatusController.text,
         'date_arrived': _dateController.text,
@@ -78,6 +78,21 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
   void initState() {
     super.initState();
     initializevariables();
+
+    ///Only for testing delete if this page is finalized
+    getParcel();
+    // _trackingNumber.text = tracking_id;
+    print(_trackingNumber);
+  }
+
+  ///Only for testing delete if this page is finalized
+  Future<void> getParcel() async {
+    try {
+      // await findParcel();
+      setState(() {});
+    } catch (error) {
+      print('Error fetching parcel data: $error');
+    }
   }
 
   @override
@@ -882,11 +897,13 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                               setState(() {
                                 isLoading = true;
                               });
+
                               if (_formKey.currentState!.validate()) {
                                 await updateParcel();
+                                await getParcelList();
                                 //change snackbar design
                                 Navigator.pushNamedAndRemoveUntil(context,
-                                    '/admin_updateParcel', (route) => false);
+                                    '/admin_manageParcel', (route) => false);
                               } else {
                                 print('cannot update');
                               }

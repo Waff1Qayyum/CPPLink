@@ -239,3 +239,6 @@ Future<void> getUserList() async {
 Future<void> getParcelList() async {
   parcel_data = await supabase.from('parcel').select<PostgrestList>();
 }
+
+//update parcel data
+var edit_parcel;

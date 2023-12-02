@@ -225,12 +225,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: isLoading == true
-                            ? null
-                            : () async {
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    '/admin_registerParcel', (route) => false);
-                              },
+                        onTap: isLoading == true ? null : () async {},
                         child: Container(
                           width: 80, // Adjust the width as needed
                           height: 40,
@@ -447,26 +442,24 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                             TableCell(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: TextButton(
-                                  onPressed: () async {
-                                    // Handle the button click here
-                                    if (rowData['tracking_id'] != null) {
-                                      // Add your logic for handling the button click when _trackingNumber is not null
-                                     await  findParcel(rowData['tracking_id']);
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context,
-                                          '/admin_updateParcel',
-                                          (route) => false);
-                                    }
+                                child: GestureDetector(
+                                  onTap: () {
+                                    int i = parcel_list.indexOf(rowData);
+                                    edit_parcel = parcel_list[i];
+                                    tracking_id = edit_parcel['tracking_id'];
+                                    customerName = edit_parcel['name'];
+                                    customerNumber = edit_parcel['phone'];
+                                    dateArrived = edit_parcel['date_arrived'];
+                                    status = edit_parcel['status'];
+                                    Navigator.pushNamed(
+                                        context, '/admin_updateParcel');
                                   },
-                                  child: Text(
-                                    'Edit',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                    ),
-                                  ),
+                                  child: Text('Edit',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: 'Lexend',
+                                      )),
                                 ),
                               ),
                             ),
