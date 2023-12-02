@@ -225,7 +225,12 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: isLoading == true ? null : () async {},
+                        onTap: isLoading == true
+                            ? null
+                            : () async {
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    '/admin_registerParcel', (route) => false);
+                              },
                         child: Container(
                           width: 80, // Adjust the width as needed
                           height: 40,
