@@ -46,9 +46,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   children: [
                     GestureDetector(
                         onTap: () {
+                          if (mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/login', (route) => false);
+                          }
                           supabase.auth.signOut();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
                         },
                         child: Text(
                           'Sign Out',

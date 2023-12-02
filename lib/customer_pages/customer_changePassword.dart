@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -44,8 +43,6 @@ class _CustomerChangePasswordState extends State<CustomerChangePassword> {
   }
 
   Future<void> setPassword() async {
-    bool? changed;
-    final res = supabase.auth.currentUser!.id;
     return await supabase.rpc('change_password', params: {
       'old_password': _oldPasswordController.text,
       'new_password': _newPasswordController.text

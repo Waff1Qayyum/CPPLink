@@ -16,16 +16,14 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class ForgotPasswordState extends State<ForgotPassword> {
-  bool _redirecting = false;
-  late final StreamSubscription<AuthState> _authStateSubscription;
   TextEditingController _emailController = TextEditingController();
   bool? emailUnique;
   bool isLoading = false;
 
   Future<void> resetPassword() async {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
+    setState(() {
+      isLoading = true;
+    });
     final email = _emailController.text.trim();
     var emailExist = false;
     final checkAdmin = await supabase.from('admin').select().eq('email', email);
@@ -38,9 +36,9 @@ class ForgotPasswordState extends State<ForgotPassword> {
 
     if (emailExist != true) {
       print("invalid email");
-                                    setState(() {
-                                      isLoading = true;
-                                    });
+      setState(() {
+        isLoading = true;
+      });
       return;
     } else {
       try {
@@ -54,11 +52,10 @@ class ForgotPasswordState extends State<ForgotPassword> {
         print('send password failed: ' + error.message);
       } catch (error) {
         print('unexpected error...');
-      }
-      finally{
-                                            setState(() {
-                                      isLoading = true;
-                                    });
+      } finally {
+        setState(() {
+          isLoading = true;
+        });
       }
     }
   }

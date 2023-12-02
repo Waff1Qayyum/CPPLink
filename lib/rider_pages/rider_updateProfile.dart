@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 

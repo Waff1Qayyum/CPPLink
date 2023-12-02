@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -56,6 +53,10 @@ class _AdminProfileState extends State<AdminProfile> {
                 children: [
                   GestureDetector(
                       onTap: () {
+                        if (mounted) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
+                        }
                         supabase.auth.signOut();
                       },
                       child: Text(

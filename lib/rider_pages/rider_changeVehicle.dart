@@ -90,7 +90,7 @@ class _RiderChangeVehicleState extends State<RiderChangeVehicle> {
 
   Future<void> changeVehicle() async {
     final userId = await supabase.auth.currentUser!.id;
-    final res = await supabase.from('rider').update({
+    await supabase.from('rider').update({
       'vehicle_model': _modelController.text.toUpperCase(),
       'vehicle_colour': _colourController.text.toUpperCase(),
       'vehicle_type': _typeController.text.toUpperCase(),

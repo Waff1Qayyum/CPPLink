@@ -153,13 +153,24 @@ void getVehiclePicture(dynamic id) async {
 
   vehicle_url = data['picture_url'];
 
-  if (vehicle_picture != null) {
+  if (vehicle_url != null) {
     vehicle_picture = Image.network(
       vehicle_url!,
       fit: BoxFit.cover,
       width: 70,
       height: 70,
     );
+  }
+}
+
+//phone unique
+Future<bool> phone_unique(String phone) async {
+  final phoneNo =
+      await supabase.from('user').select('phone').eq('phone', phone).limit(1);
+  if (phoneNo.isNotEmpty && phoneNo[0]['phone'] != null) {
+    return false;
+  } else {
+    return true;
   }
 }
 

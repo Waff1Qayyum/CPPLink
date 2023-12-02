@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -34,7 +33,6 @@ class _RiderChangePasswordState extends State<RiderChangePassword> {
 
   //use supabase function to check password
   Future<bool> checkPassword() async {
-    String? email;
     bool? match;
     match = await supabase.rpc('check_password',
         params: {'password_input': _oldPasswordController.text});
@@ -45,8 +43,6 @@ class _RiderChangePasswordState extends State<RiderChangePassword> {
   }
 
   Future<void> setPassword() async {
-    bool? changed;
-    final res = supabase.auth.currentUser!.id;
     return await supabase.rpc('change_password', params: {
       'old_password': _oldPasswordController.text,
       'new_password': _newPasswordController.text

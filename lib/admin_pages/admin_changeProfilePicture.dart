@@ -49,6 +49,10 @@ class AdminChangePictureState extends State<AdminChangePicture> {
   }
 
   Future<void> uploadImage() async {
+    if (fileImage == null) {
+      return;
+    }
+
     final imageExtension = fileImage!.path.split('.').last.toLowerCase();
     final imageBytes = await fileImage!.readAsBytes();
     final userId = supabase.auth.currentUser!.id;
