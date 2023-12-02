@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'main.dart';
 
@@ -174,4 +175,11 @@ Future<void> getAdminData(dynamic id) async {
       height: 70,
     );
   }
+}
+
+//List of user
+var user_data;
+
+Future<void> getUserList() async {
+  user_data = await supabase.from('user').select<PostgrestList>();
 }

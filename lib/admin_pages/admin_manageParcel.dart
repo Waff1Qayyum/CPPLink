@@ -1,4 +1,8 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
+
+import '../controller.dart';
 
 class AdminManageParcel extends StatefulWidget {
   const AdminManageParcel({super.key});
@@ -10,6 +14,7 @@ class AdminManageParcel extends StatefulWidget {
 class _AdminManageParcelState extends State<AdminManageParcel> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
+  dynamic user_list = user_data;
 
   @override
   void initState() {
@@ -19,6 +24,16 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void updateList(String value) {
+    setState(() {
+      user_list = user_data
+          .where((element) =>
+              element['name'] != null &&
+              element['name']!.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -80,6 +95,11 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                 SizedBox(width: 8.0),
                                 Expanded(
                                   child: TextField(
+                                    onChanged: (val) {
+                                      setState(() {
+                                        updateList(val);
+                                      });
+                                    },
                                     decoration: InputDecoration(
                                       hintText: 'Search Parcel or Customer...',
                                       border: InputBorder.none,
@@ -270,116 +290,180 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                           ),
                         ],
                       ),
-                      TableRow(
-                        children: [
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Tracking Number',
+                      // TableRow(
+                      //   children: [
+                      //     TableCell(
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             Text(
+                      //               'Tracking Number',
+                      //               style: TextStyle(
+                      //                 color: Colors.black,
+                      //                 fontSize: 15,
+                      //                 fontFamily: 'Lexend',
+                      //               ),
+                      //             ),
+                      //             Text('Tel Number',
+                      //                 style: TextStyle(
+                      //                   color: Colors.black,
+                      //                   fontSize: 15,
+                      //                   fontFamily: 'Lexend',
+                      //                 )),
+                      //             Text('Name',
+                      //                 style: TextStyle(
+                      //                   color: Colors.black,
+                      //                   fontSize: 15,
+                      //                   fontFamily: 'Lexend',
+                      //                 )),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     TableCell(
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Text('Delivered',
+                      //             style: TextStyle(
+                      //               color: Colors.black,
+                      //               fontSize: 15,
+                      //               fontFamily: 'Lexend',
+                      //               // fontWeight: FontWeight.w400,
+                      //             )),
+                      //       ),
+                      //     ),
+                      //     TableCell(
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Text('Edit'),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // TableRow(
+                      //   decoration: BoxDecoration(
+                      //     color: Color.fromARGB(255, 255, 220, 94),
+                      //   ),
+                      //   children: [
+                      //     TableCell(
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             Text('Tracking Number',
+                      //                 style: TextStyle(
+                      //                   color: Colors.black,
+                      //                   fontSize: 15,
+                      //                   fontFamily: 'Lexend',
+                      //                 )),
+                      //             Text('Tel Number',
+                      //                 style: TextStyle(
+                      //                   color: Colors.black,
+                      //                   fontSize: 15,
+                      //                   fontFamily: 'Lexend',
+                      //                 )),
+                      //             Text('Name',
+                      //                 style: TextStyle(
+                      //                   color: Colors.black,
+                      //                   fontSize: 15,
+                      //                   fontFamily: 'Lexend',
+                      //                 )),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     TableCell(
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Text('On Delivery',
+                      //             style: TextStyle(
+                      //               color: Colors.black,
+                      //               fontSize: 15,
+                      //               fontFamily: 'Lexend',
+                      //             )),
+                      //       ),
+                      //     ),
+                      //     TableCell(
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Text('Edit',
+                      //             style: TextStyle(
+                      //               color: Colors.black,
+                      //               fontSize: 15,
+                      //               fontFamily: 'Lexend',
+
+                      for (var rowData in user_list)
+                        TableRow(
+                          decoration: BoxDecoration(
+                            color: user_list.indexOf(rowData) % 2 == 0
+                                ? Color.fromARGB(255, 255, 220, 94)
+                                : null,
+                          ),
+                          children: [
+                            TableCell(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      rowData['name'].toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: 'Lexend',
+                                      ),
+                                    ),
+                                    Text(
+                                      rowData['phone'].toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: 'Lexend',
+                                      ),
+                                    ),
+                                    Text(
+                                      'Tracking Number',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: 'Lexend',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            TableCell(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  // rowData['deliveryStatus'].toString(),
+                                  'test',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontFamily: 'Lexend',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            TableCell(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text('Edit',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 15,
                                       fontFamily: 'Lexend',
-                                    ),
-                                  ),
-                                  Text('Tel Number',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                      )),
-                                  Text('Name',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                      )),
-                                ],
+                                    )),
                               ),
                             ),
-                          ),
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('Delivered',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                    // fontWeight: FontWeight.w400,
-                                  )),
-                            ),
-                          ),
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('Edit'),
-                            ),
-                          ),
-                        ],
-                      ),
-                      TableRow(
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 255, 220, 94),
+                          ],
                         ),
-                        children: [
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Tracking Number',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                      )),
-                                  Text('Tel Number',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                      )),
-                                  Text('Name',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('On Delivery',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                  )),
-                            ),
-                          ),
-                          TableCell(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('Edit',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontFamily: 'Lexend',
-                                  )),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Add more TableRow widgets as needed
                     ],
                   ),
                 ),
