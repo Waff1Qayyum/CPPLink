@@ -15,6 +15,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   dynamic user_list = user_data;
+  dynamic parcel_list = parcel_data;
 
   @override
   void initState() {
@@ -27,11 +28,21 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   }
 
   void updateList(String value) {
+    // setState(() {
+    //   user_list = user_data
+    //       .where((element) =>
+    //           element['name'] != null &&
+    //           element['name']!.toLowerCase().contains(value.toLowerCase()))
+    //       .toList();
+    // });
     setState(() {
-      user_list = user_data
+      parcel_list = parcel_data
           .where((element) =>
-              element['name'] != null &&
-              element['name']!.toLowerCase().contains(value.toLowerCase()))
+              (element['name'] != null || element['tracking_id'] != null) &&
+              (element['name']!.toLowerCase().contains(value.toLowerCase()) ||
+                  element['tracking_id']!
+                      .toLowerCase()
+                      .contains(value.toLowerCase())))
           .toList();
     });
   }
@@ -395,10 +406,11 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                       //               fontSize: 15,
                       //               fontFamily: 'Lexend',
 
-                      for (var rowData in user_list)
+                      for (var rowData
+                          in parcel_list) //change to user_list to display user
                         TableRow(
                           decoration: BoxDecoration(
-                            color: user_list.indexOf(rowData) % 2 == 0
+                            color: parcel_list.indexOf(rowData) % 2 == 0
                                 ? Color.fromARGB(255, 255, 220, 94)
                                 : null,
                           ),
@@ -426,7 +438,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                       ),
                                     ),
                                     Text(
-                                      'Tracking Number',
+                                      rowData['tracking_id'].toString(),
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 15,
@@ -441,8 +453,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  // rowData['deliveryStatus'].toString(),
-                                  'test',
+                                  rowData['status'].toString(),
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 15,

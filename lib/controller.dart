@@ -177,9 +177,14 @@ Future<void> getAdminData(dynamic id) async {
   }
 }
 
-//List of user
+//List of elements
 var user_data;
+var parcel_data;
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select<PostgrestList>();
+}
+
+Future<void> getParcelList() async {
+  parcel_data = await supabase.from('parcel').select<PostgrestList>();
 }
