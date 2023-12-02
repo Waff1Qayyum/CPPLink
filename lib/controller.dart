@@ -60,7 +60,7 @@ Future<dynamic> signupRider() async {
 //Validation
 
 //phone validation
-bool _phoneValid(String phone) {
+bool phone_check(String phone) {
   if (!RegExp(r'^01\d{8,9}$').hasMatch(phone)) {
     return false;
   } else {
@@ -69,9 +69,23 @@ bool _phoneValid(String phone) {
 }
 
 //name validation
+bool name_check(String name) {
+  if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(name)) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 //email validation
-
+bool email_check(String email) {
+  if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+      .hasMatch(email)) {
+    return false;
+  } else {
+    return true;
+  }
+}
 //formatting
 
 //format phone
