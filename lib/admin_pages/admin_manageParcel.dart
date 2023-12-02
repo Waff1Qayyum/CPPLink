@@ -16,6 +16,9 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   final _formKey = GlobalKey<FormState>();
   dynamic user_list = user_data;
   dynamic parcel_list = parcel_data;
+  dynamic sorted_list;
+  int parcel_counter = 0;
+  int delivery_counter = 0;
 
   @override
   void initState() {
@@ -45,6 +48,36 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                       .contains(value.toLowerCase())))
           .toList();
     });
+  }
+
+  void sortTrackingNumber() {
+    parcel_list = List.from(parcel_list);
+    setState(() {
+      if (parcel_counter == 1) {
+        parcel_list.sort((a, b) =>
+            (a['tracking_id'] as String).compareTo(b['tracking_id'] as String));
+      } else {
+        parcel_list.sort((a, b) =>
+            (b['tracking_id'] as String).compareTo(a['tracking_id'] as String));
+      }
+    });
+
+    print(parcel_list);
+  }
+
+  void sortDeliveryStatus() {
+    parcel_list = List.from(parcel_list);
+    setState(() {
+      if (delivery_counter == 1) {
+        parcel_list.sort(
+            (a, b) => (a['status'] as String).compareTo(b['status'] as String));
+      } else {
+        parcel_list.sort(
+            (a, b) => (b['status'] as String).compareTo(a['status'] as String));
+      }
+    });
+
+    print(parcel_list);
   }
 
   @override
@@ -82,98 +115,106 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
             ),
             Column(
               children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Container(
-                          width: 280,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1.0,
-                            ),
-                          ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.search, color: Colors.grey),
-                                SizedBox(width: 8.0),
-                                Expanded(
-                                  child: TextField(
-                                    onChanged: (val) {
-                                      setState(() {
-                                        updateList(val);
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: 'Search Parcel or Customer...',
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                Row(children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1.0,
                         ),
                       ),
-
-                      ////////////////
-                      ////////////////
-                      ////////////////
-                      ////////////////
-                      SizedBox(width: 10),
-
-                      SizedBox(height: 30),
-                      Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: InkWell(
-                          onTap: isLoading == true ? null : () async {},
-                          child: Container(
-                            width: 70,
-                            height: 53,
-                            alignment: Alignment.center,
-                            decoration: ShapeDecoration(
-                              color: Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                side: BorderSide(
-                                  width: 1.50,
-                                  color: Colors.blue, // Border color
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.search, color: Colors.grey),
+                            SizedBox(width: 8.0),
+                            Expanded(
+                              child: TextField(
+                                onChanged: (val) {
+                                  setState(() {
+                                    updateList(val);
+                                    parcel_counter = 0;
+                                    delivery_counter = 0;
+                                    // if (parcel_counter == 1 &&
+                                    //     delivery_counter == 1) {
+                                    //   sortDeliveryStatus();
+                                    //   sortTrackingNumber();
+                                    // } else if (parcel_counter == 1) {
+                                    //   sortTrackingNumber();
+                                    // } else if (delivery_counter == 1) {
+                                    //   sortDeliveryStatus();
+                                    // }
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'Search Parcel or Customer...',
+                                  border: InputBorder.none,
                                 ),
                               ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0x3F000000),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
-                                ),
-                              ],
                             ),
-                            // if loading show indicator(optional)
-                            child: isLoading == true
-                                ? CircularProgressIndicator()
-                                : Text(
-                                    'Search',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                          ),
+                          ],
                         ),
                       ),
-                    ]),
+                    ),
+                  ),
+
+                  ////////////////
+                  ////////////////
+                  ////////////////
+                  ////////////////
+                  SizedBox(width: 10),
+
+                  SizedBox(height: 30),
+                  // Padding(
+                  //   padding: EdgeInsets.only(right: 20),
+                  //   child: InkWell(
+                  //     onTap: isLoading == true ? null : () async {},
+                  //     child: Container(
+                  //       width: 70,
+                  //       height: 53,
+                  //       alignment: Alignment.center,
+                  //       decoration: ShapeDecoration(
+                  //         color: Colors.blue,
+                  //         shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(20),
+                  //           side: BorderSide(
+                  //             width: 1.50,
+                  //             color: Colors.blue, // Border color
+                  //           ),
+                  //         ),
+                  //         shadows: [
+                  //           BoxShadow(
+                  //             color: Color(0x3F000000),
+                  //             blurRadius: 4,
+                  //             offset: Offset(0, 4),
+                  //             spreadRadius: 0,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       // if loading show indicator(optional)
+                  //       child: isLoading == true
+                  //           ? CircularProgressIndicator()
+                  //           : Text(
+                  //               'Search',
+                  //               textAlign: TextAlign.center,
+                  //               style: TextStyle(
+                  //                 color: const Color.fromARGB(
+                  //                     255, 255, 255, 255),
+                  //                 fontSize: 15,
+                  //                 fontFamily: 'Lexend',
+                  //                 fontWeight: FontWeight.w400,
+                  //               ),
+                  //             ),
+                  //     ),
+                  //   ),
+                  // ),
+                ]),
                 ////////////////////
                 ////////////////////
                 ////////////////////
@@ -273,28 +314,69 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Parcel Detail',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontFamily: 'Lexend',
-                                  fontWeight: FontWeight.w400,
-                                ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Parcel Detail',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        parcel_counter++;
+                                        parcel_counter = parcel_counter % 2;
+                                        sortTrackingNumber();
+                                        print(
+                                            'Parcel Counter: ${parcel_counter}');
+                                      });
+                                    },
+                                    child: parcel_counter == 0
+                                        ? Icon(Icons.arrow_downward_rounded)
+                                        : Icon(Icons.arrow_upward_rounded),
+                                  )
+                                ],
                               ),
                             ),
                           ),
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Delivery Status',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontFamily: 'Lexend',
-                                  fontWeight: FontWeight.w400,
-                                ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Delivery Status',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        delivery_counter++;
+                                        delivery_counter = delivery_counter % 2;
+                                        sortDeliveryStatus();
+                                      });
+                                    },
+                                    child: delivery_counter == 0
+                                        ? Icon(Icons.arrow_downward_rounded)
+                                        : Icon(Icons.arrow_upward_rounded),
+                                  )
+                                ],
                               ),
                             ),
                           ),

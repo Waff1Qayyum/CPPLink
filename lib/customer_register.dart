@@ -23,6 +23,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   bool? emailUnique;
   bool? phoneUnique;
   bool? phoneValid;
+  bool? nameValid;
+  bool? emailValid;
   String? _email;
   String? _name;
   String? _phone;
@@ -213,6 +215,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter fullname';
+                                        } else if (nameValid == false) {
+                                          return 'Invalid Name';
                                         } else {
                                           return null;
                                         }
@@ -404,6 +408,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                           return 'Please enter an email';
                                         } else if (emailUnique == false) {
                                           return 'Email Already Exist';
+                                        } else if (emailValid == false) {
+                                          return 'Invalid Email';
                                         } else {
                                           return null;
                                         }
@@ -600,7 +606,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                               formatName(_nameController.text);
                                           emailUnique = await _emailUnique();
                                           phoneUnique = await _phoneUnique();
-                                          phoneValid = await _phoneValid();
+                                          phoneValid = phone_check(_phone!);
+                                          nameValid = name_check(_name!);
+                                          emailValid = email_check(_email!);
                                           if (_formkey.currentState!
                                               .validate()) {
                                             _signUp(_name!, _phone!, _email!);
