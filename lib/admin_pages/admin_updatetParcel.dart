@@ -15,6 +15,9 @@ class AdminUpdateParcel extends StatefulWidget {
 class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
   // String selectedPaymentStatus = 'not paid';
   // String selectedDeliveryStatus = 'on delivery';
+  bool? phoneValid;
+  bool? nameValid;
+  String? phone;
   bool isLoading = false;
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
@@ -55,7 +58,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
     try {
       await supabase.from('parcel').update({
         'name': _customerName.text.toUpperCase(),
-        'phone': _phoneNumber.text,
+        'phone': phone,
         'status': deliveryStatusController.text,
         'date_arrived': _dateController.text,
       }).match({'tracking_id': tracking_id});
@@ -397,6 +400,8 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please fill in';
+                                        } else if (nameValid == false) {
+                                          return 'Invalid Name';
                                         } else {
                                           return null;
                                         }
@@ -509,6 +514,8 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please fill in';
+                                    } else if (phoneValid == false) {
+                                      return 'Invalid Phone Number';
                                     } else {
                                       return null;
                                     }
@@ -897,7 +904,9 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                               setState(() {
                                 isLoading = true;
                               });
-
+                              phone = formatPhone(_phoneNumber.text);
+                              phoneValid = await phone_check(phone!);
+                              nameValid = await name_check(_customerName.text);
                               if (_formKey.currentState!.validate()) {
                                 await updateParcel();
                                 await getParcelList();
