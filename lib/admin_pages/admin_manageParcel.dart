@@ -124,7 +124,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(
-                          color: Colors.grey,
+                          color: Colors.black,
                           width: 1.0,
                         ),
                       ),
@@ -132,7 +132,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Row(
                           children: [
-                            Icon(Icons.search, color: Colors.grey),
+                            Icon(Icons.search, color: Colors.black),
                             SizedBox(width: 8.0),
                             Expanded(
                               child: TextField(
@@ -141,15 +141,6 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                     updateList(val);
                                     parcel_counter = 0;
                                     delivery_counter = 0;
-                                    // if (parcel_counter == 1 &&
-                                    //     delivery_counter == 1) {
-                                    //   sortDeliveryStatus();
-                                    //   sortTrackingNumber();
-                                    // } else if (parcel_counter == 1) {
-                                    //   sortTrackingNumber();
-                                    // } else if (delivery_counter == 1) {
-                                    //   sortDeliveryStatus();
-                                    // }
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -163,82 +154,31 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                       ),
                     ),
                   ),
-
-                  ////////////////
-                  ////////////////
-                  ////////////////
-                  ////////////////
-                  SizedBox(width: 10),
-
-                  SizedBox(height: 30),
-                  // Padding(
-                  //   padding: EdgeInsets.only(right: 20),
-                  //   child: InkWell(
-                  //     onTap: isLoading == true ? null : () async {},
-                  //     child: Container(
-                  //       width: 70,
-                  //       height: 53,
-                  //       alignment: Alignment.center,
-                  //       decoration: ShapeDecoration(
-                  //         color: Colors.blue,
-                  //         shape: RoundedRectangleBorder(
-                  //           borderRadius: BorderRadius.circular(20),
-                  //           side: BorderSide(
-                  //             width: 1.50,
-                  //             color: Colors.blue, // Border color
-                  //           ),
-                  //         ),
-                  //         shadows: [
-                  //           BoxShadow(
-                  //             color: Color(0x3F000000),
-                  //             blurRadius: 4,
-                  //             offset: Offset(0, 4),
-                  //             spreadRadius: 0,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       // if loading show indicator(optional)
-                  //       child: isLoading == true
-                  //           ? CircularProgressIndicator()
-                  //           : Text(
-                  //               'Search',
-                  //               textAlign: TextAlign.center,
-                  //               style: TextStyle(
-                  //                 color: const Color.fromARGB(
-                  //                     255, 255, 255, 255),
-                  //                 fontSize: 15,
-                  //                 fontFamily: 'Lexend',
-                  //                 fontWeight: FontWeight.w400,
-                  //               ),
-                  //             ),
-                  //     ),
-                  //   ),
-                  // ),
                 ]),
                 ////////////////////
                 ////////////////////
                 ////////////////////
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
                         onTap: isLoading == true
                             ? null
                             : () async {
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    '/admin_registerParcel', (route) => false);
+                                Navigator.pushNamed(
+                                    context, '/admin_registerParcel');
                               },
                         child: Container(
-                          width: 80, // Adjust the width as needed
+                          width: 130, // Adjust the width as needed
                           height: 40,
                           alignment: Alignment.center,
                           decoration: ShapeDecoration(
                             color: Colors.green,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(10),
                               side: BorderSide(
                                 width: 1.50,
                                 color: Colors.green, // Border color
@@ -268,7 +208,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                         width:
                                             5), // Adjust the spacing as needed
                                     Text(
-                                      'Add',
+                                      'Add Parcel',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: const Color.fromARGB(
@@ -291,7 +231,8 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                 /////////////////
                 /////////////////
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
                   child: Table(
                     border: TableBorder.all(
                       color: const Color.fromARGB(255, 0, 0, 0),
@@ -393,7 +334,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                         TableRow(
                           decoration: BoxDecoration(
                             color: parcel_list.indexOf(rowData) % 2 == 0
-                                ? Color.fromARGB(255, 255, 220, 94)
+                                ? Color.fromARGB(255, 255, 245, 211)
                                 : null,
                           ),
                           children: [
@@ -459,12 +400,17 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                     Navigator.pushNamed(
                                         context, '/admin_updateParcel');
                                   },
-                                  child: Text('Edit',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontFamily: 'Lexend',
-                                      )),
+                                  child: Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                      color: Colors
+                                          .blue, // Set the color you desire
+                                      fontSize: 15,
+                                      fontFamily: 'Lexend',
+                                      decoration: TextDecoration
+                                          .underline, // Add underline
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

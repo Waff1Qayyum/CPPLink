@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -22,33 +22,14 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
   TextEditingController deliveryStatusController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (pickedDate != null) {
-      // Format the picked date to display only the date without the time
-      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      setState(() {
-        _dateController.text = formattedDate;
-      });
-    }
-  }
 
   void initializevariables() async {
     _trackingNumber.text = tracking_id;
     _customerName.text = customerName;
     _phoneNumber.text = customerNumber;
-    _dateController.text = dateArrived;
     deliveryStatusController.text = status;
 
     print('all variables initialized.');
@@ -60,7 +41,6 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
         'name': _customerName.text.toUpperCase(),
         'phone': phone,
         'status': deliveryStatusController.text,
-        'date_arrived': _dateController.text,
       }).match({'tracking_id': tracking_id});
 
       print('Updated parcel successfully!');
@@ -76,6 +56,15 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
       // You might want to reset the form or take other corrective actions
     }
   }
+
+  // Future<void> deleteParcel() async {
+  //   try {
+  //     print('deleting parcel successfully');
+  //     return;
+  //   } catch (error) {
+  //     print('Error deleting parcel: $error');
+  //   }
+  // }
 
   @override
   void initState() {
@@ -112,7 +101,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
           backgroundColor: Color.fromRGBO(250, 195, 44, 1),
           centerTitle: true,
           title: Text(
-            'Update Parcel',
+            'Edit Parcel',
             style: TextStyle(
               fontFamily: 'roboto',
               fontWeight: FontWeight.bold,
@@ -205,9 +194,8 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                   ///////Dalam Kotak Kuning/////////
                   Container(
                       width: 390,
-                      height: 450,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
+                          horizontal: 20, vertical: 20),
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
                         color: Color(0xFFFFD233),
@@ -291,6 +279,7 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                         fontFamily: 'Lexend',
                                         fontWeight: FontWeight.w400,
                                       ),
+                                      enabled: false,
                                       controller: _trackingNumber,
                                       // enabled: true,
                                       textCapitalization:
@@ -557,199 +546,10 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                               ),
                             ]),
                           ),
-                          /////////////////////////////////////////////////////
-                          ///Date Arrive.....
-                          SizedBox(height: 10),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 100,
-                                    height: 60,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15),
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: ShapeDecoration(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            width: 4, color: Color(0xFF333333)),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Date Arrive',
-                                                  style: TextStyle(
-                                                    color: Color(0xFF333333),
-                                                    fontSize: 17,
-                                                    fontFamily: 'Roboto',
-                                                    fontWeight: FontWeight.w400,
-                                                    height: 0.00,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20.0,
-                                  ),
-                                  Container(
-                                    width: 160,
-                                    decoration: ShapeDecoration(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            width: 4, color: Color(0xFF333333)),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: TextField(
-                                            controller: _dateController,
-                                            style: TextStyle(
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0),
-                                              fontSize: 15,
-                                              fontFamily: 'Lexend',
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                            textAlignVertical:
-                                                TextAlignVertical.center,
-                                            maxLines: 1,
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter
-                                                  .singleLineFormatter,
-                                            ],
-                                            decoration: InputDecoration(
-                                              hintText: "---- -- --",
-                                              filled: true,
-                                              fillColor: const Color.fromARGB(
-                                                  255, 249, 249, 249),
-                                              // Background color
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                borderSide: BorderSide.none,
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                borderSide: BorderSide(
-                                                  width: 1.50,
-                                                  color: Color(0xFFFFD233),
-                                                ),
-                                              ),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 10),
-                                            ),
-                                            readOnly: true,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.calendar_today),
-                                          onPressed: () => _selectDate(context),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  ///////////////////////
-                                  //////////////////////
-                                ]),
-                          ),
-                          //////////////////////////////////////////////////////
-                          ///Payment Status..........
-                          // SizedBox(height: 10),
-                          // Align(
-                          //   alignment: Alignment.topLeft,
-                          //   child: Row(
-                          //     children: [
-                          //       Container(
-                          //         width: 100,
-                          //         height: 60,
-                          //         padding: const EdgeInsets.symmetric(
-                          //             horizontal: 13),
-                          //         clipBehavior: Clip.antiAlias,
-                          //         decoration: ShapeDecoration(
-                          //           color: Colors.white,
-                          //           shape: RoundedRectangleBorder(
-                          //             side: BorderSide(
-                          //                 width: 4, color: Color(0xFF333333)),
-                          //             borderRadius: BorderRadius.circular(15),
-                          //           ),
-                          //         ),
-                          //         child: Center(
-                          //           child: Text(
-                          //             'Payment Status',
-                          //             style: TextStyle(
-                          //               color: Color(0xFF333333),
-                          //               fontSize: 16,
-                          //               fontFamily: 'Roboto',
-                          //               fontWeight: FontWeight.w400,
-                          //               height: 0.00,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //       SizedBox(width: 20.0),
-                          //       Container(
-                          //         width: 160,
-                          //         height: 60,
-                          //         padding: const EdgeInsets.symmetric(
-                          //             horizontal: 24, vertical: 12),
-                          //         clipBehavior: Clip.antiAlias,
-                          //         decoration: ShapeDecoration(
-                          //           color: Colors.white,
-                          //           shape: RoundedRectangleBorder(
-                          //             side: BorderSide(
-                          //                 width: 4, color: Color(0xFF333333)),
-                          //             borderRadius: BorderRadius.circular(15),
-                          //           ),
-                          //         ),
-                          //         child: Row(
-                          //           children: [
-                          //             Expanded(
-                          //               child: DropdownButton<String>(
-                          //                 value: selectedPaymentStatus,
-                          //                 onChanged: (String? newValue) {
-                          //                   setState(() {
-                          //                     selectedPaymentStatus = newValue!;
-                          //                   });
-                          //                 },
-                          //                 items: <String>['paid', 'not paid']
-                          //                     .map((String value) {
-                          //                   return DropdownMenuItem<String>(
-                          //                     value: value,
-                          //                     child: Text(value),
-                          //                   );
-                          //                 }).toList(),
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          ///////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
                           ///Delivery Status...............
                           SizedBox(height: 10),
                           Align(
@@ -843,14 +643,39 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                   ),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     InkWell(
-                      onTap: isLoading == true
-                          ? null
-                          : () async {
-                              // Your code to handle the tap event
-                              setState(() {
-                                isLoading = true;
-                              });
-                            },
+                      onTap: () {
+                        // Your code to handle the tap event
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  content: const Text('Confirm Delete?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('No')),
+                                    TextButton(
+                                        onPressed: () async {
+                                          await supabase
+                                              .from('parcel')
+                                              .delete()
+                                              .eq('tracking_id', tracking_id);
+                                          await getParcelList();
+                                          //change snackbar design
+                                          Navigator.pop(context);
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              '/admin_manageParcel',
+                                              (route) => false);
+                                          Fluttertoast.showToast(
+                                            msg: "The parcel has been deleted!",
+                                          );
+                                        },
+                                        child: const Text('Yes'))
+                                  ],
+                                ));
+                      },
                       child: Container(
                         width: 180,
                         height: 53,
@@ -911,6 +736,9 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                 await updateParcel();
                                 await getParcelList();
                                 //change snackbar design
+                                Fluttertoast.showToast(
+                                  msg: "The parcel has been edited!",
+                                );
                                 Navigator.pushNamedAndRemoveUntil(context,
                                     '/admin_manageParcel', (route) => false);
                               } else {

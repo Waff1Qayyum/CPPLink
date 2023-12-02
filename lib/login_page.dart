@@ -397,7 +397,7 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text(
-                          'Forgot your password ?',
+                          'Forgot your password ? ',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 12,

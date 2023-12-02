@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../controller.dart';
 import '../main.dart';
 
 class AdminRegisterParcel extends StatefulWidget {
@@ -28,7 +30,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
     super.dispose();
   }
 
-  void registerParcel() async {
+  Future<void> registerParcel() async {
     try {
       await supabase.from('parcel').insert({
         'tracking_id': _trackingNumber.text,
@@ -144,7 +146,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                 Container(
                     width: 390,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
+                        horizontal: 20, vertical: 20),
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
                       color: Color(0xFFFFD233),
@@ -510,7 +512,11 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                             isLoading = true;
                           });
                           if (_formKey.currentState!.validate()) {
-                            registerParcel();
+                            await registerParcel();
+                            await getParcelList();
+                            Fluttertoast.showToast(
+                              msg: "The parcel has been Added!",
+                            );
                             //change snackbar design
                             Navigator.pushNamedAndRemoveUntil(context,
                                 '/admin_registerParcel', (route) => false);
