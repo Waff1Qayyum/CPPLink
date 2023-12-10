@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../controller.dart';
 import '../main.dart';
 
@@ -70,106 +71,104 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                 SizedBox(
                   height: 20.0,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Column(
                   children: [
                     Container(
-                        child: Image.asset(
-                      './images/cpp_logo.png',
-                      width: 70,
-                      height: 70,
-                    )),
-                    Text(
-                      'CPP',
-                      style: TextStyle(
-                        color: Color(0xFF050505),
-                        fontSize: 48,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.,
+                        children: [
+                          Text(
+                            'CPP',
+                            style: TextStyle(
+                              color: Color.fromRGBO(250, 195, 44, 1),
+                              fontSize: 48,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                              shadows: [
+                                Shadow(
+                                  color: Color.fromARGB(255, 145, 145, 145),
+                                  offset: Offset(0, 3),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            'Link',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 7, 7, 131),
+                              fontSize: 32,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      'Link',
-                      style: TextStyle(
-                        color: Color(0xFFFFD233),
-                        fontSize: 32,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
+                    )
                   ],
                 ),
                 SizedBox(height: 40.0),
-                Row(
-                    //row to put the image+name and notification icon
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                          //padding for all column
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                              //row to put image + name
-                              children: [
-                                Row(children: [
-                                  Container(
-                                    width: 50, // Adjust the width as needed
-                                    height: 50, // Adjust the height as needed
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color:
-                                            Color(0xFFFFD233), // Border color
-                                        width: 1.0, // Border width
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                          //row to put image + name
+                          children: [
+                            Row(children: [
+                              Container(
+                                width: 50, // Adjust the width as needed
+                                height: 50, // Adjust the height as needed
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Color(0xFFFFD233), // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                ),
+                                child: ClipOval(
+                                    child: user_picture != null
+                                        ? picture!
+                                        : Container(
+                                            color: Colors.grey,
+                                          )),
+                              ),
+                              SizedBox(width: 10.0),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Welcome back, ',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
                                       ),
                                     ),
-                                    child: ClipOval(
-                                        child: user_picture != null
-                                            ? picture!
-                                            : Container(
-                                                color: Colors.grey,
-                                              )),
-                                  ),
-                                  SizedBox(width: 10.0),
-                                  Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Welcome back, ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 17,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w700,
-                                            height: 0,
-                                          ),
-                                        ),
-                                        Text(
-                                          user_name ?? 'Loading..',
-                                          style: TextStyle(
-                                            color: Color(0xFFFFD233),
-                                            fontSize: 22,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w700,
-                                            height: 0,
-                                          ),
-                                        ),
-                                      ])
-                                ]),
-                              ])),
-                      IconButton(
-                        iconSize: 30.0,
-                        icon: Icon(Icons.notifications, color: Colors.black),
-                        onPressed: () {
-                          // Add your action here
-                        },
-                      ),
-                    ]),
+                                    Text(
+                                      user_name ?? 'Loading..',
+                                      style: TextStyle(
+                                        color: Color(0xFFFFD233),
+                                        fontSize: 22,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ])
+                            ]),
+                          ])),
+                  IconButton(
+                    iconSize: 30.0,
+                    icon: Icon(Icons.notifications, color: Colors.black),
+                    onPressed: () {
+                      // Add your action here
+                    },
+                  ),
+                ]),
                 SizedBox(height: 70),
                 Text(
                   'What would you want to do for Today ?',
@@ -192,7 +191,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                         children: [
                           InkWell(
                             onTap: () {
-                              // Your code to handle the tap event
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/customer_booking');
                             },
                             child: Container(
                               width: 155,
@@ -225,7 +225,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                                         255), // Change the icon color
                                   ),
                                   Text(
-                                    'Check Parcel',
+                                    'Book Delivery',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.white,
@@ -244,6 +244,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                           ),
                           InkWell(
                             onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/customer_booking');
                               // Your code to handle the tap event
                             },
                             child: Container(

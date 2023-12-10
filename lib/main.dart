@@ -15,6 +15,7 @@ import 'admin_pages/admin_homepage.dart';
 import 'admin_pages/admin_manageParcel.dart';
 import 'admin_pages/admin_registerParcel.dart';
 import 'admin_pages/admin_updatetParcel.dart';
+import 'customer_pages/customer_bookingPage.dart';
 //////customer/////////
 import 'customer_pages/customer_changeName.dart';
 import 'customer_pages/customer_changePassword.dart';
@@ -95,11 +96,13 @@ class MyApp extends StatelessWidget {
 
         //customer
         '/customer_home': (_) => const CustomerHomepage(),
-        '/customer_profile': (_) => const CustomerProfile(), //placeholder
-        '/changeName': (_) => const CustomerChangeName(), //placeholder
-        '/changePw': (_) => const CustomerChangePassword(), //placeholder
+        '/customer_profile': (_) => const CustomerProfile(), 
+        '/changeName': (_) => const CustomerChangeName(), 
+        '/changePw': (_) => const CustomerChangePassword(), 
         '/changePFP': (_) => const CustomerChangePicture(),
         '/changePhone': (_) => const CustomerChangePhone(),
+        '/customer_booking': (_) => const customerBooking(),
+
 
 //////////////////forgot password//////////////////
         '/forgotPassword': (_) => const ForgotPassword(),
