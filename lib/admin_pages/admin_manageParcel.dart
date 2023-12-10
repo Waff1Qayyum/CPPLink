@@ -22,9 +22,6 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   @override
   void initState() {
     super.initState();
-    for (Map<String, dynamic> parcel in parcel_list) {
-      print(parcel['status']);
-    }
   }
 
   @override
@@ -49,6 +46,8 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                       .toLowerCase()
                       .contains(value.toLowerCase())))
           .toList();
+      parcel_counter = 0;
+      delivery_counter = 0;
     });
   }
 
@@ -80,6 +79,8 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
 
   void filterDeliveryStatus(String status) {
     parcel_list = List.from(parcel_list);
+    parcel_counter = 0;
+    delivery_counter = 0;
     setState(() {
       if (status == "all") {
         parcel_list = parcel_data;
@@ -152,8 +153,6 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                 onChanged: (val) {
                                   setState(() {
                                     updateList(val);
-                                    parcel_counter = 0;
-                                    delivery_counter = 0;
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -214,10 +213,10 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('completed'),
+                                                title: Text('collected'),
                                                 onTap: () {
                                                   filterDeliveryStatus(
-                                                      'completed');
+                                                      'collected');
                                                   Navigator.pop(context);
                                                 },
                                               )
