@@ -22,6 +22,9 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   @override
   void initState() {
     super.initState();
+    for (Map<String, dynamic> parcel in parcel_list) {
+      print(parcel['status']);
+    }
   }
 
   @override
@@ -60,8 +63,6 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
             (b['tracking_id'] as String).compareTo(a['tracking_id'] as String));
       }
     });
-
-    print(parcel_list);
   }
 
   void sortDeliveryStatus() {
@@ -75,8 +76,21 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
             (a, b) => (b['status'] as String).compareTo(a['status'] as String));
       }
     });
+  }
 
-    print(parcel_list);
+  void filterDeliveryStatus(String status) {
+    parcel_list = List.from(parcel_list);
+    setState(() {
+      if (status == "all") {
+        parcel_list = parcel_data;
+        return;
+      }
+      parcel_list = parcel_data
+          .where((element) =>
+              (element['status'] != null) &&
+              (element['status'].contains(status.toLowerCase())))
+          .toList();
+    });
   }
 
   @override
@@ -163,6 +177,108 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      InkWell(
+                        onTap: isLoading == true
+                            ? null
+                            : () async {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Filter by'),
+                                        insetPadding: EdgeInsets.zero,
+                                        content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ListTile(
+                                                title: Text('all'),
+                                                onTap: () {
+                                                  filterDeliveryStatus('all');
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text('waiting'),
+                                                onTap: () {
+                                                  filterDeliveryStatus(
+                                                      'waiting');
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text('cancelled'),
+                                                onTap: () {
+                                                  filterDeliveryStatus(
+                                                      'cancelled');
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text('completed'),
+                                                onTap: () {
+                                                  filterDeliveryStatus(
+                                                      'completed');
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ]),
+                                      );
+                                    });
+                              },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Container(
+                            width: 130, // Adjust the width as needed
+                            height: 40,
+                            alignment: Alignment.center,
+                            decoration: ShapeDecoration(
+                              color: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                  width: 1.50,
+                                  color: Colors.green, // Border color
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0x3F000000),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: 0,
+                                ),
+                              ],
+                            ),
+                            // if loading show indicator(optional)
+                            child: isLoading == true
+                                ? CircularProgressIndicator()
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.filter_alt,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              5), // Adjust the spacing as needed
+                                      Text(
+                                        'Filter By',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 15,
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
                       InkWell(
                         onTap: isLoading == true
                             ? null
