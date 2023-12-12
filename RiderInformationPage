@@ -1,18 +1,14 @@
  import 'package:flutter/material.dart';
         
-        
-        class AdminhomepageWidget extends StatefulWidget {
-        @override
-        _AdminhomepageWidgetState createState() => _AdminhomepageWidgetState();
-        }
-        
-        class _AdminhomepageWidgetState extends State<AdminhomepageWidget> {
+        void main() {
+  runApp(MyApp());
+}
+        class AdminhomepageWidget extends StatelessWidget {
         @override
         Widget build(BuildContext context) {
-        // Figma Flutter Generator AdminhomepageWidget - FRAME
         
-        return Scaffold(
-      body: Column(
+        return MaterialApp(
+      home: Scaffold(
       width: 360,
       height: 37.5,
       decoration: BoxDecoration(
@@ -28,9 +24,10 @@
           width: 8,
         ),
   ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+      body: ListView(
+        children:[
+          Column(
+          children:
           Positioned(
         top: 0,
         left: 0,
@@ -39,17 +36,19 @@
           color : Color.fromRGBO(245, 245, 245, 1),
   ),
       padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        
-        children: <Widget>[Container(
+      child: Stack(   
+        children: [
+Container(
       width: 360,
       height: 37.5,
       decoration: BoxDecoration(
           
   ),
       child: Row(
-        children: <Widget>[
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
           Positioned(
         top: 0,
         left: 0,
@@ -113,8 +112,11 @@ Container(
       decoration: BoxDecoration(
           
   ),
-      child: Stack(
-        children: <Widget>[
+
+      child: Column(
+        crossAxisAlignment:
+        CrossAxisAlignment.start,
+        children: [
           Positioned(
         top: -2.5,
         left: 0,
@@ -141,7 +143,7 @@ Container(
   ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children:[
           
         ]
       )
@@ -153,7 +155,7 @@ Container(
         color: Color.fromRGBO(255, 210, 51, 1),
         fontFamily: 'Lexend',
         fontSize: 28,
-        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        letterSpacing: 0 
         fontWeight: FontWeight.normal,
         height: 1
       ),)
@@ -166,7 +168,7 @@ Container(
       
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: Column[
           Positioned(
         top: 468,
         left: 0,
@@ -271,6 +273,9 @@ Container(
       ),Positioned(
         top: 378.5,
         left: 13,
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment
+        .start,
         child: Container(
         width: 335,
         height: 195,
@@ -318,7 +323,7 @@ Container(
         color: Color.fromRGBO(0, 0, 0, 1),
         fontFamily: 'Lexend',
         fontSize: 18,
-        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        letterSpacing: 0
         fontWeight: FontWeight.normal,
         height: 1
       ),)
@@ -345,7 +350,7 @@ Container(
         color: Color.fromRGBO(0, 0, 0, 1),
         fontFamily: 'Lexend',
         fontSize: 13,
-        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+        letterSpacing: 0,
         fontWeight: FontWeight.normal,
         height: 1
       ),)
@@ -367,7 +372,7 @@ Container(
       
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children:[
           Positioned(
         top: 0,
         left: 0,
@@ -408,7 +413,7 @@ Container(
   ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children:[
           Positioned(
         top: 28.5,
         left: 72,
