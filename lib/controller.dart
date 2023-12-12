@@ -253,3 +253,18 @@ Future<void> getParcelList() async {
 
 //update parcel data
 var edit_parcel;
+
+//parcel unique
+Future<bool> parcel_unique(String parcelId) async {
+  final parcel = await supabase
+      .from('parcel')
+      .select()
+      .eq('tracking_id', parcelId)
+      .limit(1);
+
+  if (parcel.isNotEmpty && parcel[0]['phone'] != null) {
+    return false;
+  } else {
+    return true;
+  }
+}

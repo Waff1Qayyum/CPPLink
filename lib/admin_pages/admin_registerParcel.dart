@@ -15,6 +15,7 @@ class AdminRegisterParcel extends StatefulWidget {
 class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   bool isLoading = false;
   bool? phoneValid;
+  bool? parcelUnique;
   String? phone;
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
@@ -35,17 +36,24 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   }
 
   Future<void> registerParcel() async {
-    try {
-      await supabase.from('parcel').insert({
-        'tracking_id': _trackingNumber.text.toUpperCase(),
-        'name': _customerName.text.toUpperCase(),
-        'phone': phone,
-        'status': 'waiting',
-      });
-      print('register successfully!');
-    } catch (error) {
-      print('Error updating parcel: $error');
-    }
+    // try {
+    final userId = await supabase
+        .from('user')
+        .select('user_id')
+        .eq('name', _customerName.text.toUpperCase())
+        .single();
+
+    await supabase.from('parcel').insert({
+      'tracking_id': _trackingNumber.text.toUpperCase(),
+      'user_id': userId['user_id'],
+      'name': _customerName.text.toUpperCase(),
+      'phone': phone,
+      'status': 'waiting',
+    });
+    print('register successfully!');
+    // } catch (error) {
+    //   print('Error updating parcel: $error');
+    // }
   }
 
   @override
@@ -236,6 +244,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please fill in';
+                                      } else if (parcelUnique == false) {
+                                        return 'Parcel Exist';
                                       } else {
                                         return null;
                                       }
@@ -519,9 +529,10 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                           });
                           phone = await formatPhone(_phoneNumber.text);
                           phoneValid = await phone_check(phone!);
+                          parcelUnique = await parcel_unique(
+                              _trackingNumber.text.toUpperCase());
                           if (_formKey.currentState!.validate()) {
                             await registerParcel();
-                            await getParcelList();
                             Fluttertoast.showToast(
                               msg: "The parcel has been Added!",
                             );
