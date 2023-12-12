@@ -115,12 +115,22 @@ var user_picture;
 var picture;
 var vehicle_url;
 var vehicle_picture;
+var user_parcel = <String>[];
+
 Future<void> getData(dynamic id) async {
   final data = await supabase
       .from('user')
       .select('name, phone, email, picture_url')
       .eq('user_id', id)
       .single();
+
+  final parcel =
+      await supabase.from('parcel').select('tracking_id').eq('user_id', id);
+  if (parcel != null) {
+    for (int i = 0; i < parcel.length; i++) {
+      user_parcel.add(parcel[i]['tracking_id']);
+    }
+  }
 
   user_name = data['name'];
   user_phone = data['phone'];
