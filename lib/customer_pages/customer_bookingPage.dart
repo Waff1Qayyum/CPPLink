@@ -1,4 +1,7 @@
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
+
+import '../main.dart';
 
 class customerBooking extends StatefulWidget {
   const customerBooking({super.key});
@@ -8,6 +11,18 @@ class customerBooking extends StatefulWidget {
 }
 
 class customerBbookingState extends State<customerBooking> {
+  String? selectedValue;
+  dynamic dropDownItem;
+
+  void getTrackingId(String name) async {
+    final parcel =
+        await supabase.from('parcel').select('tracking_id').eq('name', name);
+
+    setState(() {
+      dropDownItem = parcel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,6 +167,7 @@ class customerBbookingState extends State<customerBooking> {
                           Container(
                             width: 350,
                             height: 40,
+                            child: Text(user_name),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 12),
                             clipBehavior: Clip.antiAlias,
@@ -209,6 +225,7 @@ class customerBbookingState extends State<customerBooking> {
                           Container(
                             width: 350,
                             height: 40,
+                            child: Text(user_phone),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 12),
                             clipBehavior: Clip.antiAlias,
@@ -266,6 +283,24 @@ class customerBbookingState extends State<customerBooking> {
                           Container(
                             width: 350,
                             height: 40,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedValue,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedValue = newValue!;
+                                  });
+                                },
+                                items: user_parcel
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 12),
                             clipBehavior: Clip.antiAlias,
