@@ -11,6 +11,59 @@ class RiderHomePage extends StatefulWidget {
 }
 
 class _RiderHomePageState extends State<RiderHomePage> {
+  void checkRiderMode(bool riderMode) {
+    if (riderMode == true) {
+      print('true');
+
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/delivery_homepage', (route) => false);
+    } else {
+      print('false');
+    }
+  }
+
+  Future<void> _showConfirmationDialog(bool newValue) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Switch ON to Rider Mode?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Close the dialog without updating the riderMode value
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Close the dialog and update the riderMode value
+                Navigator.of(context).pop();
+                setState(() {
+                  riderMode = true;
+                  checkRiderMode(riderMode);
+                });
+              },
+              child: Text(
+                'Confirm',
+                style: TextStyle(
+                  color: Colors.green,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,36 +81,6 @@ class _RiderHomePageState extends State<RiderHomePage> {
               color: Colors.white,
             ),
           ),
-          leading: Container(
-              //     color: Colors.white,
-              //     child:
-              //   Column(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Slider(
-              //       value: _sliderValue,
-              //       onChanged: (value) {
-              //         setState(() {
-              //           _sliderValue = value;
-              //         });
-              //       },
-              //       min: 0,
-              //       max: 1,
-              //       divisions: 10, // Optional: Set the number of divisions
-              //       label: '$_sliderValue',
-              //       activeColor: Colors.green,
-              //       inactiveColor: Colors.red, // Optional: Display a label
-              //     ),
-              //     ElevatedButton(
-              //       onPressed: () {
-              //         // Handle button press
-              //         print('Button pressed with value: $_sliderValue');
-              //       },
-              //       child: Text('Press Me'),
-              //     ),
-              //   ],
-              // ),
-              ),
           actions: [
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
@@ -88,43 +111,83 @@ class _RiderHomePageState extends State<RiderHomePage> {
           children: [
             Column(
               children: [
-                SizedBox(
-                  height: 20.0,
+                // SizedBox(
+                //   height: 20.0,
+                // ),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Rider Mode :',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontFamily: 'Lexend',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                            ),
+                          ),
+                          // SizedBox(height: 20),
+                          Switch(
+                            value: riderMode,
+                            onChanged: (value) async {
+                              // Show the confirmation dialog before changing the riderMode value
+                              await _showConfirmationDialog(value);
+                            },
+                            activeTrackColor: Colors.lightGreenAccent,
+                            activeColor: Colors.green,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+
+                Column(
                   children: [
                     Container(
-                        child: Image.asset(
-                      './images/cpp_logo.png',
-                      width: 70,
-                      height: 70,
-                    )),
-                    Text(
-                      'CPP',
-                      style: TextStyle(
-                        color: Color(0xFF050505),
-                        fontSize: 48,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.,
+                        children: [
+                          Text(
+                            'CPP',
+                            style: TextStyle(
+                              color: Color.fromRGBO(250, 195, 44, 1),
+                              fontSize: 48,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                              shadows: [
+                                Shadow(
+                                  color: Color.fromARGB(255, 145, 145, 145),
+                                  offset: Offset(0, 3),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            'Link',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 7, 7, 131),
+                              fontSize: 32,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      'Link',
-                      style: TextStyle(
-                        color: Color(0xFFFFD233),
-                        fontSize: 32,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
+                    )
                   ],
                 ),
                 SizedBox(height: 40.0),
                 Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     //row to put the image+name and notification icon
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -246,7 +309,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
                                         255), // Change the icon color
                                   ),
                                   Text(
-                                    'Check Parcel',
+                                    'Book Parcel',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.white,

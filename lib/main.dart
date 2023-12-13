@@ -28,6 +28,9 @@ import 'login_page.dart';
 import 'otpVerification.dart';
 import 'registerType_page.dart';
 import 'resetPassword.dart';
+import 'rider_pages/delivery_deliveryList.dart';
+import 'rider_pages/delivery_homepage.dart';
+import 'rider_pages/delivery_proof.dart';
 ///////////rider////////////
 import 'rider_pages/rider_changeName.dart';
 import 'rider_pages/rider_changePassword.dart';
@@ -84,6 +87,15 @@ class MyApp extends StatelessWidget {
         '/admin_updateParcel': (_) => const AdminUpdateParcel(),
         '/admin_registerParcel': (_) => const AdminRegisterParcel(),
 
+        //customer
+        '/customer_home': (_) => const CustomerHomepage(),
+        '/customer_profile': (_) => const CustomerProfile(),
+        '/changeName': (_) => const CustomerChangeName(),
+        '/changePw': (_) => const CustomerChangePassword(),
+        '/changePFP': (_) => const CustomerChangePicture(),
+        '/changePhone': (_) => const CustomerChangePhone(),
+        '/customer_booking': (_) => const customerBooking(),
+
         // rider
         '/rider_home': (_) => const RiderHomePage(),
         '/rider_changeName': (_) => const RiderChangeName(),
@@ -94,15 +106,9 @@ class MyApp extends StatelessWidget {
         '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
         '/rider_vehicle': (_) => const RiderUploadVehicle(),
 
-        //customer
-        '/customer_home': (_) => const CustomerHomepage(),
-        '/customer_profile': (_) => const CustomerProfile(), 
-        '/changeName': (_) => const CustomerChangeName(), 
-        '/changePw': (_) => const CustomerChangePassword(), 
-        '/changePFP': (_) => const CustomerChangePicture(),
-        '/changePhone': (_) => const CustomerChangePhone(),
-        '/customer_booking': (_) => const customerBooking(),
-
+        '/delivery_homepage': (_) => const DeliveryHomePage(),
+        '/delivery_list': (_) => const DeliveryList(),
+        '/delivery_proof': (_) => const DeliveryProof(),
 
 //////////////////forgot password//////////////////
         '/forgotPassword': (_) => const ForgotPassword(),
