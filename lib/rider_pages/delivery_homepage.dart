@@ -178,14 +178,38 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           padding: EdgeInsets.all(16),
                           color: Color.fromARGB(255, 174, 174,
                               174), // Light grey background color
-                          child: Text(
-                            'No request',
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 250, 250, 250),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          // child: Text(
+                          //   'No request',
+                          //   style: TextStyle(
+                          //     color: const Color.fromARGB(255, 250, 250, 250),
+                          //     fontSize: 16,
+                          //     fontWeight: FontWeight.w600,
+                          //   ),
+                          // ),
+                          child: ListView.builder(
+                              itemCount: requested_parcel == null
+                                  ? 0
+                                  : requested_parcel.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text(
+                                      requested_parcel[index]['parcel_id']),
+                                  // subtitle:
+                                  //     Text(requested_parcel[index]['address']),
+                                  // isThreeLine: true,
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      requested_parcel[index]['address'] == null
+                                          ? Text('Null')
+                                          : Text(requested_parcel[index]
+                                              ['address']),
+                                      Text(requested_parcel[index]['phone'])
+                                    ],
+                                  ),
+                                );
+                              }),
                         ),
                       ),
                     ],

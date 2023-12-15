@@ -11,9 +11,11 @@ class RiderHomePage extends StatefulWidget {
 }
 
 class _RiderHomePageState extends State<RiderHomePage> {
-  void checkRiderMode(bool riderMode) {
+  void checkRiderMode(bool riderMode) async {
     if (riderMode == true) {
       print('true');
+
+      await getRequestedParcelList();
 
       Navigator.pushNamedAndRemoveUntil(
           context, '/delivery_homepage', (route) => false);

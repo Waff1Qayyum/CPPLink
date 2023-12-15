@@ -267,6 +267,7 @@ Future<void> findParcel(dynamic searchParcel) async {
 //List of elements
 var user_data;
 var parcel_data;
+var requested_parcel;
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select<PostgrestList>();
@@ -274,6 +275,10 @@ Future<void> getUserList() async {
 
 Future<void> getParcelList() async {
   parcel_data = await supabase.from('parcel').select<PostgrestList>();
+}
+
+Future<void> getRequestedParcelList() async {
+  requested_parcel = await supabase.from('booking').select<PostgrestList>();
 }
 
 //update parcel data

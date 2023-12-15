@@ -15,10 +15,17 @@ class customerBookingState extends State<customerBooking> {
 
   void bookParcel() async {
     final userId = supabase.auth.currentUser!.id;
+    final phone = await supabase
+        .from('user')
+        .select('phone')
+        .eq('user_id', userId)
+        .single();
 
-    await supabase
-        .from('booking')
-        .insert({'customer_id': userId, 'parcel_id': selectedValue});
+    await supabase.from('booking').insert({
+      'customer_id': userId,
+      'parcel_id': selectedValue,
+      'phone': phone['phone']
+    });
 
     await supabase
         .from('parcel')
