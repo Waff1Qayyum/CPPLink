@@ -7,20 +7,24 @@ class customerBooking extends StatefulWidget {
   const customerBooking({super.key});
 
   @override
-  State<customerBooking> createState() => customerBbookingState();
+  State<customerBooking> createState() => customerBookingState();
 }
 
-class customerBbookingState extends State<customerBooking> {
+class customerBookingState extends State<customerBooking> {
   String? selectedValue;
-  dynamic dropDownItem;
 
-  void getTrackingId(String name) async {
-    final parcel =
-        await supabase.from('parcel').select('tracking_id').eq('name', name);
+  void bookParcel() async {
+    final userId = supabase.auth.currentUser!.id;
 
-    setState(() {
-      dropDownItem = parcel;
-    });
+    await supabase
+        .from('booking')
+        .insert({'customer_id': userId, 'parcel_id': selectedValue});
+
+    await supabase
+        .from('parcel')
+        .update({'status': 'waiting'}).eq('tracking_id', selectedValue);
+
+    await getData(userId);
   }
 
   @override
@@ -385,6 +389,7 @@ class customerBbookingState extends State<customerBooking> {
                 onTap: () {
                   // Add your delete parcel logic here
                   print("Book Delivery tapped!");
+                  bookParcel();
                   // You can replace the print statement with the actual logic to delete the parcel.
                 },
                 child: Container(

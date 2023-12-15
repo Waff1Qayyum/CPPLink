@@ -86,6 +86,18 @@ bool email_check(String email) {
     return true;
   }
 }
+
+//name of user exist
+Future<bool> user_exist(String name) async {
+  final user = await supabase.from('user').select('name').eq('name', name);
+
+  if (user.isEmpty || user == null) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 //formatting
 
 //format phone
@@ -124,8 +136,11 @@ Future<void> getData(dynamic id) async {
       .eq('user_id', id)
       .single();
 
-  final parcel =
-      await supabase.from('parcel').select('tracking_id').eq('user_id', id);
+  final parcel = await supabase
+      .from('parcel')
+      .select('tracking_id')
+      .eq('user_id', id)
+      .eq('status', 'arrived');
   if (parcel != null) {
     for (int i = 0; i < parcel.length; i++) {
       user_parcel.add(parcel[i]['tracking_id']);
