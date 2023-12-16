@@ -131,10 +131,12 @@ var user_booking = <String>[];
 var user_parcel = <String>[];
 var show_row;
 var user_booking_data;
+var selectedValue;
 
 Future<void> getData(dynamic id) async {
   user_booking = <String>[]; //reset list
   user_parcel = <String>[];
+  selectedValue = null;
 
   final data = await supabase
       .from('user')
@@ -256,7 +258,6 @@ var customerName;
 var customerNumber;
 var dateArrived;
 var status;
-var selectedValue;
 // var searchParcel = 'JEG3412';
 
 // final mydata = findParcel(parcelData);

@@ -11,7 +11,7 @@ class customerBooking extends StatefulWidget {
 }
 
 class customerBookingState extends State<customerBooking> {
-  void bookParcel() async {
+  Future<void> bookParcel() async {
     final userId = supabase.auth.currentUser!.id;
     final phone = await supabase
         .from('user')
@@ -403,10 +403,11 @@ class customerBookingState extends State<customerBooking> {
                 height: 50.0,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   // Add your delete parcel logic here
                   print("Book Delivery tapped!");
-                  bookParcel();
+                  await bookParcel();
+                  await getData(supabase.auth.currentUser!.id);
                   Navigator.pushNamed(context, '/customer_myRider');
                   // You can replace the print statement with the actual logic to delete the parcel.
                 },
