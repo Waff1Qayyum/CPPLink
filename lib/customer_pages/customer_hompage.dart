@@ -15,27 +15,27 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
   String userId = supabase.auth.currentUser!.id;
   String request_status = "no request";
 
-  Future<void> checkBookingStatus() async {
-    final userData =
-        await supabase.from('booking').select().eq('customer_id', userId);
-    if (userData != null && userData.isNotEmpty) {
-      request_status = userData['booking_status'];
-    } else {
-      print("no request for this id");
-    }
-    if (request_status == 'request') {
-      setState(() {
-        shouldShowRow = true;
-      });
-    } else {
-      print('no booking request');
-    }
-  }
+  // Future<void> checkBookingStatus() async {
+  //   final userData =
+  //       await supabase.from('booking').select().eq('customer_id', userId);
+  //   if (userData != null && userData.isNotEmpty) {
+  //     request_status = userData['booking_status'];
+  //   } else {
+  //     print("no request for this id");
+  //   }
+  //   if (request_status == 'request') {
+  //     setState(() {
+  //       shouldShowRow = true;
+  //     });
+  //   } else {
+  //     print('no booking request');
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    checkBookingStatus();
+    // checkBookingStatus();
   }
 
   @override
@@ -192,7 +192,7 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                   ),
                 ]),
                 /////////////////////////////////
-                shouldShowRow
+                show_row
                     ? Padding(
                         padding: EdgeInsets.only(top: 20, bottom: 20),
                         child: Row(

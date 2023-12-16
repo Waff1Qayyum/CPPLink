@@ -161,15 +161,32 @@ class customerBbookingState extends State<customerRiderPage> {
                             children: [
                               // Fetch and display data from the database here
                               // Example:
-                              Text(
-                                selectedValue, // Replace with actual data
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
+                              // Text(
+                              //   user_booking[], // Replace with actual data
+                              //   style: TextStyle(
+                              //     color: Color(0xFF333333),
+                              //     fontSize: 17,
+                              //     fontFamily: 'Roboto',
+                              //     fontWeight: FontWeight.w400,
+                              //     height: 0.00,
+                              //   ),
+                              // ),
+                              ListView.builder(
+                                itemCount: user_booking.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Text(
+                                    user_booking[
+                                        index], // Use the current element in the list
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  );
+                                },
                               ),
                               Text(
                                 user_name, // Replace with actual data

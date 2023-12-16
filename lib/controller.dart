@@ -127,25 +127,20 @@ var user_picture;
 var picture;
 var vehicle_url;
 var vehicle_picture;
+var user_booking = <String>[];
 var user_parcel = <String>[];
+var show_row;
+var user_booking_data;
 
 Future<void> getData(dynamic id) async {
+  user_booking = <String>[]; //reset list
+  user_parcel = <String>[];
+
   final data = await supabase
       .from('user')
       .select('name, phone, email, picture_url')
       .eq('user_id', id)
       .single();
-
-  final parcel = await supabase
-      .from('parcel')
-      .select('tracking_id')
-      .eq('user_id', id)
-      .eq('status', 'arrived');
-  if (parcel != null) {
-    for (int i = 0; i < parcel.length; i++) {
-      user_parcel.add(parcel[i]['tracking_id']);
-    }
-  }
 
   user_name = data['name'];
   user_phone = data['phone'];
@@ -166,6 +161,31 @@ Future<void> getData(dynamic id) async {
 
   if (rider['rider_id'] != null) {
     getVehiclePicture(id);
+  }
+
+  final parcel = await supabase
+      .from('parcel')
+      .select('tracking_id')
+      .eq('user_id', id)
+      .eq('status', 'arrived');
+  if (parcel != null) {
+    for (int i = 0; i < parcel.length; i++) {
+      user_parcel.add(parcel[i]['tracking_id']);
+    }
+  }
+
+  final booking_data = await supabase
+      .from('booking')
+      .select()
+      .eq('customer_id', id)
+      .eq('booking_status', 'request');
+  if (booking_data != null && booking_data.isNotEmpty) {
+    show_row = true;
+    for (int i = 0; i < booking_data.length; i++) {
+      user_booking.add(booking_data[i]['parcel_id']);
+    }
+  } else {
+    print("no request for this id");
   }
 }
 
