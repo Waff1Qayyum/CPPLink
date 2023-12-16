@@ -178,9 +178,15 @@ class customerBookingState extends State<customerBooking> {
                           Container(
                             width: 350,
                             height: 40,
-                            child: Text(user_name),
+                            child: Text(
+                              user_name,
+                              style: TextStyle(
+                                fontSize: 20,
+                                // You can add more text styling properties if needed
+                              ),
+                            ),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
+                                horizontal: 24, vertical: 7),
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
                               color: Colors.white,
@@ -236,9 +242,15 @@ class customerBookingState extends State<customerBooking> {
                           Container(
                             width: 350,
                             height: 40,
-                            child: Text(user_phone),
+                            child: Text(
+                              user_phone,
+                              style: TextStyle(
+                                fontSize: 20,
+                                // You can add more text styling properties if needed
+                              ),
+                            ),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
+                                horizontal: 24, vertical: 7),
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
                               color: Colors.white,
@@ -313,7 +325,7 @@ class customerBookingState extends State<customerBooking> {
                               ),
                             ),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
+                                horizontal: 24, vertical: 7),
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
                               color: Colors.white,
@@ -370,7 +382,7 @@ class customerBookingState extends State<customerBooking> {
                             width: 350,
                             height: 140,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
+                                horizontal: 24, vertical: 7),
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
                               color: Colors.white,
