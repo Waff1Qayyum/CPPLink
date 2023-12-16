@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../controller.dart';
+import '../main.dart';
 
 class DeliveryHomePage extends StatefulWidget {
   const DeliveryHomePage({super.key});
@@ -10,7 +11,7 @@ class DeliveryHomePage extends StatefulWidget {
 }
 
 class _DeliveryHomePageState extends State<DeliveryHomePage> {
-  Map<int, bool> checkedMap = {};
+  int? checkedIndex;
 
   void checkRiderMode(bool riderMode) {
     if (riderMode == true) {
@@ -62,6 +63,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
         );
       },
     );
+  }
+
+  Future<void> setRiderBooking() async {
+    await supabase.from('booking').update({
+      'rider_id': rider['rider_id'],
+      'booking_status': 'accepted'
+    }).eq('parcel_id', requested_parcel[checkedIndex]['parcel_id']);
   }
 
   @override
@@ -269,14 +277,17 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                     Transform.scale(
                                                       scale: 1.3,
                                                       child: Checkbox(
-                                                        value:
-                                                            checkedMap[index] ??
-                                                                false,
-                                                        onChanged:
-                                                            (bool? value) {
+                                                        value: checkedIndex ==
+                                                            index,
+                                                        onChanged: (value) {
                                                           setState(() {
-                                                            checkedMap[index] =
-                                                                value ?? false;
+                                                            if (value == true) {
+                                                              checkedIndex =
+                                                                  index;
+                                                            } else {
+                                                              checkedIndex =
+                                                                  null;
+                                                            }
                                                           });
                                                         },
                                                         activeColor:
@@ -304,9 +315,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
 
                 SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed('/delivery_list');
+                  onTap: () async {
+                    // Navigator.of(context)
+                    //     .pushReplacementNamed('/delivery_list');
+                    await setRiderBooking();
+                    await getRequestedParcelList();
+                    setState(() {});
+                    print('Rider set');
                   },
                   child: Container(
                       width: 294,

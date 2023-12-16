@@ -236,118 +236,120 @@ class customerBbookingState extends State<customerRiderPage> {
                 SizedBox(height: 10),
                 /////////////////////////////
                 ///////////////////////////
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 87, 255, 93),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0x3F000000),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        top: 20, left: 10, right: 10, bottom: 10),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                width: 120,
-                                height: 150,
-                                child: isImageSelected == true
-                                    ? Image(image: FileImage(imageFile!))
-                                    : Container(
-                                        color: const Color.fromARGB(
-                                            255, 154, 154, 154),
-                                        child: const Center(
-                                          child: Text('No image'),
-                                        ),
-                                      ),
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'MUHAMMAD WAFFI QAYYUM BIN DIN', // Replace with actual data
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w700,
-                                      height:
-                                          1.2, // Adjust the height as needed
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'Vehicle Details : ',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w700,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Car',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    'JYP1231',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Proton Myvi',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Red',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10)
-                                ],
-                              ),
+                rider_exist == false
+                    ? Text('no rider')
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 87, 255, 93),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0x3F000000),
+                              blurRadius: 4,
+                              offset: Offset(0, 4),
+                              spreadRadius: 0,
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: 20, left: 10, right: 10, bottom: 10),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      width: 120,
+                                      height: 150,
+                                      child: (vehicle_url != null)
+                                          ? vehicle_picture!
+                                          : Container(
+                                              color: Colors.grey,
+                                              child: const Center(
+                                                child: Text('No image'),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          rider_name, // Replace with actual data
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w700,
+                                            height:
+                                                1.2, // Adjust the height as needed
+                                          ),
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Vehicle Details : ',
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w700,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                        Text(
+                                          rider_vehicleType,
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                        Text(
+                                          rider_plate,
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                        Text(
+                                          rider_model,
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                        Text(
+                                          rider_color,
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10)
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                 //////////////////////////////////
                 /////////////////////////////////
                 SizedBox(
