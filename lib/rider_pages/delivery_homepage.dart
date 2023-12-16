@@ -208,6 +208,39 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                       Text(requested_parcel[index]['phone'])
                                     ],
                                   ),
+                                  trailing: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      height: 100,
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                'Accept',
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.green)),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                'Reject',
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.red)),
+                                            ),
+                                          ])),
                                 );
                               }),
                         ),

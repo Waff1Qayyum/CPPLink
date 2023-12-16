@@ -235,6 +235,7 @@ var customerName;
 var customerNumber;
 var dateArrived;
 var status;
+var selectedValue;
 // var searchParcel = 'JEG3412';
 
 // final mydata = findParcel(parcelData);

@@ -11,8 +11,6 @@ class customerBooking extends StatefulWidget {
 }
 
 class customerBookingState extends State<customerBooking> {
-  String? selectedValue;
-
   void bookParcel() async {
     final userId = supabase.auth.currentUser!.id;
     final phone = await supabase
@@ -397,6 +395,7 @@ class customerBookingState extends State<customerBooking> {
                   // Add your delete parcel logic here
                   print("Book Delivery tapped!");
                   bookParcel();
+                  Navigator.pushNamed(context, '/customer_myRider');
                   // You can replace the print statement with the actual logic to delete the parcel.
                 },
                 child: Container(
