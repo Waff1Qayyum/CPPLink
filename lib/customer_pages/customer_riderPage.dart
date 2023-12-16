@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -161,7 +162,7 @@ class customerBbookingState extends State<customerRiderPage> {
                               // Fetch and display data from the database here
                               // Example:
                               Text(
-                                'EFX33290', // Replace with actual data
+                                selectedValue, // Replace with actual data
                                 style: TextStyle(
                                   color: Color(0xFF333333),
                                   fontSize: 17,
@@ -171,7 +172,7 @@ class customerBbookingState extends State<customerRiderPage> {
                                 ),
                               ),
                               Text(
-                                'MUHAMMAD WAFFI QAYYUM BIN DIN', // Replace with actual data
+                                user_name, // Replace with actual data
                                 style: TextStyle(
                                   color: Color(0xFF333333),
                                   fontSize: 17,
