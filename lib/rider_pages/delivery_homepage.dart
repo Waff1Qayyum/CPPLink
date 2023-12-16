@@ -10,6 +10,8 @@ class DeliveryHomePage extends StatefulWidget {
 }
 
 class _DeliveryHomePageState extends State<DeliveryHomePage> {
+  Map<int, bool> checkedMap = {};
+
   void checkRiderMode(bool riderMode) {
     if (riderMode == true) {
       print('true');
@@ -170,51 +172,136 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                 Padding(
                   padding: EdgeInsets.only(right: 10, left: 10),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Container(
                           height: 300,
                           padding: EdgeInsets.all(16),
-                          color: Color.fromARGB(255, 174, 174,
-                              174), // Light grey background color
-                          // child: Text(
-                          //   'No request',
-                          //   style: TextStyle(
-                          //     color: const Color.fromARGB(255, 250, 250, 250),
-                          //     fontSize: 16,
-                          //     fontWeight: FontWeight.w600,
-                          //   ),
-                          // ),
-                          child: ListView.builder(
-                              itemCount: requested_parcel == null
-                                  ? 0
-                                  : requested_parcel.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text(
-                                      requested_parcel[index]['parcel_id']),
-                                  // subtitle:
-                                  //     Text(requested_parcel[index]['address']),
-                                  // isThreeLine: true,
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      requested_parcel[index]['address'] == null
-                                          ? Text('Null')
-                                          : Text(requested_parcel[index]
-                                              ['address']),
-                                      Text(requested_parcel[index]['phone'])
-                                    ],
-                                  ),
-                                );
-                              }),
+                          color: Color.fromARGB(255, 174, 174, 174),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              children: [
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: requested_parcel == null
+                                      ? 0
+                                      : requested_parcel.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 10, left: 10),
+                                      child: Container(
+                                        margin: EdgeInsets.only(bottom: 10.0),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Color.fromRGBO(255, 255, 255, 1),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Color(0x3F000000),
+                                              blurRadius: 4,
+                                              offset: Offset(0, 4),
+                                              spreadRadius: 0,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                child: Column(children: [
+                                                  ////
+                                                  Text(
+                                                    requested_parcel[index]
+                                                        ['parcel_id'],
+                                                    style: TextStyle(
+                                                      color: Color(0xFF333333),
+                                                      fontSize: 17,
+                                                      fontFamily: 'Roboto',
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      height: 0.00,
+                                                    ),
+                                                  ),
+                                                  /////
+                                                  requested_parcel[index]
+                                                              ['address'] ==
+                                                          null
+                                                      ? Text(
+                                                          'no address',
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF333333),
+                                                            fontSize: 17,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            height: 0.00,
+                                                          ),
+                                                        )
+                                                      : Text(
+                                                          requested_parcel[
+                                                              index]['address'],
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF333333),
+                                                            fontSize: 17,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            height: 0.00,
+                                                          ),
+                                                        ),
+                                                ]),
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Transform.scale(
+                                                      scale: 1.3,
+                                                      child: Checkbox(
+                                                        value:
+                                                            checkedMap[index] ??
+                                                                false,
+                                                        onChanged:
+                                                            (bool? value) {
+                                                          setState(() {
+                                                            checkedMap[index] =
+                                                                value ?? false;
+                                                          });
+                                                        },
+                                                        activeColor:
+                                                            Colors.green,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
+
                 SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {

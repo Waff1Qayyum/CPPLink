@@ -11,7 +11,7 @@ class CustomerHomepage extends StatefulWidget {
 }
 
 class _CustomerHomepageState extends State<CustomerHomepage> {
-  bool shouldShowRow = true;
+  bool shouldShowRow = false;
   String userId = supabase.auth.currentUser!.id;
   String request_status = "no request";
 
