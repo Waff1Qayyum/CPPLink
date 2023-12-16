@@ -185,6 +185,7 @@ Future<void> getData(dynamic id) async {
       user_booking.add(booking_data[i]['parcel_id']);
     }
   } else {
+    show_row = false;
     print("no request for this id");
   }
 }
