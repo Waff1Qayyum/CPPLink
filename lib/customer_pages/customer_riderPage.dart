@@ -96,7 +96,7 @@ class customerBbookingState extends State<customerRiderPage> {
                 /////////////////////////////
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 241, 213, 1),
+                    color: Color.fromRGBO(255, 255, 255, 1),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -221,7 +221,7 @@ class customerBbookingState extends State<customerRiderPage> {
                 ///////////////////////////
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 241, 213, 1),
+                    color: Color.fromARGB(255, 87, 255, 93),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -321,6 +321,7 @@ class customerBbookingState extends State<customerRiderPage> {
                                       height: 0.00,
                                     ),
                                   ),
+                                  SizedBox(height: 10)
                                 ],
                               ),
                             ),
@@ -352,7 +353,7 @@ class customerBbookingState extends State<customerRiderPage> {
                     Text(
                       'RM 5.00',
                       style: TextStyle(
-                        color: Color(0xFF333333),
+                        color: Color.fromARGB(255, 14, 173, 19),
                         fontSize: 30,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w700,
