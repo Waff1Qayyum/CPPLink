@@ -16,6 +16,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   bool isLoading = false;
   bool? phoneValid;
   bool? parcelUnique;
+  bool? userExist;
   String? phone;
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
@@ -37,19 +38,30 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
 
   Future<void> registerParcel() async {
     // try {
-    final userId = await supabase
-        .from('user')
-        .select('user_id')
-        .eq('name', _customerName.text.toUpperCase())
-        .single();
+
+    if (userExist == true) {
+      final userId = await supabase
+          .from('user')
+          .select('user_id')
+          .eq('name', _customerName.text.toUpperCase())
+          .single();
+
+      await supabase.from('parcel').insert({
+        'tracking_id': _trackingNumber.text.toUpperCase(),
+        'user_id': userId['user_id'],
+        'name': _customerName.text.toUpperCase(),
+        'phone': phone,
+      });
+
+      return;
+    }
 
     await supabase.from('parcel').insert({
       'tracking_id': _trackingNumber.text.toUpperCase(),
-      'user_id': userId['user_id'],
       'name': _customerName.text.toUpperCase(),
       'phone': phone,
-      'status': 'waiting',
     });
+
     print('register successfully!');
     // } catch (error) {
     //   print('Error updating parcel: $error');
@@ -531,6 +543,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                           phoneValid = await phone_check(phone!);
                           parcelUnique = await parcel_unique(
                               _trackingNumber.text.toUpperCase());
+                          userExist = await user_exist(
+                              _customerName.text.toUpperCase());
                           if (_formKey.currentState!.validate()) {
                             await registerParcel();
                             Fluttertoast.showToast(
