@@ -168,8 +168,7 @@ Future<void> getData(dynamic id) async {
     );
   }
 
-  rider =
-      await supabase.from('user').select('rider_id').eq('user_id', id).single();
+  rider = await supabase.from('user').select().eq('user_id', id).single();
 
   if (rider['rider_id'] != null) {
     getVehiclePicture(id);

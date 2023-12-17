@@ -620,7 +620,8 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                     items: <String>[
                                       'waiting',
                                       'collected',
-                                      'cancelled'
+                                      'cancelled',
+                                      'delivered'
                                     ].map<DropdownMenuItem<String>>(
                                         (String value) {
                                       return DropdownMenuItem<String>(

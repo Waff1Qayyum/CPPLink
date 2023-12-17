@@ -435,9 +435,11 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                     onTap: () async {
                       await uploadImage();
                       await completeDelivery();
-                      await getData(rider['rider_id']);
+                      await getData(rider['user_id']);
                       await getRiderParcel(rider['rider_id']);
                       print('upload button press');
+                      Navigator.of(context)
+                          .pushReplacementNamed('/delivery_list');
                     },
                     child: Container(
                       width: 263,
