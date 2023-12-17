@@ -21,6 +21,7 @@ import 'customer_pages/customer_changeName.dart';
 import 'customer_pages/customer_changePassword.dart';
 import 'customer_pages/customer_changePhoneNumber.dart';
 import 'customer_pages/customer_changeProfilePicture.dart';
+import 'customer_pages/customer_checkParcel.dart';
 import 'customer_pages/customer_hompage.dart';
 import 'customer_pages/customer_riderPage.dart';
 import 'forgotPassword.dart';
@@ -97,6 +98,8 @@ class MyApp extends StatelessWidget {
         '/changePhone': (_) => const CustomerChangePhone(),
         '/customer_booking': (_) => const customerBooking(),
         '/customer_myRider': (_) => const customerRiderPage(),
+        '/customer_checkParcel': (_) => const customerCheckParcel(),
+
 
         // rider
         '/rider_home': (_) => const RiderHomePage(),

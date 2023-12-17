@@ -320,8 +320,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/customer_booking');
+                              Navigator.of(context).pushReplacementNamed(
+                                  '/customer_checkParcel');
                               // Your code to handle the tap event
                             },
                             child: Container(
