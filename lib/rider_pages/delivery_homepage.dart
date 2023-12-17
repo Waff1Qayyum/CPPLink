@@ -12,6 +12,7 @@ class DeliveryHomePage extends StatefulWidget {
 
 class _DeliveryHomePageState extends State<DeliveryHomePage> {
   int? checkedIndex;
+  bool? deliveryExist;
 
   void checkRiderMode(bool riderMode) {
     if (riderMode == true) {
@@ -70,6 +71,20 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
       'rider_id': rider['rider_id'],
       'booking_status': 'accepted'
     }).eq('parcel_id', requested_parcel[checkedIndex]['parcel_id']);
+  }
+
+  Future<bool> validateRiderDelivery() async {
+    final data = await supabase
+        .from('booking')
+        .select()
+        .eq('rider_id', rider['rider_id'])
+        .eq('booking_status', 'accepted');
+
+    if (data == null || data.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   @override
@@ -318,10 +333,27 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                   onTap: () async {
                     // Navigator.of(context)
                     //     .pushReplacementNamed('/delivery_list');
-                    await setRiderBooking();
-                    await getRequestedParcelList();
-                    setState(() {});
-                    print('Rider set');
+                    deliveryExist = await validateRiderDelivery();
+                    if (deliveryExist == true) {
+                      print('delivery exist');
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('I understand'))
+                                ],
+                                title: Text('You can only deliver one parcel'),
+                              ));
+                    } else {
+                      await setRiderBooking();
+                      await getRequestedParcelList();
+                      setState(() {});
+                      print('Rider set');
+                    }
                   },
                   child: Container(
                       width: 294,

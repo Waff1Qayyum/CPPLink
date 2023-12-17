@@ -190,7 +190,7 @@ Future<void> getData(dynamic id) async {
       .from('booking')
       .select()
       .eq('customer_id', id)
-      .eq('booking_status', 'request');
+      .or('booking_status.eq.request, booking_status.eq.accepted');
   if (booking_data != null && booking_data.isNotEmpty) {
     show_row = true;
     for (int i = 0; i < booking_data.length; i++) {
@@ -236,6 +236,21 @@ void getVehiclePicture(dynamic id) async {
       width: 70,
       height: 70,
     );
+  }
+}
+
+//check request or accept parcel
+Future<bool> validateBooking(dynamic id) async {
+  final book = await supabase
+      .from('booking')
+      .select()
+      .eq('customer_id', id)
+      .or('booking_status.eq.request, booking_status.eq.accepted');
+
+  if (book.isEmpty || book == null) {
+    return true;
+  } else {
+    return false;
   }
 }
 
