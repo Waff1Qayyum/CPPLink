@@ -131,10 +131,22 @@ var user_booking = <String>[];
 var user_parcel = <String>[];
 var show_row;
 var user_booking_data;
+var selectedValue;
+
+//booking rider
+var rider;
+var rider_name;
+var rider_vehicleType;
+var rider_plate;
+var rider_model;
+var rider_color;
+bool? rider_exist;
 
 Future<void> getData(dynamic id) async {
   user_booking = <String>[]; //reset list
   user_parcel = <String>[];
+  selectedValue = null;
+  rider_exist = false;
 
   final data = await supabase
       .from('user')
@@ -156,8 +168,7 @@ Future<void> getData(dynamic id) async {
     );
   }
 
-  final rider =
-      await supabase.from('user').select('rider_id').eq('user_id', id).single();
+  rider = await supabase.from('user').select().eq('user_id', id).single();
 
   if (rider['rider_id'] != null) {
     getVehiclePicture(id);
@@ -178,7 +189,7 @@ Future<void> getData(dynamic id) async {
       .from('booking')
       .select()
       .eq('customer_id', id)
-      .eq('booking_status', 'request');
+      .or('booking_status.eq.request, booking_status.eq.accepted');
   if (booking_data != null && booking_data.isNotEmpty) {
     show_row = true;
     for (int i = 0; i < booking_data.length; i++) {
@@ -187,6 +198,24 @@ Future<void> getData(dynamic id) async {
   } else {
     show_row = false;
     print("no request for this id");
+  }
+
+  if (booking_data != null &&
+      booking_data.isNotEmpty &&
+      booking_data[0]['rider_id'] != null) {
+    rider_exist = true;
+    final rider_data = await supabase
+        .from('rider')
+        .select('*, user:user_rider_id_fkey(name, user_id)')
+        .eq('rider_id', booking_data[0]['rider_id'])
+        .single();
+
+    rider_name = rider_data['user'][0]['name'];
+    rider_vehicleType = rider_data['vehicle_type'];
+    rider_plate = rider_data['plate_number'];
+    rider_model = rider_data['vehicle_model'];
+    rider_color = rider_data['vehicle_colour'];
+    getVehiclePicture(rider_data['user'][0]['user_id']);
   }
 }
 
@@ -206,6 +235,21 @@ void getVehiclePicture(dynamic id) async {
       width: 70,
       height: 70,
     );
+  }
+}
+
+//check request or accept parcel
+Future<bool> validateBooking(dynamic id) async {
+  final book = await supabase
+      .from('booking')
+      .select()
+      .eq('customer_id', id)
+      .or('booking_status.eq.request, booking_status.eq.accepted');
+
+  if (book.isEmpty || book == null) {
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -256,7 +300,6 @@ var customerName;
 var customerNumber;
 var dateArrived;
 var status;
-var selectedValue;
 // var searchParcel = 'JEG3412';
 
 // final mydata = findParcel(parcelData);
@@ -290,6 +333,7 @@ Future<void> findParcel(dynamic searchParcel) async {
 var user_data;
 var parcel_data;
 var requested_parcel;
+var rider_parcel_list;
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select<PostgrestList>();
@@ -300,7 +344,17 @@ Future<void> getParcelList() async {
 }
 
 Future<void> getRequestedParcelList() async {
-  requested_parcel = await supabase.from('booking').select<PostgrestList>();
+  requested_parcel = await supabase
+      .from('booking')
+      .select<PostgrestList>()
+      .or('booking_status.eq.request, booking_status.eq.cancelled');
+}
+
+Future<void> getRiderParcel(dynamic id) async {
+  rider_parcel_list = await supabase
+      .from('booking')
+      .select('*, parcel(name, tracking_id)')
+      .eq('rider_id', id);
 }
 
 //update parcel data
@@ -326,3 +380,6 @@ Future<bool> parcel_unique(String parcelId) async {
     return true;
   }
 }
+
+//
+var booking_index;

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,31 +23,28 @@ class _DeliveryListSProof extends State<DeliveryProof> {
   bool isLoading = false;
   String _selectedStatusType = 'Delivered';
 
-  Future<void> uploadImage(dynamic id) async {
+  Future<void> uploadImage() async {
     try {
       final imageExtension = fileImage!.path.split('.').last.toLowerCase();
       final imageBytes = await fileImage!.readAsBytes();
 
-      final rider = await supabase
-          .from('rider')
-          .select('rider_id')
-          .eq('user_id', id)
-          .single();
-      final riderId = rider['rider_id'];
+      final bookingId = rider_parcel_list[booking_index]['booking_id'];
 
-      final imagePath = '/$riderId/vehicle';
-      await supabase.storage.from('vehicle').uploadBinary(imagePath, imageBytes,
+      final imagePath = '/$bookingId/proof';
+      await supabase.storage.from('parcel_proof').uploadBinary(
+          imagePath, imageBytes,
           fileOptions:
               FileOptions(upsert: true, contentType: 'image/$imageExtension'));
 
-      image =
-          supabase.storage.from('vehicle').getPublicUrl('/$riderId/vehicle');
+      image = supabase.storage
+          .from('parcel_proof')
+          .getPublicUrl('/$bookingId/proof');
       image = Uri.parse(image).replace(queryParameters: {
         't': DateTime.now().millisecondsSinceEpoch.toString()
       }).toString();
       await supabase
-          .from('rider')
-          .update({'picture_url': image}).eq('rider_id', riderId);
+          .from('booking')
+          .update({'picture_url': image}).eq('booking_id', bookingId);
     } catch (e) {
       return;
     }
@@ -64,6 +62,13 @@ class _DeliveryListSProof extends State<DeliveryProof> {
     setState(() {
       fileImage = pickedImage;
     });
+  }
+
+  Future<void> completeDelivery() async {
+    await supabase.from('booking').update({'booking_status': 'delivered'}).eq(
+        'booking_id', rider_parcel_list[booking_index]['booking_id']);
+    await supabase.from('parcel').update({'status': 'delivered'}).eq(
+        'tracking_id', rider_parcel_list[booking_index]['parcel_id']);
   }
 
   @override
@@ -152,85 +157,111 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                             children: [
                               /////////////
                               ////////////
-                              Text(
-                                'Track Num. : ',
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Track Num. : ',
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                  Text(
+                                    rider_parcel_list[booking_index]['parcel']
+                                        ['tracking_id'],
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  )
+                                ],
                               ),
-                              Text(
-                                'Name : ',
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Name : ',
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                  Text(
+                                    rider_parcel_list[booking_index]['parcel']
+                                        ['name'],
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 20),
-                              Text(
-                                'Address :',
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Phone : ',
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                  Text(
+                                    rider_parcel_list[booking_index]['phone'],
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Address : ',
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                  Text(
+                                    rider_parcel_list[booking_index]
+                                            ['address'] ??
+                                        'null',
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                           SizedBox(width: 10),
                           // Adjust the spacing between columns
                           // Right column with data
-                          Expanded(
-                            // child: SingleChildScrollView(
-                            //   scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Fetch and display data from the database here
-                                // Example:
-                                Text(
-                                  'EFX33290', // Replace with actual data
-                                  style: TextStyle(
-                                    color: Color(0xFF333333),
-                                    fontSize: 17,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.00,
-                                  ),
-                                ),
-                                Text(
-                                  'MUHAMMAD WAFFI QAYYUM BIN DIN', // Replace with actual data
-                                  style: TextStyle(
-                                    color: Color(0xFF333333),
-                                    fontSize: 17,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.00,
-                                  ),
-                                  overflow: TextOverflow.visible,
-                                ),
-                                Text(
-                                  'MA1, KTDI', // Replace with actual data
-                                  style: TextStyle(
-                                    color: Color(0xFF333333),
-                                    fontSize: 17,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.00,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // ),
-                          ),
                         ],
                       ),
                     ),
@@ -400,49 +431,60 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                   /////////////////////////////
                   SizedBox(height: 20),
                   /////////////////////////////
-                  Container(
-                    width: 263,
-                    height: 53,
-                    alignment: Alignment.center,
-                    decoration: ShapeDecoration(
-                      color: const Color.fromARGB(255, 44, 174, 48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(
-                          width: 1.50,
-                          color: const Color.fromARGB(255, 44, 174, 48),
-                        ),
-                      ),
-                      shadows: [
-                        BoxShadow(
-                          color: Color(0x3F000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                    child: isLoading == false
-                        ? Text(
-                            'Confirm',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 15,
-                              fontFamily: 'Lexend',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          )
-                        : Text(
-                            'Loading..',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 15,
-                              fontFamily: 'Lexend',
-                              fontWeight: FontWeight.w400,
-                            ),
+                  GestureDetector(
+                    onTap: () async {
+                      await uploadImage();
+                      await completeDelivery();
+                      await getData(rider['user_id']);
+                      await getRiderParcel(rider['rider_id']);
+                      print('upload button press');
+                      Navigator.of(context)
+                          .pushReplacementNamed('/delivery_list');
+                    },
+                    child: Container(
+                      width: 263,
+                      height: 53,
+                      alignment: Alignment.center,
+                      decoration: ShapeDecoration(
+                        color: const Color.fromARGB(255, 44, 174, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(
+                            width: 1.50,
+                            color: const Color.fromARGB(255, 44, 174, 48),
                           ),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: isLoading == false
+                          ? Text(
+                              'Confirm',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                                fontSize: 15,
+                                fontFamily: 'Lexend',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
+                          : Text(
+                              'Loading..',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                                fontSize: 15,
+                                fontFamily: 'Lexend',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                    ),
                   ),
                 ],
               ),

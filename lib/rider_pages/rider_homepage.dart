@@ -16,7 +16,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
       print('true');
 
       await getRequestedParcelList();
-
+      await getRiderParcel(rider['rider_id']);
       Navigator.pushNamedAndRemoveUntil(
           context, '/delivery_homepage', (route) => false);
     } else {

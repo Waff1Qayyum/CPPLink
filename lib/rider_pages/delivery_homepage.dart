@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../controller.dart';
+import '../main.dart';
 
 class DeliveryHomePage extends StatefulWidget {
   const DeliveryHomePage({super.key});
@@ -10,7 +11,8 @@ class DeliveryHomePage extends StatefulWidget {
 }
 
 class _DeliveryHomePageState extends State<DeliveryHomePage> {
-  Map<int, bool> checkedMap = {};
+  int? checkedIndex;
+  bool? deliveryExist;
 
   void checkRiderMode(bool riderMode) {
     if (riderMode == true) {
@@ -62,6 +64,30 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
         );
       },
     );
+  }
+
+  Future<void> setRiderBooking() async {
+    if (checkedIndex == null) {
+      return;
+    }
+    await supabase.from('booking').update({
+      'rider_id': rider['rider_id'],
+      'booking_status': 'accepted'
+    }).eq('parcel_id', requested_parcel[checkedIndex]['parcel_id']);
+  }
+
+  Future<bool> validateRiderDelivery() async {
+    final data = await supabase
+        .from('booking')
+        .select()
+        .eq('rider_id', rider['rider_id'])
+        .eq('booking_status', 'accepted');
+
+    if (data == null || data.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   @override
@@ -269,14 +295,17 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                     Transform.scale(
                                                       scale: 1.3,
                                                       child: Checkbox(
-                                                        value:
-                                                            checkedMap[index] ??
-                                                                false,
-                                                        onChanged:
-                                                            (bool? value) {
+                                                        value: checkedIndex ==
+                                                            index,
+                                                        onChanged: (value) {
                                                           setState(() {
-                                                            checkedMap[index] =
-                                                                value ?? false;
+                                                            if (value == true) {
+                                                              checkedIndex =
+                                                                  index;
+                                                            } else {
+                                                              checkedIndex =
+                                                                  null;
+                                                            }
                                                           });
                                                         },
                                                         activeColor:
@@ -304,9 +333,31 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
 
                 SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed('/delivery_list');
+                  onTap: () async {
+                    // Navigator.of(context)
+                    //     .pushReplacementNamed('/delivery_list');
+                    // deliveryExist = await validateRiderDelivery();
+                    if (deliveryExist == true) {
+                      print('delivery exist');
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('I understand'))
+                                ],
+                                title: Text('You can only deliver one parcel'),
+                              ));
+                    } else {
+                      await setRiderBooking();
+                      await getRequestedParcelList();
+                      await getRiderParcel(rider['rider_id']);
+                      setState(() {});
+                      print('Rider set');
+                    }
                   },
                   child: Container(
                       width: 294,
@@ -335,6 +386,57 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                   children: [
                                     TextSpan(
                                       text: 'Deliver Now',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ),
+                SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    // Add your delete parcel logic here
+                    Navigator.pushReplacementNamed(context, '/delivery_list');
+                    // You can replace the print statement with the actual logic to delete the parcel.
+                  },
+                  child: Container(
+                      width: 294,
+                      // height: 36,
+                      decoration: ShapeDecoration(
+                        color: Color.fromRGBO(248, 134, 41, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Delivery History',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
