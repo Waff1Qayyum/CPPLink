@@ -105,9 +105,6 @@ class MyApp extends StatelessWidget {
         '/rider_changePFP': (_) => const RiderChangePicture(),
         '/rider_changePhone': (_) => const RiderChangePhone(),
 
-
-
-        
         '/rider_profile': (_) => const RiderChangeProfile(),
         '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
         '/rider_vehicle': (_) => const RiderUploadVehicle(),

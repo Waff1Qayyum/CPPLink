@@ -11,7 +11,7 @@ class customerBooking extends StatefulWidget {
 }
 
 class customerBookingState extends State<customerBooking> {
-  bool? newBooking;
+  bool newBooking = true;
 
   Future<void> bookParcel() async {
     final userId = supabase.auth.currentUser!.id;
@@ -408,8 +408,8 @@ class customerBookingState extends State<customerBooking> {
                 onTap: () async {
                   // Add your delete parcel logic here
                   print("Book Delivery tapped!");
-                  newBooking =
-                      await validateBooking(supabase.auth.currentUser!.id);
+                  // newBooking =
+                  //     await validateBooking(supabase.auth.currentUser!.id);
                   if (newBooking == true) {
                     await bookParcel();
                     Navigator.pushNamed(context, '/customer_myRider');

@@ -334,6 +334,7 @@ Future<void> findParcel(dynamic searchParcel) async {
 var user_data;
 var parcel_data;
 var requested_parcel;
+var rider_parcel_list;
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select<PostgrestList>();
@@ -347,7 +348,14 @@ Future<void> getRequestedParcelList() async {
   requested_parcel = await supabase
       .from('booking')
       .select<PostgrestList>()
-      .eq('booking_status', 'request');
+      .or('booking_status.eq.request, booking_status.eq.cancelled');
+}
+
+Future<void> getRiderParcel(dynamic id) async {
+  rider_parcel_list = await supabase
+      .from('booking')
+      .select('*, parcel(name, tracking_id)')
+      .eq('rider_id', id);
 }
 
 //update parcel data
@@ -373,3 +381,6 @@ Future<bool> parcel_unique(String parcelId) async {
     return true;
   }
 }
+
+//
+var booking_index;
