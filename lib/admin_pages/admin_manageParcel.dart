@@ -198,6 +198,14 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                                 },
                                               ),
                                               ListTile(
+                                                title: Text('arrived'),
+                                                onTap: () {
+                                                  filterDeliveryStatus(
+                                                      'arrived');
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
                                                 title: Text('waiting'),
                                                 onTap: () {
                                                   filterDeliveryStatus(
@@ -218,6 +226,14 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                                 onTap: () {
                                                   filterDeliveryStatus(
                                                       'collected');
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text('delivered'),
+                                                onTap: () {
+                                                  filterDeliveryStatus(
+                                                      'delivered');
                                                   Navigator.pop(context);
                                                 },
                                               )
