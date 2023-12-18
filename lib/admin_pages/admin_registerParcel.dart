@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../controller.dart';
@@ -18,6 +19,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   bool? parcelUnique;
   bool? userExist;
   String? phone;
+  String? userSelected;
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
@@ -348,65 +350,147 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                 SizedBox(
                                   width: 20.0,
                                 ),
-                                Container(
-                                  width: 230,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          width: 4, color: Color(0xFF333333)),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  child: TextFormField(
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                      fontSize: 15,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please fill in';
-                                      } else {
-                                        return null;
+                                // Container(
+                                //   width: 230,
+                                //   decoration: ShapeDecoration(
+                                //     color: Colors.white,
+                                //     shape: RoundedRectangleBorder(
+                                //       side: BorderSide(
+                                //           width: 4, color: Color(0xFF333333)),
+                                //       borderRadius: BorderRadius.circular(15),
+                                //     ),
+                                //   ),
+                                // child:
+                                TypeAheadField(
+                                  suggestionsCallback: (value) {
+                                    return list_name
+                                        .where((element) => element
+                                            .toLowerCase()
+                                            .contains(value.toLowerCase()))
+                                        .toList();
+                                  },
+                                  builder: (context, controller, focusNode) {
+                                    return Container(
+                                      width: 230,
+                                      decoration: ShapeDecoration(
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              width: 4,
+                                              color: Color(0xFF333333)),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                      child: TextFormField(
+                                        controller: _customerName,
+                                        textCapitalization:
+                                            TextCapitalization.characters,
+                                        focusNode: focusNode,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please fill in';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 0),
+                                          fontSize: 15,
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        decoration: InputDecoration(
+                                            hintText: 'enter name',
+                                            filled: true,
+                                            fillColor: const Color.fromARGB(
+                                                255, 249, 249, 249),
+                                            border: OutlineInputBorder(
+                                              // Use OutlineInputBorder for rounded borders
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                width: 0,
+                                                style: BorderStyle.none,
+                                              ),
+                                            ),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 12,
+                                                    horizontal: 10)),
+                                        // autofocus: true,
+                                      ),
+                                    );
+                                  },
+                                  hideOnEmpty: true,
+                                  constraints: BoxConstraints(maxHeight: 500),
+                                  itemBuilder: (context, String suggestion) {
+                                    return Text(suggestion);
+                                  },
+                                  onSelected: (String suggestion) {
+                                    setState(() {
+                                      String selectPhone = "";
+                                      for (var entry in list_user) {
+                                        if (entry['name'] == suggestion) {
+                                          selectPhone = entry['phone'];
+                                          print('Match found: $selectPhone');
+                                        }
                                       }
-                                    },
-                                    controller: _customerName,
-                                    textCapitalization:
-                                        TextCapitalization.characters,
-                                    textAlignVertical: TextAlignVertical.center,
-                                    maxLines: 1,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter
-                                          .singleLineFormatter,
-                                    ],
-                                    decoration: InputDecoration(
-                                      hintText: "enter customer name",
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(255, 249,
-                                          249, 249), // Background color
-                                      border: OutlineInputBorder(
-                                        // Use OutlineInputBorder for rounded borders
-                                        borderRadius: BorderRadius.circular(
-                                            10), // This sets the rounded corners for the text field
-                                        borderSide: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                          width: 1.50,
-                                          color: Color(0xFFFFD233),
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 12, horizontal: 10),
-                                    ),
-                                  ),
+                                      _customerName.text = suggestion;
+                                      _phoneNumber.text = selectPhone;
+                                    });
+                                  },
                                 ),
+
+                                // child: TextFormField(
+                                //   style: TextStyle(
+                                //     color: Color.fromARGB(255, 0, 0, 0),
+                                //     fontSize: 15,
+                                //     fontFamily: 'Lexend',
+                                //     fontWeight: FontWeight.w400,
+                                //   ),
+                                //   validator: (value) {
+                                //     if (value == null || value.isEmpty) {
+                                //       return 'Please fill in';
+                                //     } else {
+                                //       return null;
+                                //     }
+                                //   },
+                                //   controller: _customerName,
+                                //   textCapitalization:
+                                //       TextCapitalization.characters,
+                                //   textAlignVertical: TextAlignVertical.center,
+                                //   maxLines: 1,
+                                //   inputFormatters: [
+                                //     FilteringTextInputFormatter
+                                //         .singleLineFormatter,
+                                //   ],
+                                //   decoration: InputDecoration(
+                                //     hintText: "enter customer name",
+                                //     filled: true,
+                                //     fillColor: const Color.fromARGB(255, 249,
+                                //         249, 249), // Background color
+                                //     border: OutlineInputBorder(
+                                //       // Use OutlineInputBorder for rounded borders
+                                //       borderRadius: BorderRadius.circular(
+                                //           10), // This sets the rounded corners for the text field
+                                //       borderSide: BorderSide(
+                                //         width: 0,
+                                //         style: BorderStyle.none,
+                                //       ),
+                                //     ),
+                                //     focusedBorder: OutlineInputBorder(
+                                //       borderRadius: BorderRadius.circular(10),
+                                //       borderSide: BorderSide(
+                                //         width: 1.50,
+                                //         color: Color(0xFFFFD233),
+                                //       ),
+                                //     ),
+                                //     contentPadding: EdgeInsets.symmetric(
+                                //         vertical: 12, horizontal: 10),
+                                //   ),
+                                // ),
+                                // ),
                               ]),
                         ),
                         SizedBox(height: 10),

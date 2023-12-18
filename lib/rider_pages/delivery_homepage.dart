@@ -336,7 +336,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                   onTap: () async {
                     // Navigator.of(context)
                     //     .pushReplacementNamed('/delivery_list');
-                    // deliveryExist = await validateRiderDelivery();
+                    deliveryExist = await validateRiderDelivery();
                     if (deliveryExist == true) {
                       print('delivery exist');
                       showDialog(

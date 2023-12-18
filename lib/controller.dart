@@ -383,3 +383,27 @@ Future<bool> parcel_unique(String parcelId) async {
 
 //
 var booking_index;
+
+//for autocomplete
+List<String> list_name = <String>[];
+List<String> list_phone = <String>[];
+dynamic list_user;
+
+Future<void> userNameList() async {
+  list_name = [];
+  list_phone = [];
+
+  list_user = await supabase.from('user').select('name, phone');
+
+  dynamic name = list_user.map((element) => element['name'] as String).toList();
+  dynamic phone =
+      list_user.map((element) => element['phone'] as String).toList();
+
+  for (String s in name) {
+    list_name.add(s);
+  }
+
+  for (String s in phone) {
+    list_phone.add(s);
+  }
+}

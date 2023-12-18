@@ -22,6 +22,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   @override
   void initState() {
     super.initState();
+    userNameList();
   }
 
   @override

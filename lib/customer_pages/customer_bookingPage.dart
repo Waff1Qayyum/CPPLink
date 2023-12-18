@@ -408,8 +408,8 @@ class customerBookingState extends State<customerBooking> {
                 onTap: () async {
                   // Add your delete parcel logic here
                   print("Book Delivery tapped!");
-                  // newBooking =
-                  //     await validateBooking(supabase.auth.currentUser!.id);
+                  newBooking =
+                      await validateBooking(supabase.auth.currentUser!.id);
                   if (newBooking == true) {
                     await bookParcel();
                     Navigator.pushNamed(context, '/customer_myRider');
