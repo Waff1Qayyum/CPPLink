@@ -56,16 +56,47 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
         'phone': phone,
       });
 
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/admin_manageParcel', (route) => false);
+
       return;
     }
 
-    await supabase.from('parcel').insert({
-      'tracking_id': _trackingNumber.text.toUpperCase(),
-      'name': _customerName.text.toUpperCase(),
-      'phone': phone,
-    });
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              content: const Text('User does not exist'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      print('cancel register');
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel')),
+                TextButton(
+                    onPressed: () async {
+                      await supabase.from('parcel').insert({
+                        'tracking_id': _trackingNumber.text.toUpperCase(),
+                        'name': _customerName.text.toUpperCase(),
+                        'phone': phone,
+                      });
+                      Fluttertoast.showToast(
+                        msg: "The parcel has been Added!",
+                      );
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/admin_manageParcel', (route) => false);
+                      print('register successfully!');
+                    },
+                    child: const Text('Register Anyway'))
+              ],
+            ));
 
-    print('register successfully!');
+    // await supabase.from('parcel').insert({
+    //   'tracking_id': _trackingNumber.text.toUpperCase(),
+    //   'name': _customerName.text.toUpperCase(),
+    //   'phone': phone,
+    // });
+
     // } catch (error) {
     //   print('Error updating parcel: $error');
     // }
@@ -585,13 +616,8 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                               _customerName.text.toUpperCase());
                           if (_formKey.currentState!.validate()) {
                             await registerParcel();
-                            Fluttertoast.showToast(
-                              msg: "The parcel has been Added!",
-                            );
                             //change snackbar design
                             await getParcelList();
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                '/admin_manageParcel', (route) => false);
                           } else {
                             print('cannot register');
                           }
