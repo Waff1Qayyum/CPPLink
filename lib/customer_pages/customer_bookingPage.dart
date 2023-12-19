@@ -432,7 +432,9 @@ class customerBookingState extends State<customerBooking> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      isLoading = true;
+                      setState(() {
+                        isLoading = true;
+                      });
 
                       // Add your delete parcel logic here
                       print("Book Delivery tapped!");
@@ -444,7 +446,9 @@ class customerBookingState extends State<customerBooking> {
                         Navigator.pushNamed(context, '/customer_myRider');
                       } else {
                         print('cannot book');
-                        isLoading = false;
+                        setState(() {
+                          isLoading = false;
+                        });
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -459,6 +463,7 @@ class customerBookingState extends State<customerBooking> {
                                       Text('You can only request one parcel'),
                                 ));
                       }
+
                       // You can replace the print statement with the actual logic to delete the parcel.
                     },
                     child: Container(

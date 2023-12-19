@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
@@ -98,397 +100,435 @@ class _DeliveryListSProof extends State<DeliveryProof> {
             },
           ),
         ),
-        body: ListView(
+        body: Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  SizedBox(height: 10),
-                  Text(
-                    'Complete Delivery',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 38,
-                      fontFamily: 'Montagu Slab',
-                      fontWeight: FontWeight.w400,
-                      height: 0.00,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ///////////////////////////
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            ListView(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
                     children: [
+                      SizedBox(height: 10),
                       Text(
-                        'Customer Details :',
+                        'Complete Delivery',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Color(0xFF333333),
-                          fontSize: 17,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          fontSize: 38,
+                          fontFamily: 'Montagu Slab',
+                          fontWeight: FontWeight.w400,
                           height: 0.00,
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0x3F000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      SizedBox(height: 20),
+                      ///////////////////////////
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /////////////
-                              ////////////
-                              Row(
-                                children: [
-                                  Text(
-                                    'Track Num. : ',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    rider_parcel_list[booking_index]['parcel']
-                                        ['tracking_id'],
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Name : ',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    rider_parcel_list[booking_index]['parcel']
-                                        ['name'],
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Phone : ',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    rider_parcel_list[booking_index]['phone'],
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Address : ',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                  Text(
-                                    rider_parcel_list[booking_index]
-                                            ['address'] ??
-                                        'null',
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          Text(
+                            'Customer Details :',
+                            style: TextStyle(
+                              color: Color(0xFF333333),
+                              fontSize: 17,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w700,
+                              height: 0.00,
+                            ),
                           ),
-                          SizedBox(width: 10),
-                          // Adjust the spacing between columns
-                          // Right column with data
                         ],
                       ),
-                    ),
-                  ),
-                  //////////////////////////
-                  SizedBox(height: 30),
-                  ///////////////////////////
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Delivery Status :',
-                        style: TextStyle(
-                          color: Color(0xFF333333),
-                          fontSize: 17,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w700,
-                          height: 0.00,
+                      SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0x3F000000),
+                              blurRadius: 4,
+                              offset: Offset(0, 4),
+                              spreadRadius: 0,
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  //////////////////////////
-                  SizedBox(height: 10),
-                  ///////////////////////////
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0x3F000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Row(
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Status : ', // Replace with actual data
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 20),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      width: 0.5,
-                                      color: Color.fromARGB(56, 25, 25, 25),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromARGB(164, 117, 117, 117),
-                                        blurRadius: 4,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  /////////////
+                                  ////////////
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Track Num. : ',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
+                                      ),
+                                      Text(
+                                        rider_parcel_list[booking_index]
+                                            ['parcel']['tracking_id'],
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Name : ',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
+                                      ),
+                                      Text(
+                                        rider_parcel_list[booking_index]
+                                            ['parcel']['name'],
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  child: DropdownButtonFormField<String>(
-                                    value: _selectedStatusType,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        _selectedStatusType = newValue!;
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(
-                                          255, 249, 249, 249),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide.none,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Phone : ',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
                                       ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        vertical: 12,
-                                        horizontal: 10,
+                                      Text(
+                                        rider_parcel_list[booking_index]
+                                            ['phone'],
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
                                       ),
-                                    ),
-                                    items: ["Delivered", "Not Delivered"]
-                                        .map((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please select status type';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
+                                    ],
                                   ),
-                                ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Address : ',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
+                                      ),
+                                      Text(
+                                        rider_parcel_list[booking_index]
+                                                ['address'] ??
+                                            'MA1,KTDI',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
+                              SizedBox(width: 10),
+                              // Adjust the spacing between columns
+                              // Right column with data
                             ],
                           ),
-                          SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        ),
+                      ),
+                      //////////////////////////
+                      SizedBox(height: 30),
+                      ///////////////////////////
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Delivery Status :',
+                            style: TextStyle(
+                              color: Color(0xFF333333),
+                              fontSize: 17,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w700,
+                              height: 0.00,
+                            ),
+                          ),
+                        ],
+                      ),
+                      //////////////////////////
+                      SizedBox(height: 10),
+                      ///////////////////////////
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0x3F000000),
+                              blurRadius: 4,
+                              offset: Offset(0, 4),
+                              spreadRadius: 0,
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
                             children: [
-                              Text(
-                                'Proof: ', // Replace with actual data
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
-                              ),
-                              SizedBox(width: 30),
-                              Column(
+                              Row(
                                 children: [
-                                  SizedBox(
-                                      width: 160,
-                                      height: 160,
-                                      child: isImageSelected == true
-                                          ? Image(image: FileImage(imageFile!))
-                                          : Container(
-                                              color: const Color.fromARGB(
-                                                  255, 154, 154, 154),
-                                              child: const Center(
-                                                child: Text('No image'),
-                                              ),
-                                            )),
-                                  Container(
-                                    width: 150,
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        getImage();
-                                      },
-                                      child: Text('Upload Photo',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontFamily: 'Lexend',
-                                            fontWeight: FontWeight.w700,
-                                          )),
+                                  Text(
+                                    'Status : ', // Replace with actual data
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 20),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          width: 0.5,
+                                          color: Color.fromARGB(56, 25, 25, 25),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color.fromARGB(
+                                                164, 117, 117, 117),
+                                            blurRadius: 4,
+                                            offset: Offset(0, 4),
+                                            spreadRadius: 0,
+                                          ),
+                                        ],
+                                      ),
+                                      child: DropdownButtonFormField<String>(
+                                        value: _selectedStatusType,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            _selectedStatusType = newValue!;
+                                          });
+                                        },
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: const Color.fromARGB(
+                                              255, 249, 249, 249),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12,
+                                            horizontal: 10,
+                                          ),
+                                        ),
+                                        items:
+                                            ["Delivered"].map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please select status type';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              // Add your widgets related to the second status here
+                              SizedBox(height: 10),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Proof: ', // Replace with actual data
+                                    style: TextStyle(
+                                      color: Color(0xFF333333),
+                                      fontSize: 17,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.00,
+                                    ),
+                                  ),
+                                  SizedBox(width: 30),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 160,
+                                        height: 160,
+                                        color: Color.fromARGB(255, 156, 156,
+                                            156), // Set the background color to blue
+                                        child: isImageSelected == true
+                                            ? Image(
+                                                image: FileImage(imageFile!))
+                                            : Center(
+                                                child: Text('No image'),
+                                              ),
+                                      ),
+                                      Container(
+                                        width: 150,
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            getImage();
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.blue),
+                                          ),
+                                          child: Text(
+                                            'Upload Photo',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontFamily: 'Lexend',
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // Add your widgets related to the second status here
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  /////////////////////////////
-                  SizedBox(height: 20),
-                  /////////////////////////////
-                  GestureDetector(
-                    onTap: () async {
-                      await uploadImage();
-                      await completeDelivery();
-                      await getData(rider['user_id']);
-                      await getRiderParcel(rider['rider_id']);
-                      print('upload button press');
-                      Navigator.of(context)
-                          .pushReplacementNamed('/delivery_list');
-                    },
-                    child: Container(
-                      width: 263,
-                      height: 53,
-                      alignment: Alignment.center,
-                      decoration: ShapeDecoration(
-                        color: const Color.fromARGB(255, 44, 174, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            width: 1.50,
-                            color: const Color.fromARGB(255, 44, 174, 48),
-                          ),
                         ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x3F000000),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          ),
-                        ],
                       ),
-                      child: isLoading == false
-                          ? Text(
-                              'Confirm',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                fontSize: 15,
-                                fontFamily: 'Lexend',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
-                          : Text(
-                              'Loading..',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                fontSize: 15,
-                                fontFamily: 'Lexend',
-                                fontWeight: FontWeight.w400,
+                      /////////////////////////////
+                      SizedBox(height: 20),
+                      /////////////////////////////
+                      GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await uploadImage();
+                          await completeDelivery();
+                          await getData(rider['user_id']);
+                          await getRiderParcel(rider['rider_id']);
+                          print('upload button press');
+                          Navigator.of(context)
+                              .pushReplacementNamed('/delivery_list');
+                          Fluttertoast.showToast(
+                            msg: "Delivery completed!",
+                          );
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
+                        child: Container(
+                          width: 263,
+                          height: 53,
+                          alignment: Alignment.center,
+                          decoration: ShapeDecoration(
+                            color: const Color.fromARGB(255, 44, 174, 48),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                width: 1.50,
+                                color: const Color.fromARGB(255, 44, 174, 48),
                               ),
                             ),
-                    ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: isLoading == false
+                              ? Text(
+                                  'Confirm',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    fontSize: 15,
+                                    fontFamily: 'Lexend',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                )
+                              : Text(
+                                  'Loading..',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    fontSize: 15,
+                                    fontFamily: 'Lexend',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            // Loading indicator overlay
+            if (isLoading)
+              Container(
+                color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LottieBuilder.asset('assets/yellow_loading.json'),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),

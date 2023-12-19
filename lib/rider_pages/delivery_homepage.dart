@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -13,6 +15,7 @@ class DeliveryHomePage extends StatefulWidget {
 class _DeliveryHomePageState extends State<DeliveryHomePage> {
   int? checkedIndex;
   bool? deliveryExist;
+  bool isLoading = false;
 
   void checkRiderMode(bool riderMode) {
     if (riderMode == true) {
@@ -108,407 +111,443 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
             ),
           ),
         ),
-        body: ListView(
+        body: Stack(
           children: [
-            Column(
+            ListView(
               children: [
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Rider Mode :',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontFamily: 'Lexend',
-                              fontWeight: FontWeight.w700,
-                              height: 0,
-                            ),
-                          ),
-                          // SizedBox(height: 20),
-                          Switch(
-                            value: riderMode,
-                            onChanged: (value) async {
-                              // Show the confirmation dialog before changing the riderMode value
-                              await _showConfirmationDialog(value);
-                            },
-                            activeTrackColor: Colors.lightGreenAccent,
-                            activeColor: Colors.green,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
                 Column(
                   children: [
-                    Container(
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        // crossAxisAlignment: CrossAxisAlignment.,
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            'CPP',
-                            style: TextStyle(
-                              color: Color.fromRGBO(248, 134, 41, 1),
-                              fontSize: 48,
-                              fontFamily: 'Montagu Slab',
-                              fontWeight: FontWeight.w700,
-                              shadows: [
-                                Shadow(
-                                  color: Color.fromARGB(255, 145, 145, 145),
-                                  offset: Offset(0, 3),
-                                  blurRadius: 4,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Rider Mode :',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontFamily: 'Lexend',
+                                  fontWeight: FontWeight.w700,
+                                  height: 0,
                                 ),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            'Link',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 7, 7, 131),
-                              fontSize: 32,
-                              fontFamily: 'Montagu Slab',
-                              fontWeight: FontWeight.w700,
-                            ),
+                              ),
+                              // SizedBox(height: 20),
+                              Switch(
+                                value: riderMode,
+                                onChanged: (value) async {
+                                  // Show the confirmation dialog before changing the riderMode value
+                                  await _showConfirmationDialog(value);
+                                },
+                                activeTrackColor: Colors.lightGreenAccent,
+                                activeColor: Colors.green,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 30),
-                Text(
-                  'Customer Delivery Request:',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                    fontSize: 17,
-                    fontFamily: 'Lexend',
-                    fontWeight: FontWeight.w700,
-                    height: 0,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.only(right: 10, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 300,
-                          padding: EdgeInsets.all(16),
-                          color: Color.fromARGB(255, 174, 174, 174),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Column(
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: requested_parcel == null
-                                      ? 0
-                                      : requested_parcel.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding:
-                                          EdgeInsets.only(right: 10, left: 10),
-                                      child: Container(
-                                        margin: EdgeInsets.only(bottom: 10.0),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Color.fromRGBO(255, 255, 255, 1),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color(0x3F000000),
-                                              blurRadius: 4,
-                                              offset: Offset(0, 4),
-                                              spreadRadius: 0,
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            // crossAxisAlignment: CrossAxisAlignment.,
+                            children: [
+                              Text(
+                                'CPP',
+                                style: TextStyle(
+                                  color: Color.fromRGBO(248, 134, 41, 1),
+                                  fontSize: 48,
+                                  fontFamily: 'Montagu Slab',
+                                  fontWeight: FontWeight.w700,
+                                  shadows: [
+                                    Shadow(
+                                      color: Color.fromARGB(255, 145, 145, 145),
+                                      offset: Offset(0, 3),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                'Link',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 7, 7, 131),
+                                  fontSize: 32,
+                                  fontFamily: 'Montagu Slab',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      'Customer Delivery Request:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 17,
+                        fontFamily: 'Lexend',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10, left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 300,
+                              padding: EdgeInsets.all(16),
+                              color: Color.fromARGB(255, 174, 174, 174),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Column(
+                                  children: [
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: requested_parcel == null
+                                          ? 0
+                                          : requested_parcel.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 10, left: 10),
+                                          child: Container(
+                                            margin:
+                                                EdgeInsets.only(bottom: 10.0),
+                                            decoration: BoxDecoration(
+                                              color: Color.fromRGBO(
+                                                  255, 255, 255, 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Color(0x3F000000),
+                                                  blurRadius: 4,
+                                                  offset: Offset(0, 4),
+                                                  spreadRadius: 0,
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                child: Column(children: [
-                                                  ////
-                                                  Text(
-                                                    requested_parcel[index]
-                                                        ['parcel_id'],
-                                                    style: TextStyle(
-                                                      color: Color(0xFF333333),
-                                                      fontSize: 17,
-                                                      fontFamily: 'Roboto',
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      height: 0.00,
-                                                    ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    child: Column(children: [
+                                                      ////
+                                                      Text(
+                                                        requested_parcel[index]
+                                                            ['parcel_id'],
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF333333),
+                                                          fontSize: 17,
+                                                          fontFamily: 'Roboto',
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          height: 0.00,
+                                                        ),
+                                                      ),
+                                                      /////
+                                                      requested_parcel[index]
+                                                                  ['address'] ==
+                                                              null
+                                                          ? Text(
+                                                              'MA1,KTDI',
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF333333),
+                                                                fontSize: 17,
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                height: 0.00,
+                                                              ),
+                                                            )
+                                                          : Text(
+                                                              requested_parcel[
+                                                                      index]
+                                                                  ['address'],
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF333333),
+                                                                fontSize: 17,
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                height: 0.00,
+                                                              ),
+                                                            ),
+                                                    ]),
                                                   ),
-                                                  /////
-                                                  requested_parcel[index]
-                                                              ['address'] ==
-                                                          null
-                                                      ? Text(
-                                                          'no address',
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF333333),
-                                                            fontSize: 17,
-                                                            fontFamily:
-                                                                'Roboto',
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            height: 0.00,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          requested_parcel[
-                                                              index]['address'],
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF333333),
-                                                            fontSize: 17,
-                                                            fontFamily:
-                                                                'Roboto',
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            height: 0.00,
+                                                  Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Transform.scale(
+                                                          scale: 1.3,
+                                                          child: Checkbox(
+                                                            value:
+                                                                checkedIndex ==
+                                                                    index,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                if (value ==
+                                                                    true) {
+                                                                  checkedIndex =
+                                                                      index;
+                                                                } else {
+                                                                  checkedIndex =
+                                                                      null;
+                                                                }
+                                                              });
+                                                            },
+                                                            activeColor:
+                                                                Colors.green,
                                                           ),
                                                         ),
-                                                ]),
-                                              ),
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Transform.scale(
-                                                      scale: 1.3,
-                                                      child: Checkbox(
-                                                        value: checkedIndex ==
-                                                            index,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            if (value == true) {
-                                                              checkedIndex =
-                                                                  index;
-                                                            } else {
-                                                              checkedIndex =
-                                                                  null;
-                                                            }
-                                                          });
-                                                        },
-                                                        activeColor:
-                                                            Colors.green,
-                                                      ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () async {
+                        // Navigator.of(context)
+                        //     .pushReplacementNamed('/delivery_list');
+                        setState(() {
+                          isLoading = true;
+                        });
+                        deliveryExist = await validateRiderDelivery();
+                        if (deliveryExist == true) {
+                          print('delivery exist');
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('I understand'))
+                                    ],
+                                    title:
+                                        Text('You can only deliver one parcel'),
+                                  ));
+                        } else {
+                          await setRiderBooking();
+                          await getRequestedParcelList();
+                          await getRiderParcel(rider['rider_id']);
+                          setState(() {});
+                          print('Rider set');
+                          Fluttertoast.showToast(
+                            msg: "Parcel ready to be delivered!",
+                          );
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      },
+                      child: Container(
+                          width: 294,
+                          // height: 36,
+                          decoration: ShapeDecoration(
+                            color: Color.fromRGBO(248, 134, 41, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Deliver Now',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ],
                             ),
+                          )),
+                    ),
+                    SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () {
+                        // Add your delete parcel logic here
+                        Navigator.pushReplacementNamed(
+                            context, '/delivery_list');
+                        // You can replace the print statement with the actual logic to delete the parcel.
+                      },
+                      child: Container(
+                          width: 294,
+                          // height: 36,
+                          decoration: ShapeDecoration(
+                            color: Color.fromRGBO(248, 134, 41, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Delivery History',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
 
-                SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () async {
-                    // Navigator.of(context)
-                    //     .pushReplacementNamed('/delivery_list');
-                    deliveryExist = await validateRiderDelivery();
-                    if (deliveryExist == true) {
-                      print('delivery exist');
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('I understand'))
-                                ],
-                                title: Text('You can only deliver one parcel'),
-                              ));
-                    } else {
-                      await setRiderBooking();
-                      await getRequestedParcelList();
-                      await getRiderParcel(rider['rider_id']);
-                      setState(() {});
-                      print('Rider set');
-                    }
-                  },
-                  child: Container(
-                      width: 294,
-                      // height: 36,
-                      decoration: ShapeDecoration(
-                        color: Color.fromRGBO(248, 134, 41, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x3F000000),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Deliver Now',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                    ///end
+                    SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () {
+                        // Add your delete parcel logic here
+                        print("View Profile tapped!");
+                        // You can replace the print statement with the actual logic to delete the parcel.
+                      },
+                      child: Container(
+                          width: 294,
+                          // height: 36,
+                          decoration: ShapeDecoration(
+                            color: Color.fromRGBO(248, 134, 41, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ],
-                        ),
-                      )),
-                ),
-                SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {
-                    // Add your delete parcel logic here
-                    Navigator.pushReplacementNamed(context, '/delivery_list');
-                    // You can replace the print statement with the actual logic to delete the parcel.
-                  },
-                  child: Container(
-                      width: 294,
-                      // height: 36,
-                      decoration: ShapeDecoration(
-                        color: Color.fromRGBO(248, 134, 41, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x3F000000),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Delivery History',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
                               ),
-                            ),
-                          ],
-                        ),
-                      )),
-                ),
-
-                ///end
-                SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {
-                    // Add your delete parcel logic here
-                    print("View Profile tapped!");
-                    // You can replace the print statement with the actual logic to delete the parcel.
-                  },
-                  child: Container(
-                      width: 294,
-                      // height: 36,
-                      decoration: ShapeDecoration(
-                        color: Color.fromRGBO(248, 134, 41, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x3F000000),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
                                     TextSpan(
-                                      text: 'View Profile',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: 'View Profile',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      )),
+                          )),
+                    ),
+                  ],
                 ),
               ],
             ),
+            // Loading indicator overlay
+            if (isLoading)
+              Container(
+                color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LottieBuilder.asset('assets/yellow_loading.json'),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),

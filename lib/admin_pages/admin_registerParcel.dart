@@ -604,9 +604,9 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                       ? null
                       : () async {
                           // Your code to handle the tap event
-                          setState(() {
-                            isLoading = true;
-                          });
+                          // setState(() {
+                          //   isLoading = true;
+                          // });
                           phone = await formatPhone(_phoneNumber.text);
                           phoneValid = await phone_check(phone!);
                           parcelUnique = await parcel_unique(
@@ -620,9 +620,9 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                           } else {
                             print('cannot register');
                           }
-                          setState(() {
-                            isLoading = false;
-                          });
+                          // setState(() {
+                          //   isLoading = false;
+                          // });
                         },
                   child: Container(
                     width: 180,
