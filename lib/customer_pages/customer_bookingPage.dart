@@ -12,7 +12,6 @@ class customerBooking extends StatefulWidget {
 
 class customerBookingState extends State<customerBooking> {
   bool newBooking = true;
-
   Future<void> bookParcel() async {
     final userId = supabase.auth.currentUser!.id;
     final phone = await supabase
@@ -309,6 +308,14 @@ class customerBookingState extends State<customerBooking> {
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: selectedValue,
+                                hint: Text('No parcel selected'),
+                                style: TextStyle(
+                                  color: Color(0xFF050505),
+                                  fontSize: 20,
+                                  fontFamily: 'Lexend',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0.00,
+                                ),
                                 onChanged: (String? newValue) {
                                   setState(() {
                                     selectedValue = newValue!;
@@ -347,8 +354,7 @@ class customerBookingState extends State<customerBooking> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .start, // Align children to the left
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             child: Row(
@@ -392,7 +398,23 @@ class customerBookingState extends State<customerBooking> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
-                          )
+                            child: TextFormField(
+                              // This is the editable text field
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Enter your address here',
+                                // You can customize the hint text as needed
+                              ),
+                              style: TextStyle(
+                                color: Color(0xFF050505),
+                                fontSize: 20,
+                                fontFamily: 'Lexend',
+                                fontWeight: FontWeight.w400,
+                                height: 0.00,
+                              ),
+                              // You can add more properties to customize the text field
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -402,7 +424,7 @@ class customerBookingState extends State<customerBooking> {
               ///////////////////////////////////////
               /////////////////////////////////////
               SizedBox(
-                height: 50.0,
+                height: 30.0,
               ),
               GestureDetector(
                 onTap: () async {
