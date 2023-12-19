@@ -106,30 +106,6 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
     });
   }
 
-  void filterUserParcel(String status) {
-    parcel_list = List.from(parcel_list);
-    parcel_counter = 0;
-    delivery_counter = 0;
-    setState(() {
-      if (status == "all") {
-        parcel_list = parcel_data;
-        return;
-      } else if (status == 'parcel') {
-        parcel_list = parcel_data
-            .where((element) =>
-                (element['user_id'] != null) &&
-                (element['user_id'].contains(supabase.auth.currentUser!.id)))
-            .toList();
-        return;
-      }
-      parcel_list = parcel_data
-          .where((element) =>
-              (element['user_id'] != null) &&
-              (element['user_id'].contains(supabase.auth.currentUser!.id)))
-          .toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -192,7 +168,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                   });
                                 },
                                 decoration: InputDecoration(
-                                  hintText: 'Search Parcel or Customer...',
+                                  hintText: 'Search Parcel...',
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -235,7 +211,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('all'),
+                                                title: Text('All'),
                                                 onTap: () {
                                                   myParcel = false;
                                                   filterDeliveryStatus(
