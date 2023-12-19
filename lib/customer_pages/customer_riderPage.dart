@@ -128,6 +128,16 @@ class customerBbookingState extends State<customerRiderPage> {
                               ),
                             ),
                             Text(
+                              'Address :',
+                              style: TextStyle(
+                                color: Color(0xFF333333),
+                                fontSize: 17,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w400,
+                                height: 0.00,
+                              ),
+                            ),
+                            Text(
                               'Name : ',
                               style: TextStyle(
                                 color: Color(0xFF333333),
@@ -138,16 +148,6 @@ class customerBbookingState extends State<customerRiderPage> {
                               ),
                             ),
                             SizedBox(height: 20),
-                            Text(
-                              'Address :',
-                              style: TextStyle(
-                                color: Color(0xFF333333),
-                                fontSize: 17,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
-                                height: 0.00,
-                              ),
-                            ),
                           ],
                         ),
                         SizedBox(width: 10),
@@ -189,6 +189,16 @@ class customerBbookingState extends State<customerRiderPage> {
                                 },
                               ),
                               Text(
+                                'MA1, KTDI', // Replace with actual data
+                                style: TextStyle(
+                                  color: Color(0xFF333333),
+                                  fontSize: 17,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0.00,
+                                ),
+                              ),
+                              Text(
                                 user_name, // Replace with actual data
                                 style: TextStyle(
                                   color: Color(0xFF333333),
@@ -198,16 +208,6 @@ class customerBbookingState extends State<customerRiderPage> {
                                   height: 0.00,
                                 ),
                                 overflow: TextOverflow.visible,
-                              ),
-                              Text(
-                                'MA1, KTDI', // Replace with actual data
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
                               ),
                             ],
                           ),

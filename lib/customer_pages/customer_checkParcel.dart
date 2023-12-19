@@ -103,7 +103,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
           backgroundColor: Color.fromRGBO(250, 195, 44, 1),
           centerTitle: true,
           title: Text(
-            'Manage Parcel',
+            'Check Parcel',
             style: TextStyle(
               fontFamily: 'roboto',
               fontWeight: FontWeight.bold,
@@ -184,7 +184,93 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text('Filter by'),
+                                        title: Text('Filter Category by'),
+                                        insetPadding: EdgeInsets.zero,
+                                        content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ListTile(
+                                                title: Text('My Parcel'),
+                                                onTap: () {
+                                                  filterDeliveryStatus(
+                                                      'My Parcel');
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text('all'),
+                                                onTap: () {
+                                                  filterDeliveryStatus('all');
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ]),
+                                      );
+                                    });
+                              },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Container(
+                            width: 130, // Adjust the width as needed
+                            height: 40,
+                            alignment: Alignment.center,
+                            decoration: ShapeDecoration(
+                              color: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                  width: 1.50,
+                                  color: Colors.green, // Border color
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0x3F000000),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: 0,
+                                ),
+                              ],
+                            ),
+                            // if loading show indicator(optional)
+                            child: isLoading == true
+                                ? CircularProgressIndicator()
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.filter_alt,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              5), // Adjust the spacing as needed
+                                      Text(
+                                        'Category',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 15,
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: isLoading == true
+                            ? null
+                            : () async {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Filter status by'),
                                         insetPadding: EdgeInsets.zero,
                                         content: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -263,7 +349,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                           width:
                                               5), // Adjust the spacing as needed
                                       Text(
-                                        'Filter By',
+                                        'Status',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: const Color.fromARGB(
@@ -281,7 +367,6 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                     ],
                   ),
                 ),
-
                 /////////////////
                 /////////////////
                 /////////////////
