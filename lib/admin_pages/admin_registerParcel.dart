@@ -448,7 +448,6 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                     );
                                   },
                                   hideOnEmpty: true,
-                                  emptyBuilder: (context) => Text(''),
                                   constraints: BoxConstraints(maxHeight: 500),
                                   itemBuilder: (context, String suggestion) {
                                     String selectPhone = "";
