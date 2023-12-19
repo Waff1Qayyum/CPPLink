@@ -319,7 +319,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                             width: 20,
                           ),
                           InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              await getParcelList();
                               Navigator.of(context).pushReplacementNamed(
                                   '/customer_checkParcel');
                               // Your code to handle the tap event

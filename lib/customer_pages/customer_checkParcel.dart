@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../controller.dart';
+import '../main.dart';
 
 class customerCheckParcel extends StatefulWidget {
   const customerCheckParcel({super.key});
@@ -16,6 +17,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
   dynamic user_list = user_data;
   dynamic parcel_list = parcel_data;
   dynamic sorted_list;
+  bool myParcel = false;
   int parcel_counter = 0;
   int delivery_counter = 0;
 
@@ -30,21 +32,13 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
   }
 
   void updateList(String value) {
-    // setState(() {
-    //   user_list = user_data
-    //       .where((element) =>
-    //           element['name'] != null &&
-    //           element['name']!.toLowerCase().contains(value.toLowerCase()))
-    //       .toList();
-    // });
     setState(() {
       parcel_list = parcel_data
           .where((element) =>
-              (element['name'] != null || element['tracking_id'] != null) &&
-              (element['name']!.toLowerCase().contains(value.toLowerCase()) ||
-                  element['tracking_id']!
-                      .toLowerCase()
-                      .contains(value.toLowerCase())))
+              (element['tracking_id'] != null) &&
+              (element['tracking_id']!
+                  .toLowerCase()
+                  .contains(value.toLowerCase())))
           .toList();
       parcel_counter = 0;
       delivery_counter = 0;
@@ -77,11 +71,29 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
     });
   }
 
-  void filterDeliveryStatus(String status) {
+  void filterDeliveryStatus(String status, bool myParcel) {
     parcel_list = List.from(parcel_list);
     parcel_counter = 0;
     delivery_counter = 0;
     setState(() {
+      if (myParcel == true) {
+        if (status == "all") {
+          parcel_list = parcel_data
+              .where((element) =>
+                  (element['user_id'] != null) &&
+                  (element['user_id'].contains(supabase.auth.currentUser!.id)))
+              .toList();
+          return;
+        }
+
+        parcel_list = parcel_data
+            .where((element) =>
+                (element['user_id'] != null) &&
+                (element['user_id'].contains(supabase.auth.currentUser!.id) &&
+                    (element['status'].contains(status.toLowerCase()))))
+            .toList();
+        return;
+      }
       if (status == "all") {
         parcel_list = parcel_data;
         return;
@@ -90,6 +102,30 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
           .where((element) =>
               (element['status'] != null) &&
               (element['status'].contains(status.toLowerCase())))
+          .toList();
+    });
+  }
+
+  void filterUserParcel(String status) {
+    parcel_list = List.from(parcel_list);
+    parcel_counter = 0;
+    delivery_counter = 0;
+    setState(() {
+      if (status == "all") {
+        parcel_list = parcel_data;
+        return;
+      } else if (status == 'parcel') {
+        parcel_list = parcel_data
+            .where((element) =>
+                (element['user_id'] != null) &&
+                (element['user_id'].contains(supabase.auth.currentUser!.id)))
+            .toList();
+        return;
+      }
+      parcel_list = parcel_data
+          .where((element) =>
+              (element['user_id'] != null) &&
+              (element['user_id'].contains(supabase.auth.currentUser!.id)))
           .toList();
     });
   }
@@ -192,15 +228,18 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                               ListTile(
                                                 title: Text('My Parcel'),
                                                 onTap: () {
+                                                  myParcel = true;
                                                   filterDeliveryStatus(
-                                                      'My Parcel');
+                                                      'all', myParcel);
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
                                                 title: Text('all'),
                                                 onTap: () {
-                                                  filterDeliveryStatus('all');
+                                                  myParcel = false;
+                                                  filterDeliveryStatus(
+                                                      'all', myParcel);
                                                   Navigator.pop(context);
                                                 },
                                               ),
@@ -278,7 +317,8 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                               ListTile(
                                                 title: Text('all'),
                                                 onTap: () {
-                                                  filterDeliveryStatus('all');
+                                                  filterDeliveryStatus(
+                                                      'all', myParcel);
                                                   Navigator.pop(context);
                                                 },
                                               ),
@@ -286,7 +326,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 title: Text('waiting'),
                                                 onTap: () {
                                                   filterDeliveryStatus(
-                                                      'waiting');
+                                                      'waiting', myParcel);
                                                   Navigator.pop(context);
                                                 },
                                               ),
@@ -294,7 +334,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 title: Text('cancelled'),
                                                 onTap: () {
                                                   filterDeliveryStatus(
-                                                      'cancelled');
+                                                      'cancelled', myParcel);
                                                   Navigator.pop(context);
                                                 },
                                               ),
@@ -302,7 +342,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 title: Text('collected'),
                                                 onTap: () {
                                                   filterDeliveryStatus(
-                                                      'collected');
+                                                      'collected', myParcel);
                                                   Navigator.pop(context);
                                                 },
                                               )
@@ -480,22 +520,6 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        rowData['name'].toString(),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontFamily: 'Lexend',
-                                        ),
-                                      ),
-                                      Text(
-                                        rowData['phone'].toString(),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontFamily: 'Lexend',
-                                        ),
-                                      ),
                                       Text(
                                         rowData['tracking_id'].toString(),
                                         style: TextStyle(
