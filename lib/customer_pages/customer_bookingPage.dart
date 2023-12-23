@@ -12,6 +12,8 @@ class customerBooking extends StatefulWidget {
 }
 
 class customerBookingState extends State<customerBooking> {
+  TextEditingController _address = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool newBooking = true;
   Future<void> bookParcel() async {
@@ -25,7 +27,8 @@ class customerBookingState extends State<customerBooking> {
     await supabase.from('booking').insert({
       'customer_id': userId,
       'parcel_id': selectedValue,
-      'phone': phone['phone']
+      'phone': phone['phone'],
+      'address': _address.text
     });
 
     await supabase
@@ -33,6 +36,14 @@ class customerBookingState extends State<customerBooking> {
         .update({'status': 'waiting'}).eq('tracking_id', selectedValue);
 
     await getData(userId);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      selectedValue = null;
+    });
   }
 
   @override
@@ -140,289 +151,300 @@ class customerBookingState extends State<customerBooking> {
                     ),
                     ////////////////////////////////////////////////
                     ///Tracking Number.......
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment
-                          .start, // Align children to the left
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start, // Align children to the left
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '   Name',
-                                              style: TextStyle(
-                                                color: Color(0xFF050505),
-                                                fontSize: 20,
-                                                fontFamily: 'Lexend',
-                                                fontWeight: FontWeight.w400,
-                                                height: 0.00,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .start, // Align children to the left
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // Align children to the left
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: '   Name',
+                                                style: TextStyle(
+                                                  color: Color(0xFF050505),
+                                                  fontSize: 20,
+                                                  fontFamily: 'Lexend',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                        textAlign: TextAlign.left,
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Container(
+                                  width: 350,
+                                  height: 40,
+                                  child: Text(
+                                    user_name,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      // You can add more text styling properties if needed
                                     ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                width: 350,
-                                height: 40,
-                                child: Text(
-                                  user_name,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    // You can add more text styling properties if needed
                                   ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 7),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 2, color: Color(0xFF333333)),
-                                    borderRadius: BorderRadius.circular(15),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 7),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 2, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        /////////////////////////////////////////////////////////
-                        ///////Phone Number ......
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start, // Align children to the left
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '   Phone Number',
-                                              style: TextStyle(
-                                                color: Color(0xFF050505),
-                                                fontSize: 20,
-                                                fontFamily: 'Lexend',
-                                                fontWeight: FontWeight.w400,
-                                                height: 0.00,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                width: 350,
-                                height: 40,
-                                child: Text(
-                                  user_phone,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    // You can add more text styling properties if needed
-                                  ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 7),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 2, color: Color(0xFF333333)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                              )
-                            ],
+                          SizedBox(
+                            height: 10.0,
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        /////////////////////////////////////////////////////////
-                        ///////Tracking Number ......
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start, // Align children to the left
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '   Tracking Number',
-                                              style: TextStyle(
-                                                color: Color(0xFF050505),
-                                                fontSize: 20,
-                                                fontFamily: 'Lexend',
-                                                fontWeight: FontWeight.w400,
-                                                height: 0.00,
+                          /////////////////////////////////////////////////////////
+                          ///////Phone Number ......
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // Align children to the left
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: '   Phone Number',
+                                                style: TextStyle(
+                                                  color: Color(0xFF050505),
+                                                  fontSize: 20,
+                                                  fontFamily: 'Lexend',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                        textAlign: TextAlign.left,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                width: 350,
-                                height: 40,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: selectedValue,
-                                    hint: Text('No parcel selected'),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Container(
+                                  width: 350,
+                                  height: 40,
+                                  child: Text(
+                                    user_phone,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      // You can add more text styling properties if needed
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 7),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 2, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          /////////////////////////////////////////////////////////
+                          ///////Tracking Number ......
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // Align children to the left
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: '   Tracking Number',
+                                                style: TextStyle(
+                                                  color: Color(0xFF050505),
+                                                  fontSize: 20,
+                                                  fontFamily: 'Lexend',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Container(
+                                  width: 350,
+                                  height: 40,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: selectedValue,
+                                      hint: Text('No parcel selected'),
+                                      style: TextStyle(
+                                        color: Color(0xFF050505),
+                                        fontSize: 17,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedValue = newValue!;
+                                        });
+                                      },
+                                      items: user_parcel
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 7),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 2, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          /////////////////////////////////////////////////////////
+                          ///////Address ......
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: '   Address',
+                                                style: TextStyle(
+                                                  color: Color(0xFF050505),
+                                                  fontSize: 20,
+                                                  fontFamily: 'Lexend',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Container(
+                                  width: 350,
+                                  height: 140,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 7),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 2, color: Color(0xFF333333)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    // This is the editable text field
+                                    controller: _address,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter address';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Enter your address here',
+                                      // You can customize the hint text as needed
+                                    ),
                                     style: TextStyle(
                                       color: Color(0xFF050505),
-                                      fontSize: 17,
+                                      fontSize: 20,
                                       fontFamily: 'Lexend',
                                       fontWeight: FontWeight.w400,
                                       height: 0.00,
                                     ),
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        selectedValue = newValue!;
-                                      });
-                                    },
-                                    items: user_parcel
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
+                                    // You can add more properties to customize the text field
                                   ),
                                 ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 7),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 2, color: Color(0xFF333333)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                              )
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        /////////////////////////////////////////////////////////
-                        ///////Address ......
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '   Address',
-                                              style: TextStyle(
-                                                color: Color(0xFF050505),
-                                                fontSize: 20,
-                                                fontFamily: 'Lexend',
-                                                fontWeight: FontWeight.w400,
-                                                height: 0.00,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                width: 350,
-                                height: 140,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 7),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 2, color: Color(0xFF333333)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                child: TextFormField(
-                                  // This is the editable text field
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Enter your address here',
-                                    // You can customize the hint text as needed
-                                  ),
-                                  style: TextStyle(
-                                    color: Color(0xFF050505),
-                                    fontSize: 20,
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.00,
-                                  ),
-                                  // You can add more properties to customize the text field
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   ///////////////////////////////////////
@@ -438,31 +460,51 @@ class customerBookingState extends State<customerBooking> {
 
                       // Add your delete parcel logic here
                       print("Book Delivery tapped!");
-                      newBooking =
-                          await validateBooking(supabase.auth.currentUser!.id);
-                      if (newBooking == true) {
-                        await bookParcel();
-                        isLoading = false;
-                        Navigator.pushNamed(context, '/customer_myRider');
-                      } else {
-                        print('cannot book');
-                        setState(() {
-                          isLoading = false;
-                        });
+                      if (selectedValue == null) {
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
+                                  content:
+                                      const Text('Please Select One Parcel'),
                                   actions: [
                                     TextButton(
                                         onPressed: () {
-                                          Navigator.of(context).pop();
+                                          Navigator.pop(context);
                                         },
-                                        child: Text('I understand'))
+                                        child: const Text('Understand')),
                                   ],
-                                  title:
-                                      Text('You can only request one parcel'),
                                 ));
                       }
+                      if (_formKey.currentState!.validate()) {
+                        newBooking = await validateBooking(
+                            supabase.auth.currentUser!.id);
+                        if (newBooking == true) {
+                          await bookParcel();
+                          isLoading = false;
+                          Navigator.pushNamed(context, '/customer_myRider');
+                        } else {
+                          print('cannot book');
+                          setState(() {
+                            isLoading = false;
+                          });
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('I understand'))
+                                    ],
+                                    title:
+                                        Text('You can only request one parcel'),
+                                  ));
+                        }
+                      }
+                      setState(() {
+                        isLoading = false;
+                      });
 
                       // You can replace the print statement with the actual logic to delete the parcel.
                     },
