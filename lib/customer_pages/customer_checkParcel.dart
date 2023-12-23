@@ -156,6 +156,8 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
             //not my parcel, has no input, status is not all
             parcel_list = parcel_data
                 .where((element) =>
+                    (element['user_id'] != null ||
+                        element['tracking_id'] != null) &&
                     (element['status'].contains(parcelStatus.toLowerCase())))
                 .toList();
             return;
@@ -222,7 +224,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                             Expanded(
                               child: TextField(
                                 onChanged: (val) {
-                                  setState(() {
+                                  setState(() async {
                                     // updateList(val);
                                     searchInput = val;
                                     filterParcel();
@@ -247,7 +249,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       InkWell(
                         onTap: isLoading == true
@@ -264,28 +266,27 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                             children: [
                                               ListTile(
                                                 title: Text('My Parcel'),
-                                                onTap: () {
+                                                onTap: () async {
                                                   myParcel = true;
                                                   setState(() {
                                                     parcelCategory =
                                                         'My Parcel';
+                                                    filterParcel();
                                                   });
                                                   // filterDeliveryStatus(
                                                   //     'all', myParcel);
-                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
                                                 title: Text('All'),
-                                                onTap: () {
-                                                  myParcel = false;
+                                                onTap: () async {
                                                   setState(() {
                                                     parcelCategory = 'All';
+                                                    filterParcel();
                                                   });
                                                   // filterDeliveryStatus(
                                                   //     'all', myParcel);
-                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               ),
@@ -361,8 +362,8 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ListTile(
-                                                title: Text('all'),
-                                                onTap: () {
+                                                title: Text('All'),
+                                                onTap: () async {
                                                   setState(() {
                                                     parcelStatus = 'All';
                                                   });
@@ -373,8 +374,8 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('arrived'),
-                                                onTap: () {
+                                                title: Text('Arrived'),
+                                                onTap: () async {
                                                   parcelStatus = 'Arrived';
                                                   // filterDeliveryStatus(
                                                   //     'arrived', myParcel);
@@ -383,18 +384,8 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('waiting'),
-                                                onTap: () {
-                                                  parcelStatus = 'Waiting';
-                                                  // filterDeliveryStatus(
-                                                  //     'waiting', myParcel);
-                                                  filterParcel();
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              ListTile(
-                                                title: Text('cancelled'),
-                                                onTap: () {
+                                                title: Text('Cancelled'),
+                                                onTap: () async {
                                                   parcelStatus = 'Cancelled';
                                                   // filterDeliveryStatus(
                                                   //     'cancelled', myParcel);
@@ -403,8 +394,8 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('collected'),
-                                                onTap: () {
+                                                title: Text('Collected'),
+                                                onTap: () async {
                                                   parcelStatus = 'Collected';
                                                   // filterDeliveryStatus(
                                                   //     'collected', myParcel);
@@ -413,15 +404,25 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('delivered'),
-                                                onTap: () {
+                                                title: Text('Delivered'),
+                                                onTap: () async {
                                                   parcelStatus = 'Delivered';
                                                   // filterDeliveryStatus(
                                                   //     'delivered', myParcel);
                                                   filterParcel();
                                                   Navigator.pop(context);
                                                 },
-                                              )
+                                              ),
+                                              ListTile(
+                                                title: Text('Waiting'),
+                                                onTap: () async {
+                                                  parcelStatus = 'Waiting';
+                                                  // filterDeliveryStatus(
+                                                  //     'waiting', myParcel);
+                                                  filterParcel();
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
                                             ]),
                                       );
                                     });
