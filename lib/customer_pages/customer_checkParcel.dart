@@ -13,6 +13,9 @@ class customerCheckParcel extends StatefulWidget {
 }
 
 class _customerCheckParcelState extends State<customerCheckParcel> {
+  String parcelStatus = 'All';
+  String parcelCategory = 'My Parcel';
+  String searchInput = "";
   bool isLoading = false;
   dynamic user_list = user_data;
   dynamic parcel_list = parcel_data;
@@ -24,25 +27,12 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
   @override
   void initState() {
     super.initState();
+    filterParcel();
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void updateList(String value) {
-    setState(() {
-      parcel_list = parcel_data
-          .where((element) =>
-              (element['tracking_id'] != null) &&
-              (element['tracking_id']!
-                  .toLowerCase()
-                  .contains(value.toLowerCase())))
-          .toList();
-      parcel_counter = 0;
-      delivery_counter = 0;
-    });
   }
 
   void sortTrackingNumber() {
@@ -71,38 +61,107 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
     });
   }
 
-  void filterDeliveryStatus(String status, bool myParcel) {
+  void filterParcel() {
     parcel_list = List.from(parcel_list);
     parcel_counter = 0;
     delivery_counter = 0;
     setState(() {
-      if (myParcel == true) {
-        if (status == "all") {
-          parcel_list = parcel_data
-              .where((element) =>
-                  (element['user_id'] != null) &&
-                  (element['user_id'].contains(supabase.auth.currentUser!.id)))
-              .toList();
-          return;
+      //category is my parcel
+      if (parcelCategory == "My Parcel") {
+        // my parcel, has input
+        if (searchInput.isNotEmpty) {
+          //my parcel, has input, status all
+          if (parcelStatus == 'All') {
+            parcel_list = parcel_data
+                .where((element) =>
+                    (element['user_id'] != null) &&
+                    (element['user_id']
+                        .contains(supabase.auth.currentUser!.id)) &&
+                    (element['tracking_id']!
+                        .toLowerCase()
+                        .contains(searchInput.toLowerCase())))
+                .toList();
+            return;
+          } else
+          //my parcel, has input, status is not all
+          {
+            parcel_list = parcel_data
+                .where((element) =>
+                    (element['user_id'] != null) &&
+                    (element['user_id']
+                        .contains(supabase.auth.currentUser!.id)) &&
+                    (element['tracking_id']!
+                        .toLowerCase()
+                        .contains(searchInput.toLowerCase())) &&
+                    (element['status'].contains(parcelStatus.toLowerCase())))
+                .toList();
+            return;
+          }
+          //my parcel, has no input
+        } else {
+          //my parcel, has no input, status is all
+          if (parcelStatus == 'All') {
+            parcel_list = parcel_data
+                .where((element) =>
+                    (element['user_id'] != null) &&
+                    (element['user_id']
+                        .contains(supabase.auth.currentUser!.id)))
+                .toList();
+            return;
+          } else {
+            //my parcel, has no input, status is not all
+            parcel_list = parcel_data
+                .where((element) =>
+                    (element['user_id'] != null) &&
+                    (element['user_id']
+                        .contains(supabase.auth.currentUser!.id)) &&
+                    (element['status'].contains(parcelStatus.toLowerCase())))
+                .toList();
+            return;
+          }
         }
-
-        parcel_list = parcel_data
-            .where((element) =>
-                (element['user_id'] != null) &&
-                (element['user_id'].contains(supabase.auth.currentUser!.id) &&
-                    (element['status'].contains(status.toLowerCase()))))
-            .toList();
-        return;
+        ////////////////////////////////////////
+        ////////////////////////////////////////
+        //category is not my parcel
+      } else {
+        // not my parcel, has input
+        if (searchInput.isNotEmpty) {
+          //not my parcel, has input, status all
+          if (parcelStatus == 'All') {
+            parcel_list = parcel_data
+                .where((element) => (element['tracking_id']!
+                    .toLowerCase()
+                    .contains(searchInput.toLowerCase())))
+                .toList();
+            return;
+          } else
+          //not my parcel, has input, status is not all
+          {
+            parcel_list = parcel_data
+                .where((element) =>
+                    (element['tracking_id']!
+                        .toLowerCase()
+                        .contains(searchInput.toLowerCase())) &&
+                    (element['status'].contains(parcelStatus.toLowerCase())))
+                .toList();
+            return;
+          }
+          //not my parcel, has no input
+        } else {
+          //not my parcel, has no input, status is all
+          if (parcelStatus == 'All') {
+            parcel_list = parcel_data;
+            return;
+          } else {
+            //not my parcel, has no input, status is not all
+            parcel_list = parcel_data
+                .where((element) =>
+                    (element['status'].contains(parcelStatus.toLowerCase())))
+                .toList();
+            return;
+          }
+        }
       }
-      if (status == "all") {
-        parcel_list = parcel_data;
-        return;
-      }
-      parcel_list = parcel_data
-          .where((element) =>
-              (element['status'] != null) &&
-              (element['status'].contains(status.toLowerCase())))
-          .toList();
     });
   }
 
@@ -164,7 +223,9 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                               child: TextField(
                                 onChanged: (val) {
                                   setState(() {
-                                    updateList(val);
+                                    // updateList(val);
+                                    searchInput = val;
+                                    filterParcel();
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -205,8 +266,13 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 title: Text('My Parcel'),
                                                 onTap: () {
                                                   myParcel = true;
-                                                  filterDeliveryStatus(
-                                                      'all', myParcel);
+                                                  setState(() {
+                                                    parcelCategory =
+                                                        'My Parcel';
+                                                  });
+                                                  // filterDeliveryStatus(
+                                                  //     'all', myParcel);
+                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               ),
@@ -214,8 +280,12 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                                 title: Text('All'),
                                                 onTap: () {
                                                   myParcel = false;
-                                                  filterDeliveryStatus(
-                                                      'all', myParcel);
+                                                  setState(() {
+                                                    parcelCategory = 'All';
+                                                  });
+                                                  // filterDeliveryStatus(
+                                                  //     'all', myParcel);
+                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               ),
@@ -254,7 +324,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        Icons.filter_alt,
+                                        Icons.supervisor_account,
                                         color: Colors.white,
                                         size: 20,
                                       ),
@@ -262,7 +332,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                           width:
                                               5), // Adjust the spacing as needed
                                       Text(
-                                        'Category',
+                                        parcelCategory,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: const Color.fromARGB(
@@ -293,32 +363,62 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                               ListTile(
                                                 title: Text('all'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'all', myParcel);
+                                                  setState(() {
+                                                    parcelStatus = 'All';
+                                                  });
+                                                  // filterDeliveryStatus(
+                                                  //     'all', myParcel);
+                                                  filterParcel();
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text('arrived'),
+                                                onTap: () {
+                                                  parcelStatus = 'Arrived';
+                                                  // filterDeliveryStatus(
+                                                  //     'arrived', myParcel);
+                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
                                                 title: Text('waiting'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'waiting', myParcel);
+                                                  parcelStatus = 'Waiting';
+                                                  // filterDeliveryStatus(
+                                                  //     'waiting', myParcel);
+                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
                                                 title: Text('cancelled'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'cancelled', myParcel);
+                                                  parcelStatus = 'Cancelled';
+                                                  // filterDeliveryStatus(
+                                                  //     'cancelled', myParcel);
+                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
                                                 title: Text('collected'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'collected', myParcel);
+                                                  parcelStatus = 'Collected';
+                                                  // filterDeliveryStatus(
+                                                  //     'collected', myParcel);
+                                                  filterParcel();
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text('delivered'),
+                                                onTap: () {
+                                                  parcelStatus = 'Delivered';
+                                                  // filterDeliveryStatus(
+                                                  //     'delivered', myParcel);
+                                                  filterParcel();
                                                   Navigator.pop(context);
                                                 },
                                               )
@@ -357,7 +457,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        Icons.filter_alt,
+                                        Icons.sort,
                                         color: Colors.white,
                                         size: 20,
                                       ),
@@ -365,7 +465,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                                           width:
                                               5), // Adjust the spacing as needed
                                       Text(
-                                        'Status',
+                                        parcelStatus,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: const Color.fromARGB(

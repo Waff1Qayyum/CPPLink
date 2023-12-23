@@ -12,6 +12,8 @@ class AdminManageParcel extends StatefulWidget {
 }
 
 class _AdminManageParcelState extends State<AdminManageParcel> {
+  String parcelStatus = 'All';
+  String searchInput = "";
   bool isLoading = false;
   dynamic user_list = user_data;
   dynamic parcel_list = parcel_data;
@@ -28,28 +30,6 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void updateList(String value) {
-    // setState(() {
-    //   user_list = user_data
-    //       .where((element) =>
-    //           element['name'] != null &&
-    //           element['name']!.toLowerCase().contains(value.toLowerCase()))
-    //       .toList();
-    // });
-    setState(() {
-      parcel_list = parcel_data
-          .where((element) =>
-              (element['name'] != null || element['tracking_id'] != null) &&
-              (element['name']!.toLowerCase().contains(value.toLowerCase()) ||
-                  element['tracking_id']!
-                      .toLowerCase()
-                      .contains(value.toLowerCase())))
-          .toList();
-      parcel_counter = 0;
-      delivery_counter = 0;
-    });
   }
 
   void sortTrackingNumber() {
@@ -78,20 +58,61 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
     });
   }
 
-  void filterDeliveryStatus(String status) {
+  void filterParcel() {
     parcel_list = List.from(parcel_list);
     parcel_counter = 0;
     delivery_counter = 0;
     setState(() {
-      if (status == "all") {
-        parcel_list = parcel_data;
-        return;
+      //has input
+      if (searchInput.isNotEmpty) {
+        //has input, status all
+        if (parcelStatus == 'All') {
+          parcel_list = parcel_data
+              .where((element) =>
+                  (element['user_id'] != null ||
+                      element['tracking_id'] != null) &&
+                  (element['name']!
+                          .toLowerCase()
+                          .contains(searchInput.toLowerCase()) ||
+                      element['tracking_id']!
+                          .toLowerCase()
+                          .contains(searchInput.toLowerCase())))
+              .toList();
+          return;
+        } else
+        //has input, status is not all
+        {
+          parcel_list = parcel_data
+              .where((element) =>
+                  (element['user_id'] != null ||
+                      element['tracking_id'] != null) &&
+                  (element['name']!
+                          .toLowerCase()
+                          .contains(searchInput.toLowerCase()) ||
+                      element['tracking_id']!
+                          .toLowerCase()
+                          .contains(searchInput.toLowerCase())) &&
+                  (element['status'].contains(parcelStatus.toLowerCase())))
+              .toList();
+          return;
+        }
+        // has no input
+      } else {
+        //has no input, status is all
+        if (parcelStatus == 'All') {
+          parcel_list = parcel_data;
+          return;
+        } else {
+          //has no input, status is not all
+          parcel_list = parcel_data
+              .where((element) =>
+                  (element['user_id'] != null ||
+                      element['tracking_id'] != null) &&
+                  (element['status'].contains(parcelStatus.toLowerCase())))
+              .toList();
+          return;
+        }
       }
-      parcel_list = parcel_data
-          .where((element) =>
-              (element['status'] != null) &&
-              (element['status'].contains(status.toLowerCase())))
-          .toList();
     });
   }
 
@@ -153,7 +174,8 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                               child: TextField(
                                 onChanged: (val) {
                                   setState(() {
-                                    updateList(val);
+                                    searchInput = val;
+                                    filterParcel();
                                   });
                                 },
                                 decoration: InputDecoration(
@@ -191,52 +213,65 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ListTile(
-                                                title: Text('all'),
+                                                title: Text('All'),
                                                 onTap: () {
-                                                  filterDeliveryStatus('all');
+                                                  setState(() {
+                                                    parcelStatus = 'All';
+                                                    filterParcel();
+                                                  });
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('arrived'),
+                                                title: Text('Arrived'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'arrived');
+                                                  setState(() {
+                                                    parcelStatus = 'Arrived';
+                                                    filterParcel();
+                                                  });
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('waiting'),
+                                                title: Text('Cancelled'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'waiting');
+                                                  setState(() {
+                                                    parcelStatus = 'Cancelled';
+                                                    filterParcel();
+                                                  });
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('cancelled'),
+                                                title: Text('Collected'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'cancelled');
+                                                  setState(() {
+                                                    parcelStatus = 'Collected';
+                                                    filterParcel();
+                                                  });
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('collected'),
+                                                title: Text('Delivered'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'collected');
+                                                  setState(() {
+                                                    parcelStatus = 'Delivered';
+                                                    filterParcel();
+                                                  });
                                                   Navigator.pop(context);
                                                 },
                                               ),
                                               ListTile(
-                                                title: Text('delivered'),
+                                                title: Text('Waiting'),
                                                 onTap: () {
-                                                  filterDeliveryStatus(
-                                                      'delivered');
+                                                  setState(() {
+                                                    parcelStatus = 'Waiting';
+                                                    filterParcel();
+                                                  });
                                                   Navigator.pop(context);
                                                 },
-                                              )
+                                              ),
                                             ]),
                                       );
                                     });
@@ -272,7 +307,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        Icons.filter_alt,
+                                        Icons.sort,
                                         color: Colors.white,
                                         size: 20,
                                       ),
@@ -280,7 +315,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                           width:
                                               5), // Adjust the spacing as needed
                                       Text(
-                                        'Filter By',
+                                        parcelStatus,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: const Color.fromARGB(
@@ -307,12 +342,13 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                           height: 40,
                           alignment: Alignment.center,
                           decoration: ShapeDecoration(
-                            color: Colors.green,
+                            color: Colors.blue,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                               side: BorderSide(
                                 width: 1.50,
-                                color: Colors.green, // Border color
+                                color: Color.fromARGB(
+                                    255, 39, 141, 225), // Border color
                               ),
                             ),
                             shadows: [

@@ -589,6 +589,107 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                             ),
                           ]),
                         ),
+                        SizedBox(height: 10),
+                        //////////////////////////////////////////////////////
+                        ///Phone......
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Row(children: [
+                            Container(
+                              width: 100,
+                              height: 60,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 4, color: Color(0xFF333333)),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Shelf Number',
+                                            style: TextStyle(
+                                              color: Color(0xFF333333),
+                                              fontSize: 17,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.00,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20.0,
+                            ),
+                            Container(
+                              width: 230,
+                              decoration: ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 4, color: Color(0xFF333333)),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              child: TextFormField(
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 15,
+                                  fontFamily: 'Lexend',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                // controller:,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                ],
+                                decoration: InputDecoration(
+                                  hintText: "enter shelf number",
+                                  filled: true,
+                                  fillColor: const Color.fromARGB(
+                                      255, 249, 249, 249), // Background color
+                                  border: OutlineInputBorder(
+                                    // Use OutlineInputBorder for rounded borders
+                                    borderRadius: BorderRadius.circular(
+                                        10), // This sets the rounded corners for the text field
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      width: 1.50,
+                                      color: Color(0xFFFFD233),
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                ),
+                              ),
+                            ),
+                          ]),
+                        ),
                       ],
                     )),
 

@@ -99,29 +99,36 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                      child: Image.asset(
-                    './images/cpp_logo.png',
-                    width: 70,
-                    height: 70,
-                  )),
-                  Text(
-                    'CPP',
-                    style: TextStyle(
-                      color: Color(0xFF050505),
-                      fontSize: 48,
-                      fontFamily: 'Montagu Slab',
-                      fontWeight: FontWeight.w700,
-                      height: 0,
-                    ),
-                  ),
-                  Text(
-                    'Link',
-                    style: TextStyle(
-                      color: Color(0xFFFFD233),
-                      fontSize: 32,
-                      fontFamily: 'Montagu Slab',
-                      fontWeight: FontWeight.w700,
-                      height: 0,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.,
+                      children: [
+                        Text(
+                          'CPP',
+                          style: TextStyle(
+                            color: Color.fromRGBO(250, 195, 44, 1),
+                            fontSize: 48,
+                            fontFamily: 'Montagu Slab',
+                            fontWeight: FontWeight.w700,
+                            shadows: [
+                              Shadow(
+                                color: Color.fromARGB(255, 145, 145, 145),
+                                offset: Offset(0, 3),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          'Link',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 7, 7, 131),
+                            fontSize: 32,
+                            fontFamily: 'Montagu Slab',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -292,7 +299,7 @@ class _CustomerChangePhoneState extends State<CustomerChangePhone> {
                             ),
                           ),
                           ///////////////////////
-                          SizedBox(height: 30),
+                          SizedBox(height: 50),
                           Text(
                             'Enter your password for confirmation',
                             textAlign: TextAlign.center,
