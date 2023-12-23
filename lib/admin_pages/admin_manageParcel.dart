@@ -197,7 +197,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       InkWell(
                         onTap: isLoading == true
