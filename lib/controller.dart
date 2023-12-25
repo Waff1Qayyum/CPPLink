@@ -334,7 +334,8 @@ var user_data;
 var parcel_data;
 var requested_parcel;
 var rider_parcel_list;
-
+var all_rider_parcel_list;
+var all_rider_details;
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select<PostgrestList>();
 }
@@ -355,6 +356,12 @@ Future<void> getRiderParcel(dynamic id) async {
       .from('booking')
       .select('*, parcel(name, tracking_id)')
       .eq('rider_id', id);
+}
+
+Future<void> getAllRiderParcel() async {
+  // all_rider_parcel_list = await supabase.from('rider').select<PostgrestList>();
+  all_rider_parcel_list = await supabase.from('rider').select(
+      'status, rider_id,booking(parcel_id,booking_status),user:user_id(name,phone)');
 }
 
 //update parcel data
@@ -407,3 +414,6 @@ Future<void> userNameList() async {
     list_phone.add(s);
   }
 }
+
+////////////////////////
+///////////////////////

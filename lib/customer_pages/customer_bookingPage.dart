@@ -368,79 +368,387 @@ class customerBookingState extends State<customerBooking> {
                           ),
                           /////////////////////////////////////////////////////////
                           ///////Address ......
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Container(
+                            child: Row(
                               children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: '   Address',
-                                                style: TextStyle(
-                                                  color: Color(0xFF050505),
-                                                  fontSize: 20,
-                                                  fontFamily: 'Lexend',
-                                                  fontWeight: FontWeight.w400,
-                                                  height: 0.00,
-                                                ),
-                                              ),
-                                            ],
+                                Expanded(
+                                  child: Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: '   Address',
+                                          style: TextStyle(
+                                            color: Color(0xFF050505),
+                                            fontSize: 20,
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
                                           ),
-                                          textAlign: TextAlign.left,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  width: 350,
-                                  height: 140,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 7),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          width: 2, color: Color(0xFF333333)),
-                                      borderRadius: BorderRadius.circular(15),
+                                      ],
                                     ),
-                                  ),
-                                  child: TextFormField(
-                                    // This is the editable text field
-                                    controller: _address,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter address';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Enter your address here',
-                                      // You can customize the hint text as needed
-                                    ),
-                                    style: TextStyle(
-                                      color: Color(0xFF050505),
-                                      fontSize: 20,
-                                      fontFamily: 'Lexend',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                    // You can add more properties to customize the text field
+                                    textAlign: TextAlign.left,
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Container(
+                            width: 350,
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+////////////////////////////////
+///////////////////////////////
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text('Colleage : ',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF050505),
+                                                    fontSize: 20,
+                                                    fontFamily: 'Lexend',
+                                                    fontWeight: FontWeight.w400,
+                                                    height: 0.00,
+                                                  )),
+                                              InkWell(
+                                                onTap: isLoading == true
+                                                    ? null
+                                                    : () async {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    'select your Colleage :'),
+                                                                insetPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                content: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: [
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTDI'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTHO'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTR'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KDSE'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KDOJ'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTC'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'K9'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'K10'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                    ]),
+                                                              );
+                                                            });
+                                                      },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8.0),
+                                                  child: Container(
+                                                    width:
+                                                        130, // Adjust the width as needed
+                                                    height: 40,
+                                                    alignment: Alignment.center,
+                                                    decoration: ShapeDecoration(
+                                                      color: Colors.blue,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        side: BorderSide(
+                                                          width: 1.50,
+                                                          color: Colors
+                                                              .blue, // Border color
+                                                        ),
+                                                      ),
+                                                      shadows: [
+                                                        BoxShadow(
+                                                          color:
+                                                              Color(0x3F000000),
+                                                          blurRadius: 4,
+                                                          offset: Offset(0, 4),
+                                                          spreadRadius: 0,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    // if loading show indicator(optional)
+                                                    child: isLoading == true
+                                                        ? CircularProgressIndicator()
+                                                        : Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Icon(
+                                                                Icons.apartment,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 20,
+                                                              ),
+                                                              SizedBox(
+                                                                  width:
+                                                                      5), // Adjust the spacing as needed
+                                                              Text(
+                                                                'Colleage',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      255,
+                                                                      255,
+                                                                      255),
+                                                                  fontSize: 15,
+                                                                  fontFamily:
+                                                                      'Lexend',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]),
+                                        //////////////////////
+                                        SizedBox(height: 10),
+                                        //////////////////////
+                                        ///////////////
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text('Block Number: ',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF050505),
+                                                    fontSize: 20,
+                                                    fontFamily: 'Lexend',
+                                                    fontWeight: FontWeight.w400,
+                                                    height: 0.00,
+                                                  )),
+                                              InkWell(
+                                                onTap: isLoading == true
+                                                    ? null
+                                                    : () async {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    'select your Block Number:'),
+                                                                insetPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                content: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: [
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTDI'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTHO'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTR'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KDSE'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KDOJ'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'KTC'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'K9'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                      ListTile(
+                                                                        title: Text(
+                                                                            'K10'),
+                                                                        onTap:
+                                                                            () {},
+                                                                      ),
+                                                                    ]),
+                                                              );
+                                                            });
+                                                      },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8.0),
+                                                  child: Container(
+                                                    width:
+                                                        130, // Adjust the width as needed
+                                                    height: 40,
+                                                    alignment: Alignment.center,
+                                                    decoration: ShapeDecoration(
+                                                      color: Colors.blue,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        side: BorderSide(
+                                                          width: 1.50,
+                                                          color: Colors
+                                                              .blue, // Border color
+                                                        ),
+                                                      ),
+                                                      shadows: [
+                                                        BoxShadow(
+                                                          color:
+                                                              Color(0x3F000000),
+                                                          blurRadius: 4,
+                                                          offset: Offset(0, 4),
+                                                          spreadRadius: 0,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    // if loading show indicator(optional)
+                                                    child: isLoading == true
+                                                        ? CircularProgressIndicator()
+                                                        : Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Icon(
+                                                                Icons.home,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 20,
+                                                              ),
+                                                              SizedBox(
+                                                                  width:
+                                                                      5), // Adjust the spacing as needed
+                                                              Text(
+                                                                'Block',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      255,
+                                                                      255,
+                                                                      255),
+                                                                  fontSize: 15,
+                                                                  fontFamily:
+                                                                      'Lexend',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]),
+////////////////////////////////
+///////////////////////////////
+                                      ]),
+                                ],
+                              ),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 10),
+                            clipBehavior: Clip.antiAlias,
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    width: 2, color: Color(0xFF333333)),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                             ),
                           ),
                         ],
