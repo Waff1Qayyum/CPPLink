@@ -70,6 +70,7 @@ class _customerQuickScanState extends State<customerQuickScan> {
           Center(
             child: QrImageView(
               data: dropdownValue.toString(),
+              // data: qrController.text,
               version: QrVersions.auto,
               size: 200.0,
             ),
@@ -87,21 +88,20 @@ class _customerQuickScanState extends State<customerQuickScan> {
                 dropdownValue = value;
               }),
             ),
-
-            // child: SizedBox(
-            //   width: MediaQuery.of(context).size.width * 0.5,
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       label: Text('Name'),
-            //       border: OutlineInputBorder(),
-            //     ),
-            //     controller: qrController,
-            //     onChanged: (value) {
-            //       setState(() {});
-            //     },
-            //   ),
-            // ),
-          )
+          ),
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width * 0.5,
+          //   child: TextFormField(
+          //     decoration: InputDecoration(
+          //       label: Text('Name'),
+          //       border: OutlineInputBorder(),
+          //     ),
+          //     controller: qrController,
+          //     onChanged: (value) {
+          //       setState(() {});
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );
