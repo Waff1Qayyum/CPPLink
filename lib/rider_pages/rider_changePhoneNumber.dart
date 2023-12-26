@@ -39,7 +39,7 @@ class _RiderChangePhoneState extends State<RiderChangePhone> {
     final phoneNo = await supabase
         .from('user')
         .select('phone')
-        .eq('phone', _phone)
+        .eq('phone', _phone!)
         .limit(1);
     if (phoneNo.isNotEmpty && phoneNo[0]['phone'] != null) {
       return false;
