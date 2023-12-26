@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -334,6 +335,7 @@ var user_data;
 var parcel_data;
 var requested_parcel;
 var rider_parcel_list;
+var group_parcel;
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select<PostgrestList>();
@@ -348,6 +350,12 @@ Future<void> getRequestedParcelList() async {
       .from('booking')
       .select<PostgrestList>()
       .or('booking_status.eq.request, booking_status.eq.cancelled');
+}
+
+Future<void> groupParcel() async {
+  var test = groupBy(requested_parcel, (Map p) => p['customer_id']);
+
+  group_parcel = test.entries.map((e) => e).toList();
 }
 
 Future<void> getRiderParcel(dynamic id) async {

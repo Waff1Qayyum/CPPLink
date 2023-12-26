@@ -95,6 +95,7 @@ class customerBbookingState extends State<customerRiderPage> {
                 SizedBox(height: 10),
                 /////////////////////////////
                 Container(
+                  alignment: AlignmentDirectional.topStart,
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(255, 255, 255, 1),
                     borderRadius: BorderRadius.circular(10),
@@ -109,16 +110,42 @@ class customerBbookingState extends State<customerRiderPage> {
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Table(
+                          columnWidths: {
+                            0: FlexColumnWidth(2.2),
+                            1: FlexColumnWidth(3),
+                          },
                           children: [
-                            /////////////
-                            ////////////
+                            TableRow(children: [
+                              Text(
+                                'Tracking Number : ',
+                                style: TextStyle(
+                                  color: Color(0xFF333333),
+                                  fontSize: 17,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0.00,
+                                ),
+                              ),
+                              Text(
+                                '${user_booking.join(', ')}',
+                                style: TextStyle(
+                                  color: Color(0xFF333333),
+                                  fontSize: 17,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0.00,
+                                ),
+                              )
+                            ])
+                          ],
+                        ),
+                        Row(
+                          children: [
                             Text(
-                              'Track Num. : ',
+                              'Address : ',
                               style: TextStyle(
                                 color: Color(0xFF333333),
                                 fontSize: 17,
@@ -128,7 +155,7 @@ class customerBbookingState extends State<customerRiderPage> {
                               ),
                             ),
                             Text(
-                              'Address :',
+                              'test',
                               style: TextStyle(
                                 color: Color(0xFF333333),
                                 fontSize: 17,
@@ -136,7 +163,11 @@ class customerBbookingState extends State<customerRiderPage> {
                                 fontWeight: FontWeight.w400,
                                 height: 0.00,
                               ),
-                            ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
                             Text(
                               'Name : ',
                               style: TextStyle(
@@ -147,72 +178,18 @@ class customerBbookingState extends State<customerRiderPage> {
                                 height: 0.00,
                               ),
                             ),
-                            SizedBox(height: 20),
+                            Text(
+                              user_name,
+                              style: TextStyle(
+                                color: Color(0xFF333333),
+                                fontSize: 17,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w400,
+                                height: 0.00,
+                              ),
+                            )
                           ],
-                        ),
-                        SizedBox(width: 10),
-                        // Adjust the spacing between columns
-                        // Right column with data
-                        Expanded(
-                          // child: SingleChildScrollView(
-                          //   scrollDirection: Axis.horizontal,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Fetch and display data from the database here
-                              // Example:
-                              // Text(
-                              //   user_booking[], // Replace with actual data
-                              //   style: TextStyle(
-                              //     color: Color(0xFF333333),
-                              //     fontSize: 17,
-                              //     fontFamily: 'Roboto',
-                              //     fontWeight: FontWeight.w400,
-                              //     height: 0.00,
-                              //   ),
-                              // ),
-                              ListView.builder(
-                                itemCount: user_booking.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return Text(
-                                    user_booking[
-                                        index], // Use the current element in the list
-                                    style: TextStyle(
-                                      color: Color(0xFF333333),
-                                      fontSize: 17,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w400,
-                                      height: 0.00,
-                                    ),
-                                  );
-                                },
-                              ),
-                              Text(
-                                'MA1, KTDI', // Replace with actual data
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
-                              ),
-                              Text(
-                                user_name, // Replace with actual data
-                                style: TextStyle(
-                                  color: Color(0xFF333333),
-                                  fontSize: 17,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.00,
-                                ),
-                                overflow: TextOverflow.visible,
-                              ),
-                            ],
-                          ),
-                          // ),
-                        ),
+                        )
                       ],
                     ),
                   ),

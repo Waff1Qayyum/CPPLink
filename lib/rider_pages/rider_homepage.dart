@@ -17,6 +17,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
 
       await getRequestedParcelList();
       await getRiderParcel(rider['rider_id']);
+      await groupParcel();
       Navigator.pushNamedAndRemoveUntil(
           context, '/delivery_homepage', (route) => false);
     } else {

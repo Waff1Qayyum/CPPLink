@@ -129,9 +129,11 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
           //not my parcel, has input, status all
           if (parcelStatus == 'All') {
             parcel_list = parcel_data
-                .where((element) => (element['tracking_id']!
-                    .toLowerCase()
-                    .contains(searchInput.toLowerCase())))
+                .where((element) =>
+                    element['tracking_id'] != null &&
+                    (element['tracking_id']!
+                        .toLowerCase()
+                        .contains(searchInput.toLowerCase())))
                 .toList();
             return;
           } else
@@ -224,7 +226,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
                             Expanded(
                               child: TextField(
                                 onChanged: (val) {
-                                  setState(() async {
+                                  setState(() {
                                     // updateList(val);
                                     searchInput = val;
                                     filterParcel();

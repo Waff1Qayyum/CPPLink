@@ -1,4 +1,5 @@
 import 'package:cpplink/admin_pages/admin_updateProfille.dart';
+import 'package:cpplink/customer_pages/customer_quickScan.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:cpplink/customer_register.dart';
 import 'package:cpplink/rider_pages/rider_changeProfilePicture.dart';
@@ -99,7 +100,7 @@ class MyApp extends StatelessWidget {
         '/customer_booking': (_) => const customerBooking(),
         '/customer_myRider': (_) => const customerRiderPage(),
         '/customer_checkParcel': (_) => const customerCheckParcel(),
-
+        '/customer_quickScan': (_) => const customerQuickScan(),
 
         // rider
         '/rider_home': (_) => const RiderHomePage(),

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -71,12 +72,16 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
 
   Future<void> setRiderBooking() async {
     if (checkedIndex == null) {
+      print('no check');
       return;
     }
-    await supabase.from('booking').update({
-      'rider_id': rider['rider_id'],
-      'booking_status': 'accepted'
-    }).eq('parcel_id', requested_parcel[checkedIndex]['parcel_id']);
+
+    for (var parcel in group_parcel[checkedIndex].value) {
+      await supabase.from('booking').update({
+        'rider_id': rider['rider_id'],
+        'booking_status': 'accepted'
+      }).eq('parcel_id', parcel['parcel_id']);
+    }
   }
 
   Future<bool> validateRiderDelivery() async {
@@ -91,6 +96,14 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     } else {
       return true;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      groupParcel();
+    });
   }
 
   @override
@@ -217,9 +230,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                     ListView.builder(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: requested_parcel == null
+                                      itemCount: group_parcel == null
                                           ? 0
-                                          : requested_parcel.length,
+                                          : group_parcel.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: EdgeInsets.only(
@@ -250,21 +263,25 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                   Container(
                                                     child: Column(children: [
                                                       ////
-                                                      Text(
-                                                        requested_parcel[index]
-                                                            ['parcel_id'],
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0xFF333333),
-                                                          fontSize: 17,
-                                                          fontFamily: 'Roboto',
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          height: 0.00,
+                                                      for (var k
+                                                          in group_parcel[index]
+                                                              .value)
+                                                        Text(
+                                                          k['parcel_id'],
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xFF333333),
+                                                            fontSize: 17,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            height: 0.00,
+                                                          ),
                                                         ),
-                                                      ),
                                                       /////
-                                                      requested_parcel[index]
+                                                      group_parcel[index]
+                                                                      .value[0]
                                                                   ['address'] ==
                                                               null
                                                           ? Text(
@@ -282,8 +299,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                               ),
                                                             )
                                                           : Text(
-                                                              requested_parcel[
-                                                                      index]
+                                                              group_parcel[
+                                                                          index]
+                                                                      .value[0]
                                                                   ['address'],
                                                               style: TextStyle(
                                                                 color: Color(
@@ -352,7 +370,20 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           isLoading = true;
                         });
                         deliveryExist = await validateRiderDelivery();
-                        if (deliveryExist == true) {
+                        if (checkedIndex == null) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('I understand'))
+                                    ],
+                                    title: Text('Please Select (1) Parcel'),
+                                  ));
+                        } else if (deliveryExist == true) {
                           print('delivery exist');
                           showDialog(
                               context: context,
@@ -370,6 +401,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                         } else {
                           await setRiderBooking();
                           await getRequestedParcelList();
+                          await groupParcel();
                           await getRiderParcel(rider['rider_id']);
                           setState(() {});
                           print('Rider set');

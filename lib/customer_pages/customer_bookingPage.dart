@@ -1,6 +1,7 @@
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '../main.dart';
 
@@ -16,7 +17,11 @@ class customerBookingState extends State<customerBooking> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool newBooking = true;
+  List<String> selectedValues = [];
+
   Future<void> bookParcel() async {
+    print(selectedValues);
+
     final userId = supabase.auth.currentUser!.id;
     final phone = await supabase
         .from('user')
@@ -24,16 +29,20 @@ class customerBookingState extends State<customerBooking> {
         .eq('user_id', userId)
         .single();
 
-    await supabase.from('booking').insert({
-      'customer_id': userId,
-      'parcel_id': selectedValue,
-      'phone': phone['phone'],
-      'address': _address.text
-    });
+    for (String s in selectedValues) {
+      await supabase.from('booking').insert({
+        'customer_id': userId,
+        'parcel_id': s,
+        'phone': phone['phone'],
+        'address': _address.text,
+      });
+    }
 
-    await supabase
-        .from('parcel')
-        .update({'status': 'waiting'}).eq('tracking_id', selectedValue);
+    for (String s in selectedValues) {
+      await supabase
+          .from('parcel')
+          .update({'status': 'waiting'}).eq('tracking_id', s);
+    }
 
     await getData(userId);
   }
@@ -320,46 +329,55 @@ class customerBookingState extends State<customerBooking> {
                                   height: 5.0,
                                 ),
                                 Container(
-                                  width: 350,
-                                  height: 40,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: selectedValue,
-                                      hint: Text('No parcel selected'),
-                                      style: TextStyle(
-                                        color: Color(0xFF050505),
-                                        fontSize: 17,
-                                        fontFamily: 'Lexend',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
+                                    width: 350,
+                                    height: 40,
+                                    // child: DropdownButtonHideUnderline(
+                                    //   child: DropdownButton<String>(
+                                    //     value: selectedValue,
+                                    //     hint: Text('No parcel selected'),
+                                    //     style: TextStyle(
+                                    //       color: Color(0xFF050505),
+                                    //       fontSize: 17,
+                                    //       fontFamily: 'Lexend',
+                                    //       fontWeight: FontWeight.w400,
+                                    //       height: 0.00,
+                                    //     ),
+                                    //     onChanged: (String? newValue) {
+                                    //       setState(() {
+                                    //         selectedValue = newValue!;
+                                    //       });
+                                    //     },
+                                    //     items: user_parcel
+                                    //         .map<DropdownMenuItem<String>>(
+                                    //             (String value) {
+                                    //       return DropdownMenuItem<String>(
+                                    //         value: value,
+                                    //         child: Text(value),
+                                    //       );
+                                    //     }).toList(),
+                                    //   ),
+                                    // ),
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: ShapeDecoration(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            width: 2, color: Color(0xFF333333)),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectedValue = newValue!;
-                                        });
+                                    ),
+                                    child: MultiSelectDropDown(
+                                      onOptionSelected: (options) {
+                                        selectedValues = options
+                                            .map((option) => option.value ?? "")
+                                            .toList();
+                                        print(selectedValues);
                                       },
-                                      items: user_parcel
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 7),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          width: 2, color: Color(0xFF333333)),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                )
+                                      options: user_parcel
+                                          .map((e) =>
+                                              ValueItem(label: e, value: e))
+                                          .toList(),
+                                    ))
                               ],
                             ),
                           ),
@@ -460,47 +478,45 @@ class customerBookingState extends State<customerBooking> {
 
                       // Add your delete parcel logic here
                       print("Book Delivery tapped!");
-                      if (selectedValue == null) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content:
-                                      const Text('Please Select One Parcel'),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Understand')),
-                                  ],
-                                ));
-                      }
+                      // if (selectedValue == null) {
+                      //   showDialog(
+                      //       context: context,
+                      //       builder: (context) => AlertDialog(
+                      //             content:
+                      //                 const Text('Please Select One Parcel'),
+                      //             actions: [
+                      //               TextButton(
+                      //                   onPressed: () {
+                      //                     Navigator.pop(context);
+                      //                   },
+                      //                   child: const Text('Understand')),
+                      //             ],
+                      //           ));
+                      // }
                       if (_formKey.currentState!.validate()) {
-                        newBooking = await validateBooking(
-                            supabase.auth.currentUser!.id);
-                        if (newBooking == true) {
-                          await bookParcel();
-                          isLoading = false;
-                          Navigator.pushNamed(context, '/customer_myRider');
-                        } else {
-                          print('cannot book');
-                          setState(() {
-                            isLoading = false;
-                          });
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('I understand'))
-                                    ],
-                                    title:
-                                        Text('You can only request one parcel'),
-                                  ));
-                        }
+                        // if (newBooking == true) {
+                        await bookParcel();
+                        isLoading = false;
+                        Navigator.pushNamed(context, '/customer_myRider');
+                        // } else {
+                        //   print('cannot book');
+                        //   setState(() {
+                        //     isLoading = false;
+                        //   });
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (context) => AlertDialog(
+                        //             actions: [
+                        //               TextButton(
+                        //                   onPressed: () {
+                        //                     Navigator.of(context).pop();
+                        //                   },
+                        //                   child: Text('I understand'))
+                        //             ],
+                        //             title:
+                        //                 Text('You can only request one parcel'),
+                        //           ));
+                        // }
                       }
                       setState(() {
                         isLoading = false;

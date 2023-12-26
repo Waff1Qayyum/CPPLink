@@ -423,6 +423,8 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                         ),
                         InkWell(
                           onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/customer_quickScan');
                             // Your code to handle the tap event
                           },
                           child: Container(
