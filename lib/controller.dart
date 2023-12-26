@@ -336,6 +336,7 @@ var requested_parcel;
 var rider_parcel_list;
 var all_rider_parcel_list;
 var all_rider_details;
+var user_rider;
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select<PostgrestList>();
 }
@@ -364,6 +365,28 @@ Future<void> getAllRiderParcel() async {
       'status, rider_id,booking(parcel_id,booking_status),user:user_id(name,phone)');
 }
 
+//for checking if Customer change into rider mode
+var riderMode = false;
+Future<void> getRiderStatus() async {
+  final currentUser = supabase.auth.currentUser!.id;
+  user_rider = await supabase.from('rider').select().eq('user_id', currentUser);
+
+  if (user_rider[0]['status'] != 'false') {
+    riderMode = true;
+  }
+}
+
+var currentRider;
+Future<void> getUserID() async {
+  currentRider = await supabase.auth.currentUser!.id;
+}
+
+Future<void> updateRiderStatus(String riderID, String status) async {
+  await supabase
+      .from('rider')
+      .update({'status': status}).eq('rider_id', riderID);
+}
+
 //update parcel data
 var edit_parcel;
 
@@ -371,7 +394,6 @@ var edit_parcel;
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
-var riderMode = false;
 
 //parcel unique
 Future<bool> parcel_unique(String parcelId) async {

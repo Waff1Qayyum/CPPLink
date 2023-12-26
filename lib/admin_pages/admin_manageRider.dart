@@ -321,8 +321,9 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                       ),
                     ),
                     columnWidths: {
-                      0: FlexColumnWidth(4),
-                      1: FlexColumnWidth(2),
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(4),
+                      2: FlexColumnWidth(2),
                     },
                     children: [
                       TableRow(
@@ -330,6 +331,27 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                           color: Color(0xFFFFD233),
                         ),
                         children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -409,6 +431,28 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                                 : null,
                           ),
                           children: [
+                            TableCell(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      (rider_list.indexOf(rowData) + 1)
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             TableCell(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),

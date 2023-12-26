@@ -409,9 +409,10 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                       ),
                     ),
                     columnWidths: {
-                      0: FlexColumnWidth(4),
-                      1: FlexColumnWidth(2),
-                      2: FlexColumnWidth(1),
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(4),
+                      2: FlexColumnWidth(2),
+                      3: FlexColumnWidth(1),
                     },
                     children: [
                       TableRow(
@@ -419,6 +420,27 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                           color: Color(0xFFFFD233),
                         ),
                         children: [
+                          TableCell(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontFamily: 'Lexend',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           TableCell(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -463,7 +485,7 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'Delivery Status',
+                                      'Status',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -505,6 +527,28 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                 : null,
                           ),
                           children: [
+                            TableCell(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      (parcel_list.indexOf(rowData) + 1)
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Lexend',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             TableCell(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -574,8 +618,8 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                           .blue, // Set the color you desire
                                       fontSize: 15,
                                       fontFamily: 'Lexend',
-                                      decoration: TextDecoration
-                                          .underline, // Add underline
+                                      // decoration: TextDecoration
+                                      //     .underline, // Add underline
                                     ),
                                   ),
                                 ),
