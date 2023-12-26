@@ -223,7 +223,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  // Your code to handle the tap event
+                                  try {
+                                    Navigator.of(context).pushReplacementNamed(
+                                        '/admin_quickFind');
+                                  } on Exception catch (e) {
+                                    print(e.toString());
+                                  }
                                 },
                                 child: Container(
                                   width: 155,

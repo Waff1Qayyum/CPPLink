@@ -1,3 +1,4 @@
+import 'package:cpplink/admin_pages/admin_quickFind.dart';
 import 'package:cpplink/admin_pages/admin_updateProfille.dart';
 import 'package:cpplink/customer_pages/customer_quickScan.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
         '/admin_updateParcel': (_) => const AdminUpdateParcel(),
         '/admin_registerParcel': (_) => const AdminRegisterParcel(),
         '/admin_manageRider': (_) => const ManageRiderPage(),
+        '/admin_quickFind': (_) => const AdminQuickFind(),
 
         //customer
         '/customer_home': (_) => const CustomerHomepage(),
