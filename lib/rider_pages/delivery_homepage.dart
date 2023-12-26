@@ -18,14 +18,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   bool? deliveryExist;
   bool isLoading = false;
 
-  void checkRiderMode(bool riderMode) {
-    if (riderMode == true) {
-      print('true');
-    } else {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/rider_home', (route) => false);
-      print('false');
-    }
+  void riderModeDeactivate() async {
+    setState(() {
+      riderMode = false;
+    });
+    await updateRiderStatus(user_rider[0]['rider_id'], 'offline');
+    await getRiderStatus();
+    Navigator.pushNamedAndRemoveUntil(context, '/rider_home', (route) => false);
   }
 
   Future<void> _showConfirmationDialog(bool newValue) async {
@@ -52,10 +51,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
               onPressed: () {
                 // Close the dialog and update the riderMode value
                 Navigator.of(context).pop();
-                setState(() {
-                  riderMode = false;
-                  checkRiderMode(riderMode);
-                });
+                riderModeDeactivate();
               },
               child: Text(
                 'Confirm',

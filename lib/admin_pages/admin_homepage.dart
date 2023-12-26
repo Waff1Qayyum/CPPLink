@@ -401,7 +401,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                               width: 20,
                             ),
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
+                                await getAllRiderParcel();
+
+                                Navigator.of(context)
+                                    .pushReplacementNamed('/admin_manageRider');
                                 // Your code to handle the tap event
                               },
                               child: Container(

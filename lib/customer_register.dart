@@ -73,7 +73,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     final email = await supabase
         .from('user')
         .select('email')
-        .eq('email', _email)
+        .eq('email', _email!)
         .limit(1);
 
     if (email.isNotEmpty && email[0]['email'] != null) {
@@ -87,7 +87,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     final phoneNo = await supabase
         .from('user')
         .select('phone')
-        .eq('phone', _phone)
+        .eq('phone', _phone!)
         .limit(1);
     if (phoneNo.isNotEmpty && phoneNo[0]['phone'] != null) {
       return false;

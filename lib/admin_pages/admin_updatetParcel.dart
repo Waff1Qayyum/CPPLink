@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import '../controller.dart';
 import '../main.dart';
 
@@ -618,10 +619,11 @@ class _AdminUpdateParcelState extends State<AdminUpdateParcel> {
                                       });
                                     },
                                     items: <String>[
-                                      'waiting',
+                                      'arrived',
                                       'collected',
                                       'cancelled',
-                                      'delivered'
+                                      'delivered',
+                                      'waiting',
                                     ].map<DropdownMenuItem<String>>(
                                         (String value) {
                                       return DropdownMenuItem<String>(

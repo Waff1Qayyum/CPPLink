@@ -335,20 +335,23 @@ var user_data;
 var parcel_data;
 var requested_parcel;
 var rider_parcel_list;
+var all_rider_parcel_list;
+var all_rider_details;
+var user_rider;
 var group_parcel;
 
 Future<void> getUserList() async {
-  user_data = await supabase.from('user').select<PostgrestList>();
+  user_data = await supabase.from('user').select();
 }
 
 Future<void> getParcelList() async {
-  parcel_data = await supabase.from('parcel').select<PostgrestList>();
+  parcel_data = await supabase.from('parcel').select();
 }
 
 Future<void> getRequestedParcelList() async {
   requested_parcel = await supabase
       .from('booking')
-      .select<PostgrestList>()
+      .select()
       .or('booking_status.eq.request, booking_status.eq.cancelled');
 }
 
@@ -365,6 +368,31 @@ Future<void> getRiderParcel(dynamic id) async {
       .eq('rider_id', id);
 }
 
+Future<void> getAllRiderParcel() async {
+  // all_rider_parcel_list = await supabase.from('rider').select<PostgrestList>();
+  all_rider_parcel_list = await supabase.from('rider').select(
+      'status, rider_id,booking(parcel_id,booking_status),user:user_id(name,phone)');
+}
+
+//for checking if Customer change into rider mode
+dynamic riderMode;
+Future<void> getRiderStatus() async {
+  final currentUser = supabase.auth.currentUser!.id;
+  user_rider = await supabase.from('rider').select().eq('user_id', currentUser);
+
+  if (user_rider[0]['status'] != 'false') {
+    riderMode = true;
+  } else {
+    riderMode = false;
+  }
+}
+
+Future<void> updateRiderStatus(String riderID, String status) async {
+  await supabase
+      .from('rider')
+      .update({'status': status}).eq('rider_id', riderID);
+}
+
 //update parcel data
 var edit_parcel;
 
@@ -372,7 +400,6 @@ var edit_parcel;
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
-var riderMode = false;
 
 //parcel unique
 Future<bool> parcel_unique(String parcelId) async {
@@ -414,4 +441,11 @@ Future<void> userNameList() async {
   for (String s in phone) {
     list_phone.add(s);
   }
+}
+
+////////////////////////
+///////////////////////
+
+Future<void> addParcelToArray() async {
+  // await supabase.from('booking').insert({'arraytest: [abc,efg,hijk]'}).eq('booking_id','18902096-9c96-4a70-b3bf-3e0b4dedaeee');
 }

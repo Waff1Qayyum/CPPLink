@@ -11,17 +11,35 @@ class RiderHomePage extends StatefulWidget {
 }
 
 class _RiderHomePageState extends State<RiderHomePage> {
-  void checkRiderMode(bool riderMode) async {
-    if (riderMode == true) {
-      print('true');
+  void riderModeActive() async {
+    setState(() {
+      riderMode = true;
+    });
+    await getRequestedParcelList();
+    await groupParcel();
+    await getRiderParcel(user_rider[0]['rider_id']);
+    await updateRiderStatus(user_rider[0]['rider_id'], 'idle');
 
-      await getRequestedParcelList();
-      await getRiderParcel(rider['rider_id']);
-      await groupParcel();
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/delivery_homepage', (route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/delivery_homepage', (route) => false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print(supabase.auth.currentUser!.id);
+    print(user_rider[0]['user_id']);
+
+    print(user_rider[0]['rider_id']);
+    print(user_rider[0]['status']);
+
+    // getRiderStatus();
+    if (user_rider[0]['rider_id'] != null &&
+        user_rider[0]['status'] == "offline") {
+      riderMode = false;
     } else {
-      print('false');
+      riderMode = true;
+      riderModeActive();
     }
   }
 
@@ -50,8 +68,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
                 // Close the dialog and update the riderMode value
                 Navigator.of(context).pop();
                 setState(() {
-                  riderMode = true;
-                  checkRiderMode(riderMode);
+                  riderModeActive();
                 });
               },
               child: Text(
