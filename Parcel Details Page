@@ -1,0 +1,426 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Builder(builder: (BuildContext context) {
+        return Scaffold(
+          body: Container(
+            child: Column(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  child: Container(
+                      child: Row(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              child: Container(
+                                width: 360,
+                                height: 37.5,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              width: 360,
+                              height: 37.5,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          child:Row(
+                          Positioned(
+                            left: 22.24,
+                            top: 16.99,
+                            ),
+                          ),
+                          Column(
+                            left: 247.5,
+                            top: 11,
+                            child: Container(
+                              Row(
+                                  children: [
+                                    Positioned(
+                                      left: 0,
+                                      top: 6.25,
+                                      right: 35.25,
+                                      bottom: 6.5,             
+                                        width: 53.25,
+                                        height: 11.25,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      left: 64.5,
+                                      top: 0,
+                                      child: Container(
+                                        child: Container(
+                                          width: 24,
+                                          height: 24,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        width: 24,
+                                        height: 24,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+
+                                    Container(),
+                                  ],
+                                ),
+                              ),
+                              width: 88.5,
+                              height: 24,
+                              decoration: BoxDecoration(),
+                            ),
+                          ),
+                          Container(),
+                        ],
+                      ),
+                    ),
+                    width: 360,
+                    height: 37.5,
+                    padding: EdgeInsets.symmetric(),
+                    decoration: BoxDecoration(),
+                  ),
+                ),
+                Row(
+                  left: 0,
+                  top: 758,
+                  child: Container(
+                    child: Container(
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 72,
+                            top: 28.5,
+                              width: 15,
+                              height: 15,
+                              semanticLabel: "icon",
+                            ),
+                          ),
+                          Column(
+                            left: 172.5,
+                            top: 13.5,
+                            child: Image.network(
+                              width: 15,
+                              height: 15,
+                              semanticLabel: "icon",
+                            ),
+                          ),
+                          Positioned(
+                            left: 273,
+                            top: 28.5,
+                            child: Image.network(
+                              width: 15,
+                              height: 15,
+                              semanticLabel: "icon",
+                              key: Key(
+                                "Back (3123:874)",
+                              ),
+                            ),
+                          ),
+
+Container(),
+                        ],
+                      ),
+                    ),
+                    width: 360,
+                    height: 42,
+                    padding: EdgeInsets.symmetric(),
+                    decoration: BoxDecoration(
+                      color: Color(
+                        0xff333333,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 0,
+                  top: 33,
+                  child: Container(
+                    child: Container(
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 96,
+                            top: 106,
+                            right: 96,
+                            child: Container(
+                              child: Container(
+                                width: 168,
+                                height: 59,
+                                decoration: BoxDecoration(
+                                  color: Color(
+                                    0xffffd233,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(
+                                        0x26000000,
+                                      ),
+                                      offset: Offset(
+                                        0,
+                                        5,
+                                      ),
+                                      blurRadius: 10,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              height: 59,
+                              decoration: BoxDecoration(
+                                color: Color(
+                                  0xffffd233,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  10,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(
+                                      0x26000000,
+                                    ),
+                                    offset: Offset(
+                                      0,
+                                      5,
+                                    ),
+                                    blurRadius: 10,
+                                    spreadRadius: 0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 107,
+                            top: 494,
+                            right: 108,
+                            child: Image.network(
+                              width: 145,
+                              height: 31,
+                              key: Key(
+                                "Rectangle 91 (3124:889)",
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: -2,
+                            child: Container(
+                              child: Container(
+                                key: Key(
+                                  "Rectangle 90 (3123:879)",
+                                ),
+                                width: 360,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: Color(
+                                    0xffffd233,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(
+                                        0x3f000000,
+                                      ),
+                                      offset: Offset(
+                                        0,
+                                        4,
+                                      ),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              width: 360,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                color: Color(
+                                  0xffffd233,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(
+                                      0x3f000000,
+                                    ),
+                                    offset: Offset(
+                                      0,
+                                      4,
+                                    ),
+                                    blurRadius: 4,
+                                    spreadRadius: 0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 104,
+                            top: 106,
+                            child: SizedBox(
+                              child: Text(
+                                "Parcel Details",
+                                key: Key(
+                                  "Parcel Details (3123:880)",
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "Montagu Slab",
+                                  letterSpacing: 0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              width: 155,
+                              height: 18,
+                            ),
+                          ),
+                          Positioned(
+                            left: 107,
+                            top: 494,
+                            child: SizedBox(
+                              child: Text(
+                                "Back",
+                                key: Key(
+                                  "Back (3125:891)",
+                                ),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "Lexend",
+                                  letterSpacing: 0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              width: 151,
+                              height: 18,
+                            ),
+                          ),
+                          Positioned(
+                            left: 2,
+                            top: 4,
+                            child: Container(
+                              child: Positioned(
+                                left: 12,
+                                top: 8,
+                                right: 11,
+                                bottom: 7,
+                                child: Image.network(
+                                  width: 9,
+                                  height: 12,
+                                  key: Key(
+                                    "Vector (3123:882)",
+                                  ),
+                                ),
+                              ),
+                              width: 32,
+                              height: 27,
+                              padding: EdgeInsets.symmetric(),
+                              decoration: BoxDecoration(),
+                            ),
+                          ),
+                          Container(),
+                        ],
+                      ),
+                    ),
+                    width: 360,
+                    height: 723,
+                    padding: EdgeInsets.symmetric(),
+                    decoration: BoxDecoration(),
+                  ),
+                ),
+                Positioned(
+                  left: 13,
+                  top: 211,
+                  right: 12,
+                  child: Image.network(
+                    width: 335,
+                    height: 288,
+                    key: Key(
+                      "Rectangle 47 (3123:886)",
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 24,
+                  top: 221,
+                  child: SizedBox(
+                    child: Text(
+                      "Track id :\n\nShelf/Basket no. :\n \nName :\n\nPhone :\n\nRider Delivery:\n\nRider:\n\n\n\n",
+                      key: Key(
+                        "Headline (3123:887)",
+                      ),
+                      style: TextStyle(
+                        color: Color(
+                          0xff333333,
+                        ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Lexend",
+                        letterSpacing: 0,
+                      ),
+                    ),
+                    width: 324,
+                    height: 216,
+                  ),
+                ),
+                Container(),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                top: BorderSide(
+                  color: Color(
+                    0xff333333,
+                  ),
+                  width: 8,
+                ),
+                right: BorderSide(
+                  color: Color(
+                    0xff333333,
+                  ),
+                  width: 8,
+                ),
+                bottom: BorderSide(
+                  color: Color(
+                    0xff333333,
+                  ),
+                  width: 8,
+                ),
+                left: BorderSide(
+                  color: Color(
+                    0xff333333,
+                  ),
+                  width: 8,
+                ),
+              ),
+              borderRadius: BorderRadius.circular(
+                32,
+              ),
+            ),
+          ),
+        );
+      }),
+      theme: ThemeData(
+        textTheme: TextTheme(),
+      ),
+    );
+  }
+}
