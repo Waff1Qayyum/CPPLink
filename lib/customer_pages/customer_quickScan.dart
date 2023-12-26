@@ -1,3 +1,4 @@
+import 'package:cpplink/controller.dart';
 import 'package:cpplink/main.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -11,6 +12,7 @@ class customerQuickScan extends StatefulWidget {
 
 class _customerQuickScanState extends State<customerQuickScan> {
   TextEditingController qrController = TextEditingController();
+  String? dropdownValue = user_parcel[0];
 
   @override
   Widget build(BuildContext context) {
@@ -67,25 +69,38 @@ class _customerQuickScanState extends State<customerQuickScan> {
         children: [
           Center(
             child: QrImageView(
-              data: qrController.text,
+              data: dropdownValue.toString(),
               version: QrVersions.auto,
               size: 200.0,
             ),
           ),
           Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  label: Text('Name'),
-                  border: OutlineInputBorder(),
-                ),
-                controller: qrController,
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              items: user_parcel.map((String parcel) {
+                return DropdownMenuItem<String>(
+                  child: Text(parcel),
+                  value: parcel,
+                );
+              }).toList(),
+              onChanged: (value) => setState(() {
+                dropdownValue = value;
+              }),
             ),
+
+            // child: SizedBox(
+            //   width: MediaQuery.of(context).size.width * 0.5,
+            //   child: TextFormField(
+            //     decoration: InputDecoration(
+            //       label: Text('Name'),
+            //       border: OutlineInputBorder(),
+            //     ),
+            //     controller: qrController,
+            //     onChanged: (value) {
+            //       setState(() {});
+            //     },
+            //   ),
+            // ),
           )
         ],
       ),
