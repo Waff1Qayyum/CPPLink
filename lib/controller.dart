@@ -366,19 +366,16 @@ Future<void> getAllRiderParcel() async {
 }
 
 //for checking if Customer change into rider mode
-var riderMode = false;
+dynamic riderMode;
 Future<void> getRiderStatus() async {
   final currentUser = supabase.auth.currentUser!.id;
   user_rider = await supabase.from('rider').select().eq('user_id', currentUser);
 
   if (user_rider[0]['status'] != 'false') {
     riderMode = true;
+  }else{
+    riderMode = false;
   }
-}
-
-var currentRider;
-Future<void> getUserID() async {
-  currentRider = await supabase.auth.currentUser!.id;
 }
 
 Future<void> updateRiderStatus(String riderID, String status) async {
@@ -439,3 +436,7 @@ Future<void> userNameList() async {
 
 ////////////////////////
 ///////////////////////
+
+Future<void> addParcelToArray() async {
+  // await supabase.from('booking').insert({'arraytest: [abc,efg,hijk]'}).eq('booking_id','18902096-9c96-4a70-b3bf-3e0b4dedaeee');
+}

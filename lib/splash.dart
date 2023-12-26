@@ -40,7 +40,6 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.of(context).pushReplacementNamed('/admin_home');
       } else if (checkRider.isNotEmpty) {
         print('User is a rider');
-        await getData(userID);
         await getRiderStatus(); //for checking rider status
         Navigator.of(context).pushReplacementNamed('/rider_home');
       } else if (checkCustomer.isNotEmpty) {
