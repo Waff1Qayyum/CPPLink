@@ -11,9 +11,14 @@ class DeliveryList extends StatefulWidget {
 }
 
 class _DeliveryListState extends State<DeliveryList> {
+  var same_user_parcel;
+
   @override
   void initState() {
     super.initState();
+    setState(() {
+      same_user_parcel = groupParcel(rider_parcel_list);
+    });
   }
 
   Future<void> selectParcel(int index) async {
@@ -93,7 +98,8 @@ class _DeliveryListState extends State<DeliveryList> {
                         ),
                       ),
                       Text(
-                        rider_parcel_list.length.toString(),
+                        // rider_parcel_list.length.toString(),
+                        same_user_parcel.length.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color.fromARGB(255, 0, 0, 0),
@@ -112,7 +118,7 @@ class _DeliveryListState extends State<DeliveryList> {
 ///////////////////////////////////////
                   ListView.separated(
                     shrinkWrap: true,
-                    itemCount: rider_parcel_list.length,
+                    itemCount: same_user_parcel.length,
                     separatorBuilder: (BuildContext context, int index) =>
                         SizedBox(height: 10),
                     itemBuilder: (context, index) {
@@ -158,9 +164,12 @@ class _DeliveryListState extends State<DeliveryList> {
                                         height: 0.00,
                                       ),
                                     ),
+                                    // for (var i in same_user_parcel[index].value)
                                     Text(
-                                      rider_parcel_list[index]['parcel']
-                                          ['tracking_id'],
+                                      same_user_parcel[index]
+                                          .value
+                                          .map((i) => i['parcel_id'])
+                                          .join(', '),
                                       style: TextStyle(
                                         color: Color(0xFF333333),
                                         fontSize: 17,
@@ -184,7 +193,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      rider_parcel_list[index]['parcel']
+                                      same_user_parcel[index].value[0]['parcel']
                                           ['name'],
                                       style: TextStyle(
                                         color: Color(0xFF333333),
@@ -209,7 +218,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      rider_parcel_list[index]['phone'],
+                                      same_user_parcel[index].value[0]['phone'],
                                       style: TextStyle(
                                         color: Color(0xFF333333),
                                         fontSize: 17,
@@ -233,7 +242,8 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      rider_parcel_list[index]['address'] ??
+                                      same_user_parcel[index].value[0]
+                                              ['address'] ??
                                           'MA1,KTDI',
                                       style: TextStyle(
                                         color: Color(0xFF333333),

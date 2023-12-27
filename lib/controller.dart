@@ -355,10 +355,11 @@ Future<void> getRequestedParcelList() async {
       .or('booking_status.eq.request, booking_status.eq.cancelled');
 }
 
-Future<void> groupParcel() async {
-  var test = groupBy(requested_parcel, (Map p) => p['customer_id']);
+dynamic groupParcel(var parcel) {
+  var test = groupBy(parcel, (Map p) => p['customer_id']);
 
   group_parcel = test.entries.map((e) => e).toList();
+  return group_parcel;
 }
 
 Future<void> getRiderParcel(dynamic id) async {
