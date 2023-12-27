@@ -419,6 +419,7 @@ Future<bool> parcel_unique(String parcelId) async {
 
 //
 var booking_index;
+var same_user_parcel;
 
 //for autocomplete
 List<String> list_name = <String>[];

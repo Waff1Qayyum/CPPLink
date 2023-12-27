@@ -12,8 +12,6 @@ class DeliveryList extends StatefulWidget {
 }
 
 class _DeliveryListState extends State<DeliveryList> {
-  var same_user_parcel;
-
   @override
   void initState() {
     super.initState();

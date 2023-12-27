@@ -67,10 +67,13 @@ class _DeliveryListSProof extends State<DeliveryProof> {
   }
 
   Future<void> completeDelivery() async {
-    await supabase.from('booking').update({'booking_status': 'delivered'}).eq(
-        'booking_id', rider_parcel_list[booking_index]['booking_id']);
-    await supabase.from('parcel').update({'status': 'delivered'}).eq(
-        'tracking_id', rider_parcel_list[booking_index]['parcel_id']);
+    for (var i in same_user_parcel[booking_index].value) {
+      await supabase.from('booking').update({'booking_status': 'delivered'}).eq(
+          'booking_id', i['booking_id']);
+      await supabase
+          .from('parcel')
+          .update({'status': 'delivered'}).eq('tracking_id', i['parcel_id']);
+    }
   }
 
   @override
@@ -174,8 +177,10 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                         ),
                                       ),
                                       Text(
-                                        rider_parcel_list[booking_index]
-                                            ['parcel']['tracking_id'],
+                                        same_user_parcel[booking_index]
+                                            .value
+                                            .map((i) => i['parcel_id'])
+                                            .join(', '),
                                         style: TextStyle(
                                           color: Color(0xFF333333),
                                           fontSize: 17,
@@ -199,7 +204,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                         ),
                                       ),
                                       Text(
-                                        rider_parcel_list[booking_index]
+                                        same_user_parcel[booking_index].value[0]
                                             ['parcel']['name'],
                                         style: TextStyle(
                                           color: Color(0xFF333333),
@@ -224,7 +229,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                         ),
                                       ),
                                       Text(
-                                        rider_parcel_list[booking_index]
+                                        same_user_parcel[booking_index].value[0]
                                             ['phone'],
                                         style: TextStyle(
                                           color: Color(0xFF333333),
@@ -249,7 +254,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                         ),
                                       ),
                                       Text(
-                                        rider_parcel_list[booking_index]
+                                        same_user_parcel[booking_index].value[0]
                                                 ['address'] ??
                                             'MA1,KTDI',
                                         style: TextStyle(
