@@ -73,11 +73,15 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
       return;
     }
 
-    for (var parcel in groupByName[checkedIndex].value) {
-      await supabase.from('booking').update({
-        'rider_id': rider['rider_id'],
-        'booking_status': 'accepted'
-      }).eq('parcel_id', parcel['parcel_id']);
+    try {
+      for (var parcel in groupByName[checkedIndex].value) {
+        await supabase.from('booking').update({
+          'rider_id': rider['rider_id'],
+          'booking_status': 'accepted'
+        }).eq('parcel_id', parcel['parcel_id']);
+      }
+    } on Exception catch (e) {
+      print(e.toString());
     }
   }
 
@@ -395,6 +399,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                         Text('You can only deliver one parcel'),
                                   ));
                         } else {
+                          await getRequestedParcelList();
                           await setRiderBooking();
                           await getRequestedParcelList();
                           groupByName = groupParcel(requested_parcel);

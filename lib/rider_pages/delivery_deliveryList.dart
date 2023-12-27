@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -151,6 +152,17 @@ class _DeliveryListState extends State<DeliveryList> {
                                     fontWeight: FontWeight.w400,
                                     height: 0.00,
                                   ),
+                                ),
+                                Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    for (var i in same_user_parcel[index].value)
+                                      QrImageView(
+                                        data: i['parcel_id'],
+                                        version: QrVersions.auto,
+                                        size: 100.0,
+                                      ),
+                                  ],
                                 ),
                                 Row(
                                   children: [
