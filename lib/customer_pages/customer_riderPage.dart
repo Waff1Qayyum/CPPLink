@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../main.dart';
 
 class customerRiderPage extends StatefulWidget {
   const customerRiderPage({super.key});
@@ -15,7 +18,7 @@ class customerBbookingState extends State<customerRiderPage> {
   bool isImageSelected = false;
   XFile? fileImage;
   File? imageFile;
-
+  final currentuser = supabase.auth.currentSession!.user.id;
   void getImage() async {
     final XFile? pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -28,6 +31,48 @@ class customerBbookingState extends State<customerRiderPage> {
     setState(() {
       fileImage = pickedImage;
     });
+  }
+
+  updateData() async {
+    await getRiderDetail(currentUserID);
+    await checkBookingStatus(currentUserID);
+    if (mounted) {
+      setState(() {
+        rider_exist;
+        show_row;
+        delivered;
+        vehicle_picture;
+        vehicle_url;
+        rider_name;
+        rider_vehicleType;
+        rider_plate;
+        rider_model;
+        rider_color;
+      });
+      if (delivered == true) {
+        Navigator.of(context).pushReplacementNamed('/customer_home');
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (mounted) {
+      //listen to realtime changes on database
+      supabase
+          .channel('public:customer')
+          .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              schema: 'public',
+              table: 'booking',
+              callback: (payload) {
+                print('Change received: ${payload.toString()}');
+                updateData();
+              })
+          .subscribe();
+    }
   }
 
   @override
@@ -155,7 +200,7 @@ class customerBbookingState extends State<customerRiderPage> {
                               ),
                             ),
                             Text(
-                              'test',
+                              user_booking_address.toString(),
                               style: TextStyle(
                                 color: Color(0xFF333333),
                                 fontSize: 17,
@@ -163,7 +208,7 @@ class customerBbookingState extends State<customerRiderPage> {
                                 fontWeight: FontWeight.w400,
                                 height: 0.00,
                               ),
-                            )
+                            ),
                           ],
                         ),
                         Row(

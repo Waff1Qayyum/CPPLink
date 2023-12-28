@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'main.dart';
 
@@ -8,6 +9,7 @@ import 'main.dart';
 // final currentUser =  supabase.auth.currentUser;
 // final currentID = currentUser!.id;
 // final currentUName =  supabase.from('user').select('name').eq('user_id',currentID);
+final currentuser = supabase.auth.currentSession!.user.id;
 
 /////////////////////////
 //////////////////////// for otp
@@ -130,9 +132,12 @@ var vehicle_url;
 var vehicle_picture;
 var user_booking = <String>[];
 var user_parcel = <String>[];
-var show_row;
+var show_row; //show button 'My booking' in homepage
 var user_booking_data;
+var user_booking_address;
 var selectedValue;
+
+dynamic pass_booking_data;
 
 //booking rider
 var rider;
@@ -142,13 +147,17 @@ var rider_plate;
 var rider_model;
 var rider_color;
 bool? rider_exist;
+bool? delivered;
+//'show rider details in customer_myrider'
 
 Future<void> getData(dynamic id) async {
   user_booking = <String>[]; //reset list
   user_parcel = <String>[];
   selectedValue = null;
   rider_exist = false;
+  delivered = false;
 
+//get user detail
   final data = await supabase
       .from('user')
       .select('name, phone, email, picture_url')
@@ -160,6 +169,7 @@ Future<void> getData(dynamic id) async {
   user_email = data['email'];
   user_picture = data['picture_url'];
 
+//get user picture
   if (user_picture != null) {
     picture = Image.network(
       user_picture!,
@@ -168,13 +178,117 @@ Future<void> getData(dynamic id) async {
       height: 70,
     );
   }
-
+  //get rider detail
   rider = await supabase.from('user').select().eq('user_id', id).single();
 
+  //get rider picture
   if (rider['rider_id'] != null) {
     getVehiclePicture(id);
   }
 
+//select all customer parcel with 'arrived' status to display
+  getArrivedParcel(id);
+
+//get customer parcel delivery request with 'accepted' or 'request' status
+  final booking_data = await supabase
+      .from('booking')
+      .select()
+      .eq('customer_id', id)
+      .or('booking_status.eq.request, booking_status.eq.accepted');
+  //if exist request
+  if (booking_data != null && booking_data.isNotEmpty) {
+    show_row = true;
+    for (int i = 0; i < booking_data.length; i++) {
+      //store the parcel ID  into user_booking array
+      user_booking.add(booking_data[i]['parcel_id']);
+    }
+    //store the parcel address
+    user_booking_address = booking_data[0]['address'];
+    pass_booking_data = booking_data;
+  } else {
+    //if request not exist
+    show_row = false;
+    print("no request for this id");
+  }
+  //get rider details
+  getRiderDetail(id);
+}
+
+Future<void> getRiderDetail(dynamic id) async {
+  //get customer parcel delivery request with 'accepted' or 'request' status
+  final booking_data = await supabase
+      .from('booking')
+      .select()
+      .eq('customer_id', id)
+      .or('booking_status.eq.request, booking_status.eq.accepted');
+  //if request exist and already have a rider ID
+  if (booking_data != null &&
+      booking_data.isNotEmpty &&
+      booking_data[0]['rider_id'] != null) {
+    final rider_data = await supabase
+        .from('rider')
+        .select('*, user:user_rider_id_fkey(name, user_id)')
+        .eq('rider_id', booking_data[0]['rider_id'])
+        .single();
+
+    //get the detail
+    rider_name = rider_data['user'][0]['name'];
+    rider_vehicleType = rider_data['vehicle_type'];
+    rider_plate = rider_data['plate_number'];
+    rider_model = rider_data['vehicle_model'];
+    rider_color = rider_data['vehicle_colour'];
+    await getVehiclePicture(rider_data['user'][0]['user_id']);
+    print('RIDER_NAME : ' + rider_name);
+    rider_exist = true;
+    print("In function " + rider_exist.toString());
+  } else {
+    rider_exist = false;
+    print('NO RIDER');
+    print("In function " + rider_exist.toString());
+  }
+}
+
+//Check the booking made status, is it delivered or still waiting
+Future<void> checkBookingStatus(dynamic id) async {
+  bool allDelivered = false;
+  //CHECK for the requested
+  for (int i = 0; i < user_booking.length; i++) {
+    //CHECK IF BOOKING HAS BEEN DELIVERED
+    final delivered_booking = await supabase
+        .from('booking')
+        .select()
+        .eq('customer_id', id)
+        .eq('parcel_id', user_booking[i])
+        .eq('booking_status', 'delivered');
+
+//if the request is delivered
+    if (delivered_booking.isNotEmpty && delivered_booking != null) {
+      print('THE STATUS FOR PARCEL ID : ' +
+          user_booking[i] +
+          ' IS ' +
+          delivered_booking[0]['booking_status']);
+      allDelivered = true;
+      print('Booking matched and Parcel is delivered!');
+      print('delivered : ' + delivered.toString());
+    } else {
+      print('No Booking matched with this id ' + user_booking[i]);
+      print('delivered : ' + delivered.toString());
+      allDelivered = false;
+      break;
+    }
+  }
+  //will remove the Mybooking button, remove rider, exit from riderpage
+  if (allDelivered == true) {
+    show_row = false;
+    rider_exist = false;
+    delivered = true;
+  }
+}
+
+//check if new parcel arrived for a specific user
+Future<void> getArrivedParcel(dynamic id) async {
+  user_parcel = <String>[];
+//select all customer parcel with 'arrived' status to display
   final parcel = await supabase
       .from('parcel')
       .select('tracking_id')
@@ -182,45 +296,13 @@ Future<void> getData(dynamic id) async {
       .eq('status', 'arrived');
   if (parcel != null) {
     for (int i = 0; i < parcel.length; i++) {
+      //store track id in user_parcel array
       user_parcel.add(parcel[i]['tracking_id']);
     }
   }
-
-  final booking_data = await supabase
-      .from('booking')
-      .select()
-      .eq('customer_id', id)
-      .or('booking_status.eq.request, booking_status.eq.accepted');
-  if (booking_data != null && booking_data.isNotEmpty) {
-    show_row = true;
-    for (int i = 0; i < booking_data.length; i++) {
-      user_booking.add(booking_data[i]['parcel_id']);
-    }
-  } else {
-    show_row = false;
-    print("no request for this id");
-  }
-
-  if (booking_data != null &&
-      booking_data.isNotEmpty &&
-      booking_data[0]['rider_id'] != null) {
-    rider_exist = true;
-    final rider_data = await supabase
-        .from('rider')
-        .select('*, user:user_rider_id_fkey(name, user_id)')
-        .eq('rider_id', booking_data[0]['rider_id'])
-        .single();
-
-    rider_name = rider_data['user'][0]['name'];
-    rider_vehicleType = rider_data['vehicle_type'];
-    rider_plate = rider_data['plate_number'];
-    rider_model = rider_data['vehicle_model'];
-    rider_color = rider_data['vehicle_colour'];
-    getVehiclePicture(rider_data['user'][0]['user_id']);
-  }
 }
 
-void getVehiclePicture(dynamic id) async {
+Future<void> getVehiclePicture(dynamic id) async {
   final data = await supabase
       .from('rider')
       .select('picture_url')
@@ -446,6 +528,4 @@ Future<void> userNameList() async {
 ////////////////////////
 ///////////////////////
 
-Future<void> addParcelToArray() async {
-  // await supabase.from('booking').insert({'arraytest: [abc,efg,hijk]'}).eq('booking_id','18902096-9c96-4a70-b3bf-3e0b4dedaeee');
-}
+final currentUserID = supabase.auth.currentSession!.user.id;

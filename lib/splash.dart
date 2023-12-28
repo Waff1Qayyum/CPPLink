@@ -23,10 +23,9 @@ class _SplashPageState extends State<SplashPage> {
       return;
     }
 
-    final session = supabase.auth
-        .currentSession; //check if user already sign in by checking the session
-    if (session != null) {
-      final userID = supabase.auth.currentUser!.id;
+    final session = supabase.auth.currentSession; //check if user already sign in by checking the session
+    if (session!=null) {
+      final userID = supabase.auth.currentSession!.user.id;
       final checkAdmin =
           await supabase.from('admin').select().eq('user_id', userID);
       final checkRider =

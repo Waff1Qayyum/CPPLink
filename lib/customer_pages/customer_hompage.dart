@@ -18,7 +18,6 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
   @override
   void initState() {
     super.initState();
-    // checkBookingStatus();
   }
 
   @override

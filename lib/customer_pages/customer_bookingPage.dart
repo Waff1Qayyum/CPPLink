@@ -1,7 +1,9 @@
 import 'package:cpplink/controller.dart';
+import 'package:cpplink/customer_pages/colleage.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
@@ -13,7 +15,10 @@ class customerBooking extends StatefulWidget {
 }
 
 class customerBookingState extends State<customerBooking> {
-  TextEditingController _address = TextEditingController();
+  String colleage = '';
+  String block = '';
+
+  // TextEditingController _address = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool newBooking = true;
@@ -34,7 +39,7 @@ class customerBookingState extends State<customerBooking> {
         'customer_id': userId,
         'parcel_id': s,
         'phone': phone['phone'],
-        'address': _address.text,
+        'address': (colleage + ', ' + block).toString(),
       });
     }
 
@@ -47,12 +52,50 @@ class customerBookingState extends State<customerBooking> {
     await getData(userId);
   }
 
+  void resetblock() {
+    setState(() {
+      block = '';
+    });
+  }
+
+  void updateBlock(String _block) {
+    setState(() {
+      block = _block;
+    });
+  }
+
+  updateListParcel() async {
+    await getArrivedParcel(currentUserID);
+    if (mounted) {
+      setState(() {
+        user_parcel;
+      });
+      if (delivered == true) {
+        Navigator.of(context).pushReplacementNamed('/customer_home');
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     setState(() {
       selectedValue = null;
     });
+    if (mounted) {
+      //listen to realtime changes on database
+      supabase
+          .channel('public:customer')
+          .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              schema: 'public',
+              table: 'parcel',
+              callback: (payload) {
+                print('Change received: ${payload.toString()}');
+                updateListParcel();
+              })
+          .subscribe();
+    }
   }
 
   @override
@@ -331,32 +374,6 @@ class customerBookingState extends State<customerBooking> {
                                 Container(
                                     width: 350,
                                     height: 40,
-                                    // child: DropdownButtonHideUnderline(
-                                    //   child: DropdownButton<String>(
-                                    //     value: selectedValue,
-                                    //     hint: Text('No parcel selected'),
-                                    //     style: TextStyle(
-                                    //       color: Color(0xFF050505),
-                                    //       fontSize: 17,
-                                    //       fontFamily: 'Lexend',
-                                    //       fontWeight: FontWeight.w400,
-                                    //       height: 0.00,
-                                    //     ),
-                                    //     onChanged: (String? newValue) {
-                                    //       setState(() {
-                                    //         selectedValue = newValue!;
-                                    //       });
-                                    //     },
-                                    //     items: user_parcel
-                                    //         .map<DropdownMenuItem<String>>(
-                                    //             (String value) {
-                                    //       return DropdownMenuItem<String>(
-                                    //         value: value,
-                                    //         child: Text(value),
-                                    //       );
-                                    //     }).toList(),
-                                    //   ),
-                                    // ),
                                     clipBehavior: Clip.antiAlias,
                                     decoration: ShapeDecoration(
                                       color: Colors.white,
@@ -367,6 +384,8 @@ class customerBookingState extends State<customerBooking> {
                                       ),
                                     ),
                                     child: MultiSelectDropDown(
+                                      hint: 'Select your parcel',
+                                      hintFontSize: 17,
                                       onOptionSelected: (options) {
                                         selectedValues = options
                                             .map((option) => option.value ?? "")
@@ -463,49 +482,122 @@ class customerBookingState extends State<customerBooking> {
                                                                         title: Text(
                                                                             'KTDI'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'KTDI';
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                       ListTile(
                                                                         title: Text(
                                                                             'KTHO'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'KTHO';
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                       ListTile(
                                                                         title: Text(
                                                                             'KTR'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'KTR';
+
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                       ListTile(
                                                                         title: Text(
                                                                             'KDSE'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'KDSE';
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                       ListTile(
                                                                         title: Text(
                                                                             'KDOJ'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'KDOJ';
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                       ListTile(
                                                                         title: Text(
                                                                             'KTC'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'KTC';
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                       ListTile(
                                                                         title: Text(
                                                                             'K9'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'K9';
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                       ListTile(
                                                                         title: Text(
                                                                             'K10'),
                                                                         onTap:
-                                                                            () {},
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            colleage =
+                                                                                'K10';
+                                                                            resetblock();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                       ),
                                                                     ]),
                                                               );
@@ -514,10 +606,11 @@ class customerBookingState extends State<customerBooking> {
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          right: 8.0),
+                                                    right: 8.0,
+                                                  ),
                                                   child: Container(
                                                     width:
-                                                        130, // Adjust the width as needed
+                                                        100, // Adjust the width as needed
                                                     height: 40,
                                                     alignment: Alignment.center,
                                                     decoration: ShapeDecoration(
@@ -538,7 +631,7 @@ class customerBookingState extends State<customerBooking> {
                                                           color:
                                                               Color(0x3F000000),
                                                           blurRadius: 4,
-                                                          offset: Offset(0, 4),
+                                                          offset: Offset(0, 2),
                                                           spreadRadius: 0,
                                                         ),
                                                       ],
@@ -561,7 +654,7 @@ class customerBookingState extends State<customerBooking> {
                                                                   width:
                                                                       5), // Adjust the spacing as needed
                                                               Text(
-                                                                'Colleage',
+                                                                colleage,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -588,7 +681,7 @@ class customerBookingState extends State<customerBooking> {
                                               ),
                                             ]),
                                         //////////////////////
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         //////////////////////
                                         ///////////////
                                         Row(
@@ -622,55 +715,11 @@ class customerBookingState extends State<customerBooking> {
                                                                     mainAxisSize:
                                                                         MainAxisSize
                                                                             .min,
-                                                                    children: [
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTDI'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTHO'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTR'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KDSE'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KDOJ'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTC'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'K9'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'K10'),
-                                                                        onTap:
-                                                                            () {},
-                                                                      ),
+                                                                    children: <Widget>[
+                                                                      buildListTileForColleague(
+                                                                          colleage,
+                                                                          updateBlock,
+                                                                          context),
                                                                     ]),
                                                               );
                                                             });
@@ -681,7 +730,7 @@ class customerBookingState extends State<customerBooking> {
                                                           right: 8.0),
                                                   child: Container(
                                                     width:
-                                                        130, // Adjust the width as needed
+                                                        100, // Adjust the width as needed
                                                     height: 40,
                                                     alignment: Alignment.center,
                                                     decoration: ShapeDecoration(
@@ -702,7 +751,7 @@ class customerBookingState extends State<customerBooking> {
                                                           color:
                                                               Color(0x3F000000),
                                                           blurRadius: 4,
-                                                          offset: Offset(0, 4),
+                                                          offset: Offset(0, 2),
                                                           spreadRadius: 0,
                                                         ),
                                                       ],
@@ -725,7 +774,7 @@ class customerBookingState extends State<customerBooking> {
                                                                   width:
                                                                       5), // Adjust the spacing as needed
                                                               Text(
-                                                                'Block',
+                                                                block,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -737,7 +786,7 @@ class customerBookingState extends State<customerBooking> {
                                                                       255,
                                                                       255,
                                                                       255),
-                                                                  fontSize: 15,
+                                                                  fontSize: 17,
                                                                   fontFamily:
                                                                       'Lexend',
                                                                   fontWeight:
@@ -786,46 +835,40 @@ class customerBookingState extends State<customerBooking> {
 
                       // Add your delete parcel logic here
                       print("Book Delivery tapped!");
-                      // if (selectedValue == null) {
-                      //   showDialog(
-                      //       context: context,
-                      //       builder: (context) => AlertDialog(
-                      //             content:
-                      //                 const Text('Please Select One Parcel'),
-                      //             actions: [
-                      //               TextButton(
-                      //                   onPressed: () {
-                      //                     Navigator.pop(context);
-                      //                   },
-                      //                   child: const Text('Understand')),
-                      //             ],
-                      //           ));
-                      // }
-                      if (_formKey.currentState!.validate()) {
-                        // if (newBooking == true) {
+
+                      if (_formKey.currentState!.validate() &&
+                          colleage.isNotEmpty &&
+                          block.isNotEmpty) {
                         await bookParcel();
                         isLoading = false;
                         Navigator.pushNamed(context, '/customer_myRider');
-                        // } else {
-                        //   print('cannot book');
-                        //   setState(() {
-                        //     isLoading = false;
-                        //   });
-                        //   showDialog(
-                        //       context: context,
-                        //       builder: (context) => AlertDialog(
-                        //             actions: [
-                        //               TextButton(
-                        //                   onPressed: () {
-                        //                     Navigator.of(context).pop();
-                        //                   },
-                        //                   child: Text('I understand'))
-                        //             ],
-                        //             title:
-                        //                 Text('You can only request one parcel'),
-                        //           ));
-                        // }
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            // Return the AlertDialog here
+                            return AlertDialog(
+                              title: Text('Incomplete form'),
+                              content: Text(
+                                  'Please fill the parcel tracking number, colleage and block!'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'Ok',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
                       }
+
                       setState(() {
                         isLoading = false;
                       });
