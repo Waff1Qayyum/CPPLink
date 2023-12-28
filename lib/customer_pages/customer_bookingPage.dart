@@ -26,8 +26,6 @@ class customerBookingState extends State<customerBooking> {
   bool parcel = false;
 
   Future<void> bookParcel() async {
-    print(selectedValues);
-
     final userId = supabase.auth.currentUser!.id;
     final phone = await supabase
         .from('user')
@@ -35,13 +33,25 @@ class customerBookingState extends State<customerBooking> {
         .eq('user_id', userId)
         .single();
 
+    await supabase.from('booking').insert({
+      'customer_id': userId,
+      'phone': phone['phone'],
+      'address': (colleage + ', ' + block).toString(),
+    });
+
+    final booking = await supabase
+        .from('booking')
+        .select()
+        .eq('customer_id', userId)
+        .eq('booking_status', 'request')
+        .single();
+
+    final booking_id = booking['booking_id'];
+
     for (String s in selectedValues) {
-      await supabase.from('booking').insert({
-        'customer_id': userId,
-        'parcel_id': s,
-        'phone': phone['phone'],
-        'address': (colleage + ', ' + block).toString(),
-      });
+      await supabase
+          .from('booking_parcel')
+          .insert({'booking_id': booking_id, 'parcel_id': s});
     }
 
     for (String s in selectedValues) {

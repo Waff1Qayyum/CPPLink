@@ -17,7 +17,6 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   int? checkedIndex;
   bool? deliveryExist;
   bool isLoading = false;
-  var groupByName;
 
   void riderModeDeactivate() async {
     setState(() {
@@ -74,12 +73,10 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     }
 
     try {
-      for (var parcel in groupByName[checkedIndex].value) {
-        await supabase.from('booking').update({
-          'rider_id': rider['rider_id'],
-          'booking_status': 'accepted'
-        }).eq('parcel_id', parcel['parcel_id']);
-      }
+      await supabase.from('booking').update({
+        'rider_id': rider['rider_id'],
+        'booking_status': 'accepted'
+      }).eq('booking_id', requested_parcel[checkedIndex]['booking_id']);
     } on Exception catch (e) {
       print(e.toString());
     }
@@ -102,9 +99,6 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      groupByName = groupParcel(requested_parcel);
-    });
   }
 
   @override
@@ -231,9 +225,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                     ListView.builder(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: groupByName == null
+                                      itemCount: requested_parcel == null
                                           ? 0
-                                          : groupByName.length,
+                                          : requested_parcel.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: EdgeInsets.only(
@@ -265,10 +259,11 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                     child: Column(children: [
                                                       ////
                                                       Text(
-                                                        groupByName[index]
-                                                            .value
-                                                            .map((i) =>
-                                                                i['parcel_id'])
+                                                        requested_parcel[index][
+                                                                'booking_parcel']
+                                                            .map((e) => e[
+                                                                    'parcel']
+                                                                ['tracking_id'])
                                                             .join(', '),
                                                         style: TextStyle(
                                                           color:
@@ -281,8 +276,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                         ),
                                                       ),
                                                       /////
-                                                      groupByName[index]
-                                                                      .value[0]
+                                                      requested_parcel[index]
                                                                   ['address'] ==
                                                               null
                                                           ? Text(
@@ -300,8 +294,8 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                               ),
                                                             )
                                                           : Text(
-                                                              groupByName[index]
-                                                                      .value[0]
+                                                              requested_parcel[
+                                                                      index]
                                                                   ['address'],
                                                               style: TextStyle(
                                                                 color: Color(
@@ -402,7 +396,6 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           await getRequestedParcelList();
                           await setRiderBooking();
                           await getRequestedParcelList();
-                          groupByName = groupParcel(requested_parcel);
                           await getRiderParcel(rider['rider_id']);
                           setState(() {});
                           print('Rider set');

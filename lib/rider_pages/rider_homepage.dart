@@ -16,7 +16,6 @@ class _RiderHomePageState extends State<RiderHomePage> {
       riderMode = true;
     });
     await getRequestedParcelList();
-    await groupParcel(requested_parcel);
     await getRiderParcel(user_rider[0]['rider_id']);
     await updateRiderStatus(user_rider[0]['rider_id'], 'idle');
 
