@@ -17,6 +17,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   int? checkedIndex;
   bool? deliveryExist;
   bool isLoading = false;
+  var groupByName;
 
   void riderModeDeactivate() async {
     setState(() {
@@ -72,11 +73,15 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
       return;
     }
 
-    for (var parcel in group_parcel[checkedIndex].value) {
-      await supabase.from('booking').update({
-        'rider_id': rider['rider_id'],
-        'booking_status': 'accepted'
-      }).eq('parcel_id', parcel['parcel_id']);
+    try {
+      for (var parcel in groupByName[checkedIndex].value) {
+        await supabase.from('booking').update({
+          'rider_id': rider['rider_id'],
+          'booking_status': 'accepted'
+        }).eq('parcel_id', parcel['parcel_id']);
+      }
+    } on Exception catch (e) {
+      print(e.toString());
     }
   }
 
@@ -98,7 +103,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   void initState() {
     super.initState();
     setState(() {
-      groupParcel();
+      groupByName = groupParcel(requested_parcel);
     });
   }
 
@@ -226,9 +231,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                     ListView.builder(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: group_parcel == null
+                                      itemCount: groupByName == null
                                           ? 0
-                                          : group_parcel.length,
+                                          : groupByName.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: EdgeInsets.only(
@@ -259,24 +264,24 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                   Container(
                                                     child: Column(children: [
                                                       ////
-                                                      for (var k
-                                                          in group_parcel[index]
-                                                              .value)
-                                                        Text(
-                                                          k['parcel_id'],
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF333333),
-                                                            fontSize: 17,
-                                                            fontFamily:
-                                                                'Roboto',
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            height: 0.00,
-                                                          ),
+                                                      Text(
+                                                        groupByName[index]
+                                                            .value
+                                                            .map((i) =>
+                                                                i['parcel_id'])
+                                                            .join(', '),
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF333333),
+                                                          fontSize: 17,
+                                                          fontFamily: 'Roboto',
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          height: 0.00,
                                                         ),
+                                                      ),
                                                       /////
-                                                      group_parcel[index]
+                                                      groupByName[index]
                                                                       .value[0]
                                                                   ['address'] ==
                                                               null
@@ -295,8 +300,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                               ),
                                                             )
                                                           : Text(
-                                                              group_parcel[
-                                                                          index]
+                                                              groupByName[index]
                                                                       .value[0]
                                                                   ['address'],
                                                               style: TextStyle(
@@ -395,9 +399,10 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                         Text('You can only deliver one parcel'),
                                   ));
                         } else {
+                          await getRequestedParcelList();
                           await setRiderBooking();
                           await getRequestedParcelList();
-                          await groupParcel();
+                          groupByName = groupParcel(requested_parcel);
                           await getRiderParcel(rider['rider_id']);
                           setState(() {});
                           print('Rider set');
