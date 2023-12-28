@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
 
 import '../controller.dart';
@@ -79,20 +80,20 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                       height: 350,
                       child: Stack(
                         children: [
-                          // MobileScanner(
-                          //   // fit: BoxFit.contain,
-                          //   controller: MobileScannerController(
-                          //     detectionSpeed: DetectionSpeed.noDuplicates,
-                          //     facing: CameraFacing.back,
-                          //     torchEnabled: true,
-                          //   ),
-                          //   onDetect: (capture) {
-                          //     final List<Barcode> barcodes = capture.barcodes;
-                          //     for (var barcode in barcodes) {
-                          //       _qrResult.text = barcode.rawValue ?? '';
-                          //     }
-                          //   },
-                          // ),
+                          MobileScanner(
+                            // fit: BoxFit.contain,
+                            controller: MobileScannerController(
+                              detectionSpeed: DetectionSpeed.noDuplicates,
+                              facing: CameraFacing.back,
+                              torchEnabled: true,
+                            ),
+                            onDetect: (capture) {
+                              final List<Barcode> barcodes = capture.barcodes;
+                              for (var barcode in barcodes) {
+                                _qrResult.text = barcode.rawValue ?? '';
+                              }
+                            },
+                          ),
                           QRScannerOverlay(
                             overlayColor:
                                 const Color.fromARGB(255, 255, 255, 255),
