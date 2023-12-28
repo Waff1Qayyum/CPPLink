@@ -23,6 +23,7 @@ class customerBookingState extends State<customerBooking> {
   bool isLoading = false;
   bool newBooking = true;
   List<String> selectedValues = [];
+  bool parcel = false;
 
   Future<void> bookParcel() async {
     print(selectedValues);
@@ -50,6 +51,19 @@ class customerBookingState extends State<customerBooking> {
     }
 
     await getData(userId);
+  }
+
+  Future<bool> checkSelectedValues() async {
+    bool exist = false;
+    for (String s in selectedValues) {
+      //if no track
+      if (s.isEmpty && s == null) {
+        exist = false;
+        break;
+      }
+      exist = true;
+    }
+    return exist;
   }
 
   void resetblock() {
@@ -459,150 +473,138 @@ class customerBookingState extends State<customerBooking> {
                                                     height: 0.00,
                                                   )),
                                               InkWell(
-                                                onTap: isLoading == true
-                                                    ? null
-                                                    : () async {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return AlertDialog(
-                                                                title: Text(
-                                                                    'select your Colleage :'),
-                                                                insetPadding:
-                                                                    EdgeInsets
-                                                                        .zero,
-                                                                content: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: [
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTDI'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'KTDI';
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTHO'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'KTHO';
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTR'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'KTR';
+                                                onTap: () async {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                              'select your Colleage :'),
+                                                          insetPadding:
+                                                              EdgeInsets.zero,
+                                                          content: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'KTDI'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'KTDI';
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'KTHO'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'KTHO';
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'KTR'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'KTR';
 
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KDSE'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'KDSE';
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KDOJ'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'KDOJ';
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'KTC'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'KTC';
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'K9'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'K9';
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                      ListTile(
-                                                                        title: Text(
-                                                                            'K10'),
-                                                                        onTap:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            colleage =
-                                                                                'K10';
-                                                                            resetblock();
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      ),
-                                                                    ]),
-                                                              );
-                                                            });
-                                                      },
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'KDSE'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'KDSE';
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'KDOJ'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'KDOJ';
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'KTC'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'KTC';
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'K9'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'K9';
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                ListTile(
+                                                                  title: Text(
+                                                                      'K10'),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      colleage =
+                                                                          'K10';
+                                                                      resetblock();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                              ]),
+                                                        );
+                                                      });
+                                                },
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -697,33 +699,29 @@ class customerBookingState extends State<customerBooking> {
                                                     height: 0.00,
                                                   )),
                                               InkWell(
-                                                onTap: isLoading == true
-                                                    ? null
-                                                    : () async {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return AlertDialog(
-                                                                title: Text(
-                                                                    'select your Block Number:'),
-                                                                insetPadding:
-                                                                    EdgeInsets
-                                                                        .zero,
-                                                                content: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: <Widget>[
-                                                                      buildListTileForColleague(
-                                                                          colleage,
-                                                                          updateBlock,
-                                                                          context),
-                                                                    ]),
-                                                              );
-                                                            });
-                                                      },
+                                                onTap: () async {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                              'select your Block Number:'),
+                                                          insetPadding:
+                                                              EdgeInsets.zero,
+                                                          content: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: <Widget>[
+                                                                buildListTileForColleague(
+                                                                    colleage,
+                                                                    updateBlock,
+                                                                    context),
+                                                              ]),
+                                                        );
+                                                      });
+                                                },
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -835,10 +833,12 @@ class customerBookingState extends State<customerBooking> {
 
                       // Add your delete parcel logic here
                       print("Book Delivery tapped!");
+                      parcel = await checkSelectedValues();
 
                       if (_formKey.currentState!.validate() &&
                           colleage.isNotEmpty &&
-                          block.isNotEmpty) {
+                          block.isNotEmpty &&
+                          parcel == true) {
                         await bookParcel();
                         isLoading = false;
                         Navigator.pushNamed(context, '/customer_myRider');
