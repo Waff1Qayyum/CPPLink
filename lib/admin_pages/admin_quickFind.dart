@@ -1,7 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:lottie/lottie.dart';
 import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
+
+import '../controller.dart';
 
 class AdminQuickFind extends StatefulWidget {
   const AdminQuickFind({super.key});
@@ -11,7 +12,23 @@ class AdminQuickFind extends StatefulWidget {
 }
 
 class _AdminQuickFindState extends State<AdminQuickFind> {
+  bool isLoading = false;
   TextEditingController _qrResult = TextEditingController();
+
+  checkParcelAndredirect(String parcel_id) async {
+    await findParcel(parcel_id);
+    if (tracking_id != "" &&
+        customerName != "" &&
+        customerNumber != "" &&
+        dateArrived != "" &&
+        status != "" &&
+        shelf_number != "") {
+      print("parcel id is not found");
+      Navigator.of(context).pushReplacementNamed('/admin_quickFindResult');
+    } else {
+      print("parcel id is not found");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,54 +56,110 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
           },
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              width: 400,
-              height: 400,
-              child: Stack(
-                children: [
-                  MobileScanner(
-                    // fit: BoxFit.contain,
-                    controller: MobileScannerController(
-                      detectionSpeed: DetectionSpeed.noDuplicates,
-                      facing: CameraFacing.front,
-                      torchEnabled: true,
+      body: Stack(
+        children: [
+          ListView(
+            children: [
+              Center(
+                  child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Text('Scan Parcel Qr code to easily get the parcel detail.',
+                        style: TextStyle(
+                          color: Color(0xFF050505),
+                          fontSize: 17,
+                          fontFamily: 'Lexend',
+                          fontWeight: FontWeight.w400,
+                          height: 0.00,
+                        )),
+                    SizedBox(height: 10),
+                    Container(
+                      width: 350,
+                      height: 350,
+                      child: Stack(
+                        children: [
+                          // MobileScanner(
+                          //   // fit: BoxFit.contain,
+                          //   controller: MobileScannerController(
+                          //     detectionSpeed: DetectionSpeed.noDuplicates,
+                          //     facing: CameraFacing.back,
+                          //     torchEnabled: true,
+                          //   ),
+                          //   onDetect: (capture) {
+                          //     final List<Barcode> barcodes = capture.barcodes;
+                          //     for (var barcode in barcodes) {
+                          //       _qrResult.text = barcode.rawValue ?? '';
+                          //     }
+                          //   },
+                          // ),
+                          QRScannerOverlay(
+                            overlayColor:
+                                const Color.fromARGB(255, 255, 255, 255),
+                          )
+                        ],
+                      ),
                     ),
-                    onDetect: (capture) {
-                      final List<Barcode> barcodes = capture.barcodes;
-                      for (var barcode in barcodes) {
-                        _qrResult.text = barcode.rawValue ?? '';
-                      }
-                    },
-                  ),
-                  QRScannerOverlay(
-                    overlayColor: Colors.black,
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    label: Text('QR Results'),
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: _qrResult,
-                  onChanged: (value) {
-                    setState(() {});
-                  },
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Parcel Track number',
+                        style: TextStyle(
+                          color: Color(0xFF050505),
+                          fontSize: 17,
+                          fontFamily: 'Lexend',
+                          fontWeight: FontWeight.w400,
+                          height: 0.00,
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                    // ),
+
+                    Center(
+                      child: SizedBox(
+                        width: 230,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            label: Text('QR Results'),
+                            border: OutlineInputBorder(
+// ({Color color = const Color(0xFF000000), double width = 1.0, BorderStyle style = BorderStyle.solid, double strokeAlign = strokeAlignInside})
+                                borderSide: BorderSide(
+                              color: Colors.black,
+                            )),
+                          ),
+                          controller: _qrResult,
+                          onChanged: (value) async {
+                            isLoading = true;
+                            setState(() {});
+                            checkParcelAndredirect(value);
+                            await findParcel(value);
+                            isLoading = false;
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )),
+            ],
+          ),
+          // Loading indicator overlay
+          if (isLoading)
+            Container(
+              color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    LottieBuilder.asset('assets/yellow_loading.json'),
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

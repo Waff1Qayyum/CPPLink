@@ -84,9 +84,9 @@ class customerBookingState extends State<customerBooking> {
       setState(() {
         user_parcel;
       });
-      if (delivered == true) {
-        Navigator.of(context).pushReplacementNamed('/customer_home');
-      }
+      // if (delivered == true) {
+      //   Navigator.of(context).pushReplacementNamed('/customer_home');
+      // }
     }
   }
 

@@ -24,6 +24,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   TextEditingController _trackingNumber = TextEditingController();
   TextEditingController _customerName = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
+  TextEditingController shelfNumber = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -54,6 +55,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
         'user_id': userId['user_id'],
         'name': _customerName.text.toUpperCase(),
         'phone': phone,
+        'shelf_number': shelfNumber.text.toUpperCase()
       });
 
       Navigator.pushNamedAndRemoveUntil(
@@ -79,6 +81,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                         'tracking_id': _trackingNumber.text.toUpperCase(),
                         'name': _customerName.text.toUpperCase(),
                         'phone': phone,
+                        'shelf_number': shelfNumber.text.toUpperCase()
                       });
                       Fluttertoast.showToast(
                         msg: "The parcel has been Added!",
@@ -686,6 +689,7 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 12, horizontal: 10),
                                 ),
+                                controller: shelfNumber,
                               ),
                             ),
                           ]),

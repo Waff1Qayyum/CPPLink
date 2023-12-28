@@ -579,6 +579,14 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                         fontFamily: 'Lexend',
                                       ),
                                     ),
+                                    Text(
+                                      rowData['shelf_number'].toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontFamily: 'Lexend',
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -608,6 +616,8 @@ class _AdminManageParcelState extends State<AdminManageParcel> {
                                     customerNumber = edit_parcel['phone'];
                                     dateArrived = edit_parcel['date_arrived'];
                                     status = edit_parcel['status'];
+                                    shelf_number = edit_parcel['shelf_number'];
+
                                     Navigator.pushNamed(
                                         context, '/admin_updateParcel');
                                   },

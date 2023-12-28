@@ -1,6 +1,9 @@
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../main.dart';
 
 class customerQuickScan extends StatefulWidget {
   const customerQuickScan({super.key});
@@ -12,6 +15,35 @@ class customerQuickScan extends StatefulWidget {
 class _customerQuickScanState extends State<customerQuickScan> {
   TextEditingController qrController = TextEditingController();
   String? dropdownValue = user_parcel[0];
+
+  updateListParcel() async {
+    await getArrivedParcel(currentUserID);
+    if (mounted) {
+      setState(() {
+        user_parcel;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (mounted) {
+      //listen to realtime changes on database
+      supabase
+          .channel('public:customer')
+          .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              schema: 'public',
+              table: 'parcel',
+              callback: (payload) {
+                print('Change received: ${payload.toString()}');
+                updateListParcel();
+              })
+          .subscribe();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
