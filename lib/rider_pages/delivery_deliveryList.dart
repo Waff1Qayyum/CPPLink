@@ -155,11 +155,12 @@ class _DeliveryListState extends State<DeliveryList> {
                                   // mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     for (var i in same_user_parcel[index].value)
-                                      QrImageView(
-                                        data: i['parcel_id'],
-                                        version: QrVersions.auto,
-                                        size: 100.0,
-                                      ),
+                                      if (i['booking_status'] != 'delivered')
+                                        QrImageView(
+                                          data: i['parcel_id'],
+                                          version: QrVersions.auto,
+                                          size: 100.0,
+                                        ),
                                   ],
                                 ),
                                 Row(
@@ -265,7 +266,8 @@ class _DeliveryListState extends State<DeliveryList> {
                                     ),
                                   ],
                                 ),
-                                rider_parcel_list[index]['booking_status'] ==
+                                same_user_parcel[index].value[0]
+                                            ['booking_status'] ==
                                         'accepted'
                                     ? Row(
                                         mainAxisAlignment:
