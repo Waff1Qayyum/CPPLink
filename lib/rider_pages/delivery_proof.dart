@@ -67,9 +67,10 @@ class _DeliveryListSProof extends State<DeliveryProof> {
   }
 
   Future<void> completeDelivery() async {
-    for (var i in rider_parcel_list[booking_index]) {
-      await supabase.from('booking').update({'booking_status': 'delivered'}).eq(
-          'booking_id', i['booking_id']);
+    await supabase.from('booking').update({'booking_status': 'delivered'}).eq(
+        'booking_id', rider_parcel_list[booking_index]['booking_id']);
+
+    for (var i in rider_parcel_list[booking_index]['booking_parcel']) {
       await supabase
           .from('parcel')
           .update({'status': 'delivered'}).eq('tracking_id', i['parcel_id']);
@@ -178,6 +179,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                       ),
                                       Text(
                                         rider_parcel_list[booking_index]
+                                                ['booking_parcel']
                                             .map((i) => i['parcel_id'])
                                             .join(', '),
                                         style: TextStyle(
@@ -203,7 +205,9 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                         ),
                                       ),
                                       Text(
-                                        rider_parcel_list[booking_index],
+                                        rider_parcel_list[booking_index]
+                                                ['booking_parcel'][0]['parcel']
+                                            ['name'],
                                         style: TextStyle(
                                           color: Color(0xFF333333),
                                           fontSize: 17,

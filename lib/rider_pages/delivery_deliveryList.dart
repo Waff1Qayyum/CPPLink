@@ -153,8 +153,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                   children: [
                                     for (var i in rider_parcel_list[index]
                                         ['booking_parcel'])
-                                      if (i['parcel']['booking_status'] !=
-                                          'delivered')
+                                      if (i['parcel']['status'] != 'delivered')
                                         QrImageView(
                                           data: i['parcel_id'],
                                           version: QrVersions.auto,
