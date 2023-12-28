@@ -15,9 +15,6 @@ class _DeliveryListState extends State<DeliveryList> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      same_user_parcel = groupParcel(rider_parcel_list);
-    });
   }
 
   Future<void> selectParcel(int index) async {
@@ -98,7 +95,7 @@ class _DeliveryListState extends State<DeliveryList> {
                       ),
                       Text(
                         // rider_parcel_list.length.toString(),
-                        same_user_parcel.length.toString(),
+                        rider_parcel_list.length.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color.fromARGB(255, 0, 0, 0),
@@ -117,7 +114,7 @@ class _DeliveryListState extends State<DeliveryList> {
 ///////////////////////////////////////
                   ListView.separated(
                     shrinkWrap: true,
-                    itemCount: same_user_parcel.length,
+                    itemCount: rider_parcel_list.length,
                     separatorBuilder: (BuildContext context, int index) =>
                         SizedBox(height: 10),
                     itemBuilder: (context, index) {
@@ -154,8 +151,9 @@ class _DeliveryListState extends State<DeliveryList> {
                                 Row(
                                   // mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    for (var i in same_user_parcel[index].value)
-                                      if (i['booking_status'] != 'delivered')
+                                    for (var i in rider_parcel_list[index]
+                                        ['booking_parcel'])
+                                      if (i['parcel']['status'] != 'delivered')
                                         QrImageView(
                                           data: i['parcel_id'],
                                           version: QrVersions.auto,
@@ -175,10 +173,9 @@ class _DeliveryListState extends State<DeliveryList> {
                                         height: 0.00,
                                       ),
                                     ),
-                                    // for (var i in same_user_parcel[index].value)
+                                    // for (var i in rider_parcel_list[index].value)
                                     Text(
-                                      same_user_parcel[index]
-                                          .value
+                                      rider_parcel_list[index]['booking_parcel']
                                           .map((i) => i['parcel_id'])
                                           .join(', '),
                                       style: TextStyle(
@@ -204,8 +201,8 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      same_user_parcel[index].value[0]['parcel']
-                                          ['name'],
+                                      rider_parcel_list[index]['booking_parcel']
+                                          [0]['parcel']['name'],
                                       style: TextStyle(
                                         color: Color(0xFF333333),
                                         fontSize: 17,
@@ -229,7 +226,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      same_user_parcel[index].value[0]['phone'],
+                                      rider_parcel_list[index]['phone'],
                                       style: TextStyle(
                                         color: Color(0xFF333333),
                                         fontSize: 17,
@@ -253,8 +250,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      same_user_parcel[index].value[0]
-                                              ['address'] ??
+                                      rider_parcel_list[index]['address'] ??
                                           'MA1,KTDI',
                                       style: TextStyle(
                                         color: Color(0xFF333333),
@@ -266,8 +262,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                     ),
                                   ],
                                 ),
-                                same_user_parcel[index].value[0]
-                                            ['booking_status'] ==
+                                rider_parcel_list[index]['booking_status'] ==
                                         'accepted'
                                     ? Row(
                                         mainAxisAlignment:

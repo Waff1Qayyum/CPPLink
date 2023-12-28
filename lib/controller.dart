@@ -192,7 +192,7 @@ Future<void> getData(dynamic id) async {
 //get customer parcel delivery request with 'accepted' or 'request' status
   final booking_data = await supabase
       .from('booking')
-      .select()
+      .select('*, booking_parcel:booking_parcel_booking_id_fkey(parcel_id)')
       .eq('customer_id', id)
       .or('booking_status.eq.request, booking_status.eq.accepted');
   //if exist request
@@ -200,7 +200,10 @@ Future<void> getData(dynamic id) async {
     show_row = true;
     for (int i = 0; i < booking_data.length; i++) {
       //store the parcel ID  into user_booking array
-      user_booking.add(booking_data[i]['parcel_id']);
+      // user_booking.add(booking_data[i]['parcel_id']);
+      for (var k in booking_data[i]['booking_parcel']) {
+        user_booking.add(k['parcel_id']);
+      }
     }
     //store the parcel address
     user_booking_address = booking_data[0]['address'];
@@ -468,21 +471,14 @@ Future<void> getParcelList() async {
 Future<void> getRequestedParcelList() async {
   requested_parcel = await supabase
       .from('booking')
-      .select()
+      .select('*, booking_parcel(*, parcel(*))')
       .or('booking_status.eq.request, booking_status.eq.cancelled');
-}
-
-dynamic groupParcel(var parcel) {
-  var test = groupBy(parcel, (Map p) => p['customer_id']);
-
-  group_parcel = test.entries.map((e) => e).toList();
-  return group_parcel;
 }
 
 Future<void> getRiderParcel(dynamic id) async {
   rider_parcel_list = await supabase
       .from('booking')
-      .select('*, parcel(name, tracking_id)')
+      .select('*, booking_parcel(*, parcel(*))')
       .eq('rider_id', id);
 }
 
@@ -536,7 +532,6 @@ Future<bool> parcel_unique(String parcelId) async {
 
 //
 var booking_index;
-var same_user_parcel;
 
 //for autocomplete
 List<String> list_name = <String>[];
