@@ -75,6 +75,8 @@ class _DeliveryListSProof extends State<DeliveryProof> {
           .from('parcel')
           .update({'status': 'delivered'}).eq('tracking_id', i['parcel_id']);
     }
+
+    await updateRiderStatus(currentUserID, "idle");
   }
 
   @override

@@ -12,15 +12,19 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
   String riderStatus = 'All';
   String searchInput = "";
   bool isLoading = false;
-  dynamic user_list = user_data;
-  dynamic parcel_list = parcel_data;
-  dynamic sorted_list;
+  // dynamic user_list = user_data;
+  // dynamic parcel_list = parcel_data;
+  // dynamic sorted_list;
   int riderCounter = 0;
   int delivery_counter = 0;
 
-  dynamic rider_list = all_rider_parcel_list;
+  // dynamic rider_list = all_rider_parcel_list;
   // dynamic rider_delivery_list = rider_parcel_delivery_list;
 
+  // dynamic allRider_list_status = allRider_parcel_list_status;
+  dynamic allRider_list_user = allRider_parcel_list_user;
+  // dynamic allRider_list_booking = allRider_parcel_list_booking;
+  dynamic listDeliveringParcel = listParcelID ;
   @override
   void initState() {
     super.initState();
@@ -33,40 +37,40 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
   }
 
   void sortRiderName() {
-    rider_list = List.from(rider_list);
+    allRider_list_user = List.from(allRider_list_user);
     setState(() {
       if (riderCounter == 1) {
-        rider_list.sort((a, b) => (a['user']['name'] as String)
+        allRider_list_user.sort((a, b) => (a['user']['name'] as String)
             .compareTo(b['user']['name'] as String));
       } else {
-        rider_list.sort((a, b) => (b['user']['name'] as String)
+        allRider_list_user.sort((a, b) => (b['user']['name'] as String)
             .compareTo(a['user']['name'] as String));
       }
     });
   }
 
   void sortRiderStatus() {
-    rider_list = List.from(rider_list);
+    allRider_list_user = List.from(allRider_list_user);
     setState(() {
       if (delivery_counter == 1) {
-        rider_list.sort(
+        allRider_list_user.sort(
             (a, b) => (a['status'] as String).compareTo(b['status'] as String));
       } else {
-        rider_list.sort(
+        allRider_list_user.sort(
             (a, b) => (b['status'] as String).compareTo(a['status'] as String));
       }
     });
   }
 
   void filterRider() {
-    rider_list = List.from(rider_list);
+    allRider_list_user = List.from(allRider_list_user);
     riderCounter = 0;
     setState(() {
       //has input
       if (searchInput.isNotEmpty) {
         //has input, status all
         if (riderStatus == 'All') {
-          rider_list = all_rider_parcel_list
+          allRider_list_user = allRider_parcel_list_user
               .where((element) =>
                   (element['rider_id'] != null) &&
                   (element['user']['name']!
@@ -77,7 +81,7 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
         } else
         //has input, status is not all
         {
-          rider_list = all_rider_parcel_list
+          allRider_list_user = allRider_parcel_list_user
               .where((element) =>
                   (element['rider_id'] != null) &&
                   ((element['user']['name']!
@@ -91,16 +95,15 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
       } else {
         //has no input, status is all
         if (riderStatus == 'All') {
-          rider_list = all_rider_parcel_list;
+          allRider_list_user = allRider_parcel_list_user;
           return;
         } else {
           //has no input, status is not all
-          rider_list = all_rider_parcel_list
+          allRider_list_user = allRider_parcel_list_user
               .where((element) =>
                   (element['rider_id'] != null) &&
                   (element['status'].contains(riderStatus.toLowerCase())))
               .toList();
-          return;
           return;
         }
       }
@@ -422,11 +425,11 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                           ),
                         ],
                       ),
-                      for (var rowData in rider_list)
+                      for (var rowUser in allRider_list_user)
                         //change to user_list to display user // Debugging line
                         TableRow(
                           decoration: BoxDecoration(
-                            color: rider_list.indexOf(rowData) % 2 == 0
+                            color: allRider_list_user.indexOf(rowUser) % 2 == 0
                                 ? Color.fromARGB(255, 255, 245, 211)
                                 : null,
                           ),
@@ -440,7 +443,7 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      (rider_list.indexOf(rowData) + 1)
+                                      (allRider_list_user.indexOf(rowUser) + 1)
                                           .toString(),
                                       style: TextStyle(
                                         color: Colors.black,
@@ -460,7 +463,7 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      rowData['user']['name'],
+                                      rowUser['user']['name'],
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 15,
@@ -468,7 +471,7 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                                       ),
                                     ),
                                     Text(
-                                      rowData['user']['phone'],
+                                      rowUser['user']['phone'],
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 15,
@@ -476,11 +479,12 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                                       ),
                                     ),
                                     SizedBox(height: 5),
-                                    for (var rowBooking in rowData['booking'])
-                                      if (rowBooking != null &&
-                                          rowBooking['booking_status']
-                                                  .toString() ==
-                                              'accepted')
+                                    // for (var ParceIDList in listDeliveringParcel)
+                                    //   if (ParceIDList != null &&
+                                    //       ParceIDList.length > 0)
+                                    if (rowUser['booking'] != null && rowUser['booking'].length >0)
+                                    for (var booking in rowUser['booking'])
+                                    if (booking['parcelList'] != null && booking['parcelList'].length >0)
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -494,8 +498,10 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                                                 fontFamily: 'Lexend',
                                               ),
                                             ),
+
+                                    for (var ParcelId in booking['parcelList'])
                                             Text(
-                                              rowBooking['parcel_id'],
+                                              ParcelId,
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15,
@@ -512,7 +518,7 @@ class _ManageRiderPageState extends State<ManageRiderPage> {
                                 child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                rowData['status'],
+                                rowUser['status'],
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,

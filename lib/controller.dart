@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'main.dart';
@@ -482,10 +481,92 @@ Future<void> getRiderParcel(dynamic id) async {
       .eq('rider_id', id);
 }
 
+var allRider_parcel_list_status = <String>[];
+var allRider_parcel_list_user = [];
+var allRider_parcel_list_booking = [];
+var rider_parcel_list_bookingID = [];
+// List <dynamic> listParcelID = [];
+
+Future<dynamic> getListBookingParcelID(String bookingID) async {
+  rider_parcel_list_bookingID = [];
+  var search_parcel_list = await supabase
+      .from('booking_parcel')
+      .select('parcel_id')
+      .eq('booking_id', bookingID);
+  if (search_parcel_list != null) {
+    for (int i = 0; i < search_parcel_list.length; i++) {
+      rider_parcel_list_bookingID.add(search_parcel_list);
+    }
+  }
+  print(rider_parcel_list_bookingID);
+  rider_parcel_list_bookingID;
+}
+
+List<dynamic> listParcelID = [];
+
 Future<void> getAllRiderParcel() async {
+  allRider_parcel_list_status = <String>[];
+  allRider_parcel_list_user = [];
+  allRider_parcel_list_booking = [];
+
   // all_rider_parcel_list = await supabase.from('rider').select<PostgrestList>();
-  all_rider_parcel_list = await supabase.from('rider').select(
-      'status, rider_id,booking(parcel_id,booking_status),user:user_id(name,phone)');
+  rider_parcel_list = await supabase.from('rider').select(
+      'status, rider_id,user:user_id(name,phone),booking(booking_id,booking_status)');
+
+  if (rider_parcel_list != null) {
+    for (int i = 0; i < rider_parcel_list.length; i++) {
+      // store rider
+      // allRider_parcel_list_user.add(rider_parcel_list[i]);
+      // print(rider_parcel_list[i]);
+      // check if rider delivering, has booking list
+      var currentData = rider_parcel_list[i];
+      if (currentData['status'] == 'delivering' &&
+          currentData['booking'] != null &&
+          currentData['booking'].length > 0) {
+        //initialize the booking list
+        var currentBookingData = rider_parcel_list[i]['booking'];
+        //loop booking list
+        for (int x = 0; x < currentBookingData.length; x++) {
+          //check if the booking list has booking id with status == accepted
+          if (currentBookingData[x]['booking_status'] == "accepted") {
+            // get parcel track id in booking_parcel table
+            var search_parcel_list = await supabase
+                .from('booking_parcel')
+                .select('parcel_id')
+                .eq('booking_id', (currentBookingData[x]['booking_id']));
+            // if found parcel track id
+            if (search_parcel_list != null) {
+              // create a local list to store parcel IDs
+              List<String> localParcelListID = [];
+              // insert parcel track ids into the local list
+              for (int j = 0; j < search_parcel_list.length; j++) {
+                localParcelListID.add(search_parcel_list[j]['parcel_id']);
+              }
+              currentData['booking'][x]['parcelList'] = localParcelListID;
+              // insert the local list into the global list
+              listParcelID.add(localParcelListID);
+              //how to do this ?
+              // currentData.add(localParcelListID);
+            }
+          } else {
+            print("all not excepted");
+          }
+        }
+      } else {
+        List emptyList = [];
+        listParcelID.add(emptyList);
+      }
+      print("List Parcel : ");
+      print(listParcelID);
+      print("List User List : ");
+      // print(rider_parcel_list[i]);
+      allRider_parcel_list_user.add(currentData);
+      print(allRider_parcel_list_user);
+    }
+
+    // print("user");
+    // print(allRider_parcel_list_user);
+  }
 }
 
 //for checking if Customer change into rider mode

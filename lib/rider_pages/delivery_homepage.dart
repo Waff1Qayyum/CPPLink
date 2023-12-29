@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -17,7 +16,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   int? checkedIndex;
   bool? deliveryExist;
   bool isLoading = false;
-
+  bool enableButton = false;
   void riderModeDeactivate() async {
     setState(() {
       riderMode = false;
@@ -25,6 +24,22 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     await updateRiderStatus(user_rider[0]['rider_id'], 'offline');
     await getRiderStatus();
     Navigator.pushNamedAndRemoveUntil(context, '/rider_home', (route) => false);
+  }
+
+  // void setDeliveryButton() {
+  //   if (deliveryExist == true) {
+  //     setState(() {
+  //       enableButton = false;
+  //     });
+  //   }
+  // }
+
+  void setButtonColor(bool x) {
+    if (deliveryExist == false) {
+      enableButton = x;
+    } else {
+      enableButton = false;
+    }
   }
 
   Future<void> _showConfirmationDialog(bool newValue) async {
@@ -280,7 +295,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                                   ['address'] ==
                                                               null
                                                           ? Text(
-                                                              'MA1,KTDI',
+                                                              'No address',
                                                               style: TextStyle(
                                                                 color: Color(
                                                                     0xFF333333),
@@ -326,9 +341,15 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                                     true) {
                                                                   checkedIndex =
                                                                       index;
+                                                                  setButtonColor(
+                                                                      true);
+                                                                  // enableButton =
+                                                                  //     true;
                                                                 } else {
                                                                   checkedIndex =
                                                                       null;
+                                                                  setButtonColor(
+                                                                      false);
                                                                 }
                                                               });
                                                             },
@@ -358,13 +379,11 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                     SizedBox(height: 20),
                     GestureDetector(
                       onTap: () async {
-                        // Navigator.of(context)
-                        //     .pushReplacementNamed('/delivery_list');
                         setState(() {
                           isLoading = true;
                         });
                         deliveryExist = await validateRiderDelivery();
-                        if (checkedIndex == null) {
+                        if (checkedIndex == null && deliveryExist == false) {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -397,6 +416,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           await setRiderBooking();
                           await getRequestedParcelList();
                           await getRiderParcel(rider['rider_id']);
+                          await updateRiderStatus(currentUserID, "delivering");
                           setState(() {});
                           print('Rider set');
                           Fluttertoast.showToast(
@@ -411,7 +431,10 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           width: 294,
                           // height: 36,
                           decoration: ShapeDecoration(
-                            color: Color.fromRGBO(248, 134, 41, 1),
+                            color: enableButton
+                                ? Color.fromRGBO(248, 134, 41, 1)
+                                : Colors.grey,
+                            // containerColor
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),

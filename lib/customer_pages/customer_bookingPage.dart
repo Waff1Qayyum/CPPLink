@@ -33,12 +33,13 @@ class customerBookingState extends State<customerBooking> {
         .eq('user_id', userId)
         .single();
 
+//insert into booking table
     await supabase.from('booking').insert({
       'customer_id': userId,
       'phone': phone['phone'],
       'address': (colleage + ', ' + block).toString(),
     });
-
+//retrieve booking data
     final booking = await supabase
         .from('booking')
         .select()

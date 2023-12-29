@@ -31,6 +31,7 @@ class _DeliveryListState extends State<DeliveryList> {
 
     await getRiderParcel(rider['rider_id']);
     await getRequestedParcelList();
+    await updateRiderStatus(currentUserID, "idle");
     setState(() {});
   }
 
@@ -119,7 +120,7 @@ class _DeliveryListState extends State<DeliveryList> {
                         SizedBox(height: 10),
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: EdgeInsets.only(right: 20, left: 20),
+                        padding: EdgeInsets.only(right: 40, left: 40),
                         child: Container(
                           decoration: BoxDecoration(
                             color: Color.fromRGBO(255, 255, 255, 1),
@@ -262,11 +263,12 @@ class _DeliveryListState extends State<DeliveryList> {
                                     ),
                                   ],
                                 ),
+                                SizedBox(height: 10),
                                 rider_parcel_list[index]['booking_status'] ==
                                         'accepted'
                                     ? Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            MainAxisAlignment.end,
                                         children: [
                                           GestureDetector(
                                             onTap: () {
@@ -277,7 +279,8 @@ class _DeliveryListState extends State<DeliveryList> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Container(
-                                                  width: 135,
+                                                  width: 100,
+                                                  height: 50,
                                                   decoration: ShapeDecoration(
                                                     color: const Color.fromARGB(
                                                         255, 174, 44, 44),
@@ -304,10 +307,10 @@ class _DeliveryListState extends State<DeliveryList> {
                                                     ],
                                                   ),
                                                   child: Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      child: Center(
+                                                        child: Text(
                                                           'Cancel',
                                                           textAlign:
                                                               TextAlign.center,
@@ -322,24 +325,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                                                 FontWeight.w400,
                                                           ),
                                                         ),
-                                                        Text(
-                                                          'Delivery',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: const Color
-                                                                .fromARGB(255,
-                                                                255, 255, 255),
-                                                            fontSize: 15,
-                                                            fontFamily:
-                                                                'Lexend',
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                                      )),
                                                 ),
                                               ],
                                             ),
@@ -356,7 +342,8 @@ class _DeliveryListState extends State<DeliveryList> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Container(
-                                                  width: 135,
+                                                  width: 100,
+                                                  height: 50,
                                                   decoration: ShapeDecoration(
                                                     color: const Color.fromARGB(
                                                         255, 44, 174, 48),
@@ -384,18 +371,20 @@ class _DeliveryListState extends State<DeliveryList> {
                                                   ),
                                                   child: Padding(
                                                     padding: EdgeInsets.all(5),
-                                                    child: Text(
-                                                      'Complete Delivery',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 255, 255, 255),
-                                                        fontSize: 15,
-                                                        fontFamily: 'Lexend',
-                                                        fontWeight:
-                                                            FontWeight.w400,
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Complete',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: const Color
+                                                              .fromARGB(255,
+                                                              255, 255, 255),
+                                                          fontSize: 15,
+                                                          fontFamily: 'Lexend',
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),

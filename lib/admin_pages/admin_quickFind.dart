@@ -74,18 +74,18 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                           fontWeight: FontWeight.w400,
                           height: 0.00,
                         )),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     Container(
-                      width: 350,
-                      height: 350,
+                      width: 310,
+                      height: 310,
                       child: Stack(
                         children: [
                           MobileScanner(
-                            // fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                             controller: MobileScannerController(
                               detectionSpeed: DetectionSpeed.noDuplicates,
                               facing: CameraFacing.back,
-                              torchEnabled: true,
+                              torchEnabled: false,
                             ),
                             onDetect: (capture) {
                               final List<Barcode> barcodes = capture.barcodes;
@@ -95,9 +95,11 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                             },
                           ),
                           QRScannerOverlay(
+                            scanAreaSize:
+                                Size(340, 340), // Adjust the size as needed
                             overlayColor:
                                 const Color.fromARGB(255, 255, 255, 255),
-                          )
+                          ),
                         ],
                       ),
                     ),
