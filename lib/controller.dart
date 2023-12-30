@@ -458,6 +458,8 @@ var all_rider_parcel_list;
 var all_rider_details;
 var user_rider;
 var group_parcel;
+var rider_parcel_list_delivered = [];
+var rider_parcel_list_ongoing = [];
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select();
@@ -475,10 +477,21 @@ Future<void> getRequestedParcelList() async {
 }
 
 Future<void> getRiderParcel(dynamic id) async {
+  rider_parcel_list_delivered = [];
+  rider_parcel_list_ongoing = [];
+
   rider_parcel_list = await supabase
       .from('booking')
       .select('*, booking_parcel(*, parcel(*))')
       .eq('rider_id', id);
+
+  rider_parcel_list.map((e) {
+    if (e['booking_status'] == 'delivered') {
+      rider_parcel_list_delivered.add(e);
+    } else {
+      rider_parcel_list_ongoing.add(e);
+    }
+  }).toList();
 }
 
 var allRider_parcel_list_status = <String>[];

@@ -27,7 +27,8 @@ class _DeliveryListState extends State<DeliveryList> {
     await supabase
         .from('booking')
         .update({'booking_status': 'cancelled', 'rider_id': null}).eq(
-            'booking_id', rider_parcel_list[index]['booking_id']);
+            'booking_id',
+            rider_parcel_list_ongoing[booking_index]['booking_id']);
 
     await getRiderParcel(rider['rider_id']);
     await getRequestedParcelList();
@@ -113,9 +114,27 @@ class _DeliveryListState extends State<DeliveryList> {
 ////////////////////////////////////////
 
 ///////////////////////////////////////
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 20,
+                    child: Text(
+                      'Ongoing',
+                      style: TextStyle(
+                        color: Color(0xFF333333),
+                        fontSize: 17,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                        height: 0.00,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: rider_parcel_list.length,
+                    itemCount: rider_parcel_list_ongoing.length,
                     separatorBuilder: (BuildContext context, int index) =>
                         SizedBox(height: 10),
                     itemBuilder: (context, index) {
@@ -152,8 +171,9 @@ class _DeliveryListState extends State<DeliveryList> {
                                 Row(
                                   // mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    for (var i in rider_parcel_list[index]
-                                        ['booking_parcel'])
+                                    for (var i
+                                        in rider_parcel_list_ongoing[index]
+                                            ['booking_parcel'])
                                       if (i['parcel']['status'] != 'delivered')
                                         QrImageView(
                                           data: i['parcel_id'],
@@ -174,9 +194,10 @@ class _DeliveryListState extends State<DeliveryList> {
                                         height: 0.00,
                                       ),
                                     ),
-                                    // for (var i in rider_parcel_list[index].value)
+                                    // for (var i in rider_parcel_list_ongoing[index].value)
                                     Text(
-                                      rider_parcel_list[index]['booking_parcel']
+                                      rider_parcel_list_ongoing[index]
+                                              ['booking_parcel']
                                           .map((i) => i['parcel_id'])
                                           .join(', '),
                                       style: TextStyle(
@@ -202,8 +223,9 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      rider_parcel_list[index]['booking_parcel']
-                                          [0]['parcel']['name'],
+                                      rider_parcel_list_ongoing[index]
+                                              ['booking_parcel'][0]['parcel']
+                                          ['name'],
                                       style: TextStyle(
                                         color: Color(0xFF333333),
                                         fontSize: 17,
@@ -227,7 +249,7 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      rider_parcel_list[index]['phone'],
+                                      rider_parcel_list_ongoing[index]['phone'],
                                       style: TextStyle(
                                         color: Color(0xFF333333),
                                         fontSize: 17,
@@ -251,7 +273,8 @@ class _DeliveryListState extends State<DeliveryList> {
                                       ),
                                     ),
                                     Text(
-                                      rider_parcel_list[index]['address'] ??
+                                      rider_parcel_list_ongoing[index]
+                                              ['address'] ??
                                           'MA1,KTDI',
                                       style: TextStyle(
                                         color: Color(0xFF333333),
@@ -264,7 +287,8 @@ class _DeliveryListState extends State<DeliveryList> {
                                   ],
                                 ),
                                 SizedBox(height: 10),
-                                rider_parcel_list[index]['booking_status'] ==
+                                rider_parcel_list_ongoing[index]
+                                            ['booking_status'] ==
                                         'accepted'
                                     ? Row(
                                         mainAxisAlignment:
@@ -407,7 +431,347 @@ class _DeliveryListState extends State<DeliveryList> {
                                             ),
                                           ),
                                           Text(
-                                            rider_parcel_list[index]
+                                            rider_parcel_list_ongoing[index]
+                                                ['booking_status'],
+                                            style: TextStyle(
+                                              color: Color(0xFF333333),
+                                              fontSize: 17,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.00,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Text(
+                      'Delivered',
+                      style: TextStyle(
+                        color: Color(0xFF333333),
+                        fontSize: 17,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                        height: 0.00,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: rider_parcel_list_delivered.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding:
+                            EdgeInsets.only(right: 40, left: 40, bottom: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 255, 255, 1),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  (index + 1).toString(),
+                                  style: TextStyle(
+                                    color: Color(0xFF333333),
+                                    fontSize: 17,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0.00,
+                                  ),
+                                ),
+                                Row(
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    for (var i
+                                        in rider_parcel_list_delivered[index]
+                                            ['booking_parcel'])
+                                      if (i['parcel']['status'] != 'delivered')
+                                        QrImageView(
+                                          data: i['parcel_id'],
+                                          version: QrVersions.auto,
+                                          size: 100.0,
+                                        ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Track Num. : ',
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                    // for (var i in rider_parcel_list_delivered[index].value)
+                                    Text(
+                                      rider_parcel_list_delivered[index]
+                                              ['booking_parcel']
+                                          .map((i) => i['parcel_id'])
+                                          .join(', '),
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Name : ',
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                    Text(
+                                      rider_parcel_list_delivered[index]
+                                              ['booking_parcel'][0]['parcel']
+                                          ['name'],
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Phone : ',
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                    Text(
+                                      rider_parcel_list_delivered[index]
+                                          ['phone'],
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Address : ',
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                    Text(
+                                      rider_parcel_list_delivered[index]
+                                              ['address'] ??
+                                          'MA1,KTDI',
+                                      style: TextStyle(
+                                        color: Color(0xFF333333),
+                                        fontSize: 17,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w400,
+                                        height: 0.00,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                rider_parcel_list_delivered[index]
+                                            ['booking_status'] ==
+                                        'accepted'
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              cancelParcel(index);
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 100,
+                                                  height: 50,
+                                                  decoration: ShapeDecoration(
+                                                    color: const Color.fromARGB(
+                                                        255, 174, 44, 44),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      side: BorderSide(
+                                                        width: 1.50,
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            255, 174, 44, 44),
+                                                      ),
+                                                    ),
+                                                    shadows: [
+                                                      BoxShadow(
+                                                        color:
+                                                            Color(0x3F000000),
+                                                        blurRadius: 4,
+                                                        offset: Offset(0, 4),
+                                                        spreadRadius: 0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Padding(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      child: Center(
+                                                        child: Text(
+                                                          'Cancel',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: const Color
+                                                                .fromARGB(255,
+                                                                255, 255, 255),
+                                                            fontSize: 15,
+                                                            fontFamily:
+                                                                'Lexend',
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                        ),
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              selectParcel(index);
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 100,
+                                                  height: 50,
+                                                  decoration: ShapeDecoration(
+                                                    color: const Color.fromARGB(
+                                                        255, 44, 174, 48),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      side: BorderSide(
+                                                        width: 1.50,
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            255, 44, 174, 48),
+                                                      ),
+                                                    ),
+                                                    shadows: [
+                                                      BoxShadow(
+                                                        color:
+                                                            Color(0x3F000000),
+                                                        blurRadius: 4,
+                                                        offset: Offset(0, 4),
+                                                        spreadRadius: 0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Complete',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: const Color
+                                                              .fromARGB(255,
+                                                              255, 255, 255),
+                                                          fontSize: 15,
+                                                          fontFamily: 'Lexend',
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Text(
+                                            'Status : ',
+                                            style: TextStyle(
+                                              color: Color(0xFF333333),
+                                              fontSize: 17,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.00,
+                                            ),
+                                          ),
+                                          Text(
+                                            rider_parcel_list_delivered[index]
                                                 ['booking_status'],
                                             style: TextStyle(
                                               color: Color(0xFF333333),
