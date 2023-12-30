@@ -5,7 +5,6 @@ import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:cpplink/customer_register.dart';
 import 'package:cpplink/rider_pages/rider_changeProfilePicture.dart';
 import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
-import 'package:cpplink/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -38,7 +37,6 @@ import 'resetPassword.dart';
 import 'rider_pages/delivery_deliveryList.dart';
 import 'rider_pages/delivery_homepage.dart';
 import 'rider_pages/delivery_proof.dart';
-import 'rider_pages/delivery_qrPage.dart';
 ///////////rider////////////
 import 'rider_pages/rider_changeName.dart';
 import 'rider_pages/rider_changePassword.dart';
@@ -46,6 +44,7 @@ import 'rider_pages/rider_changePhoneNumber.dart';
 import 'rider_pages/rider_changeVehicle.dart';
 import 'rider_pages/rider_homepage.dart';
 import 'rider_pages/rider_updateProfile.dart';
+import 'splash.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -75,8 +74,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //used for changing between pages
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
-        // '/': (_) => const DeliveryQrPage(),
-
         '/login': (_) => const LoginPage(), //login_page
 
 ////////////////////register page////////////////
@@ -98,6 +95,7 @@ class MyApp extends StatelessWidget {
         '/admin_manageRider': (_) => const ManageRiderPage(),
         '/admin_quickFind': (_) => const AdminQuickFind(),
         '/admin_quickFindResult': (_) => const AdminQuickFindResult(),
+
 
         //customer
         '/customer_home': (_) => const CustomerHomepage(),
@@ -121,8 +119,6 @@ class MyApp extends StatelessWidget {
         '/rider_profile': (_) => const RiderChangeProfile(),
         '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
         '/rider_vehicle': (_) => const RiderUploadVehicle(),
-
-        '/delivery_viewQrPage': (_) => const DeliveryQrPage(),
 
         '/delivery_homepage': (_) => const DeliveryHomePage(),
         '/delivery_list': (_) => const DeliveryList(),

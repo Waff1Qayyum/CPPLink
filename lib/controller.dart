@@ -304,35 +304,6 @@ Future<void> getArrivedParcel(dynamic id) async {
   }
 }
 
-var currentParcelList;
-var currentParcelIndex;
-setIndex(int i) {
-  currentParcelIndex = i;
-}
-
-Future<void> getCurrentParcelList() async {
-  currentParcelList = [];
-  if (currentParcelIndex > -1) {
-    currentParcelList = rider_parcel_list[currentParcelIndex]['booking_parcel'];
-  } else {
-    print('error get parcel list');
-  }
-}
-
-//check if new parcel arrived for a specific user
-// Future<void> getDeliveryRiderParcel(dynamic id) async {
-//   // user_parcel = <String>[];
-// //select all customer parcel with 'arrived' status to display
-//   final parcel = rider_parcel_list[index]['booking_parcel'])
-//                                       if (i['parcel']['status'] != 'delivered
-//   if (parcel != null) {
-//     for (int i = 0; i < parcel.length; i++) {
-//       //store track id in user_parcel array
-//       user_parcel.add(parcel[i]['tracking_id']);
-//     }
-//   }
-// }
-
 Future<void> getVehiclePicture(dynamic id) async {
   final data = await supabase
       .from('rider')
@@ -487,8 +458,6 @@ var all_rider_parcel_list;
 var all_rider_details;
 var user_rider;
 var group_parcel;
-var rider_parcel_list_delivered = [];
-var rider_parcel_list_ongoing = [];
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select();
@@ -506,21 +475,10 @@ Future<void> getRequestedParcelList() async {
 }
 
 Future<void> getRiderParcel(dynamic id) async {
-  rider_parcel_list_delivered = [];
-  rider_parcel_list_ongoing = [];
-
   rider_parcel_list = await supabase
       .from('booking')
       .select('*, booking_parcel(*, parcel(*))')
       .eq('rider_id', id);
-
-  rider_parcel_list.map((e) {
-    if (e['booking_status'] == 'delivered') {
-      rider_parcel_list_delivered.add(e);
-    } else {
-      rider_parcel_list_ongoing.add(e);
-    }
-  }).toList();
 }
 
 var allRider_parcel_list_status = <String>[];
@@ -545,28 +503,28 @@ Future<dynamic> getListBookingParcelID(String bookingID) async {
 }
 
 List<dynamic> listParcelID = [];
-var current_rider_list;
+
 Future<void> getAllRiderParcel() async {
   allRider_parcel_list_status = <String>[];
   allRider_parcel_list_user = [];
   allRider_parcel_list_booking = [];
 
   // all_rider_parcel_list = await supabase.from('rider').select<PostgrestList>();
-  current_rider_list = await supabase.from('rider').select(
+  rider_parcel_list = await supabase.from('rider').select(
       'status, rider_id,user:user_id(name,phone),booking(booking_id,booking_status)');
 
-  if (current_rider_list != null) {
-    for (int i = 0; i < current_rider_list.length; i++) {
+  if (rider_parcel_list != null) {
+    for (int i = 0; i < rider_parcel_list.length; i++) {
       // store rider
       // allRider_parcel_list_user.add(rider_parcel_list[i]);
       // print(rider_parcel_list[i]);
       // check if rider delivering, has booking list
-      var currentData = current_rider_list[i];
+      var currentData = rider_parcel_list[i];
       if (currentData['status'] == 'delivering' &&
           currentData['booking'] != null &&
           currentData['booking'].length > 0) {
         //initialize the booking list
-        var currentBookingData = current_rider_list[i]['booking'];
+        var currentBookingData = rider_parcel_list[i]['booking'];
         //loop booking list
         for (int x = 0; x < currentBookingData.length; x++) {
           //check if the booking list has booking id with status == accepted
@@ -621,21 +579,6 @@ Future<void> getRiderStatus() async {
     riderMode = true;
   } else {
     riderMode = false;
-  }
-}
-
-bool delivery = false;
-Future<void> validateRiderDelivery() async {
-  final data = await supabase
-      .from('booking')
-      .select()
-      .eq('rider_id', rider['rider_id'])
-      .eq('booking_status', 'accepted');
-
-  if (data == null || data.isEmpty) {
-    delivery = false;
-  } else {
-    delivery = true;
   }
 }
 
