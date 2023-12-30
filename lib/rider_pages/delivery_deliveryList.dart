@@ -183,30 +183,39 @@ class _DeliveryListState extends State<DeliveryList> {
                                   ],
                                 ),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Track Num. : ',
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                        fontSize: 17,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Track Num. : ',
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    // for (var i in rider_parcel_list_ongoing[index].value)
-                                    Text(
-                                      rider_parcel_list_ongoing[index]
-                                              ['booking_parcel']
-                                          .map((i) => i['parcel_id'])
-                                          .join(', '),
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                        fontSize: 17,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
+                                    Column(
+                                      children: [
+                                        // for (var i in rider_parcel_list_ongoing[index].value)
+                                        Text(
+                                          rider_parcel_list_ongoing[index]
+                                                  ['booking_parcel']
+                                              .map((i) => i['parcel_id'])
+                                              .join(', \n'),
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
