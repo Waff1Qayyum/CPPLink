@@ -124,6 +124,8 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                       child: SizedBox(
                         width: 230,
                         child: TextFormField(
+                          readOnly: true,
+                          autofocus: true,
                           decoration: InputDecoration(
                             label: Text('QR Results'),
                             border: OutlineInputBorder(

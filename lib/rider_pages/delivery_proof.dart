@@ -68,9 +68,9 @@ class _DeliveryListSProof extends State<DeliveryProof> {
 
   Future<void> completeDelivery() async {
     await supabase.from('booking').update({'booking_status': 'delivered'}).eq(
-        'booking_id', rider_parcel_list[booking_index]['booking_id']);
+        'booking_id', rider_parcel_list_ongoing[booking_index]['booking_id']);
 
-    for (var i in rider_parcel_list[booking_index]['booking_parcel']) {
+    for (var i in rider_parcel_list_ongoing[booking_index]['booking_parcel']) {
       await supabase
           .from('parcel')
           .update({'status': 'delivered'}).eq('tracking_id', i['parcel_id']);

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -22,16 +21,30 @@ class _DeliveryListState extends State<DeliveryList> {
     Navigator.pushReplacementNamed(context, '/delivery_proof');
   }
 
+  Future<void> goToOtherPage() async {
+    Navigator.pushReplacementNamed(context, '/delivery_viewQrPage');
+
+    // Navigator.of(context).pushReplacementNamed('delivery_viewQrPage');
+  }
+
+  void triggerSetIndex(int i) async {
+    await setIndex(i);
+  }
+
+  // Navigator.of(context)
+  //   .pushReplacementNamed(
+  //       '/rider_profile');
+
   Future<void> cancelParcel(int index) async {
     booking_index = index;
     await supabase
         .from('booking')
         .update({'booking_status': 'cancelled', 'rider_id': null}).eq(
             'booking_id', rider_parcel_list[index]['booking_id']);
-
     await getRiderParcel(rider['rider_id']);
     await getRequestedParcelList();
     await updateRiderStatus(currentUserID, "idle");
+    validateRiderDelivery();
     setState(() {});
   }
 
@@ -58,7 +71,7 @@ class _DeliveryListState extends State<DeliveryList> {
               color: Colors.white, // Icon color
             ),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/delivery_homepage');
+              Navigator.pushReplacementNamed(context, '/delivery_homepage');
             },
           ),
         ),
@@ -149,44 +162,93 @@ class _DeliveryListState extends State<DeliveryList> {
                                     height: 0.00,
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Row(
+                                  mainAxisSize: MainAxisSize.max,
                                   // mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    for (var i in rider_parcel_list[index]
-                                        ['booking_parcel'])
-                                      if (i['parcel']['status'] != 'delivered')
-                                        QrImageView(
-                                          data: i['parcel_id'],
-                                          version: QrVersions.auto,
-                                          size: 100.0,
+                                    // for (var i in rider_parcel_list[index]
+                                    //     ['booking_parcel'])
+                                    //   if (i['parcel']['status'] != 'delivered')
+                                    GestureDetector(
+                                      onTap: () {
+                                        goToOtherPage();
+                                        // setIndex(index);
+                                      },
+                                      child: Text(
+                                        'View Parcel Qr Code',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 20,
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: Colors.blue,
+                                          decorationThickness: 1.5,
                                         ),
+                                      ),
+                                    ),
+                                    // InkWell(
+                                    //   onTap: () {
+                                    //     Navigator.of(context).pushNamed('/delivery_viewQrPage');
+                                    //   },
+                                    //   child:
+                                    // )
+                                    // InkWell(
+                                    //   onTap: () {
+                                    //     print('view Qr');
+                                    //   },
+                                    //   child: Container(
+                                    //     child: QrImageView(
+                                    //       data: i['parcel_id'],
+                                    //       version: QrVersions.auto,
+                                    //       size: 100.0,
+                                    //     ),
+                                    //   ),
+                                    // )
                                   ],
                                 ),
+                                SizedBox(height: 5),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Track Num. : ',
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                        fontSize: 17,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Track Num. : ',
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    // for (var i in rider_parcel_list[index].value)
-                                    Text(
-                                      rider_parcel_list[index]['booking_parcel']
-                                          .map((i) => i['parcel_id'])
-                                          .join(', '),
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                        fontSize: 17,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
-                                    ),
+                                    Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          // for (var i in rider_parcel_list[index].value)
+                                          Text(
+                                            rider_parcel_list[index]
+                                                    ['booking_parcel']
+                                                .map((i) => i['parcel_id'])
+                                                .join(',\n'),
+                                            style: TextStyle(
+                                              color: Color(0xFF333333),
+                                              fontSize: 17,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.00,
+                                            ),
+                                          ),
+                                        ]),
                                   ],
                                 ),
                                 Row(

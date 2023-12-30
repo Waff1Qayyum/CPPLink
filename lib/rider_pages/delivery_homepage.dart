@@ -14,7 +14,7 @@ class DeliveryHomePage extends StatefulWidget {
 
 class _DeliveryHomePageState extends State<DeliveryHomePage> {
   int? checkedIndex;
-  bool? deliveryExist;
+  bool? deliveryExist = delivery;
   bool isLoading = false;
   bool enableButton = false;
   void riderModeDeactivate() async {
@@ -97,23 +97,17 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     }
   }
 
-  Future<bool> validateRiderDelivery() async {
-    final data = await supabase
-        .from('booking')
-        .select()
-        .eq('rider_id', rider['rider_id'])
-        .eq('booking_status', 'accepted');
-
-    if (data == null || data.isEmpty) {
-      return false;
-    } else {
-      return true;
-    }
+  checkDelivery() async {
+    validateRiderDelivery();
+    setState(() {
+      deliveryExist = delivery;
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    checkDelivery();
   }
 
   @override
@@ -382,7 +376,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                         setState(() {
                           isLoading = true;
                         });
-                        deliveryExist = await validateRiderDelivery();
+                        checkDelivery();
                         if (checkedIndex == null && deliveryExist == false) {
                           showDialog(
                               context: context,
@@ -422,6 +416,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           Fluttertoast.showToast(
                             msg: "Parcel ready to be delivered!",
                           );
+                          setButtonColor(false);
                         }
                         setState(() {
                           isLoading = false;
@@ -508,7 +503,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                     TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: 'Delivery History',
+                                          text: 'Delivery List',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
