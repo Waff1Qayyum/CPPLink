@@ -392,7 +392,27 @@ class customerBbookingState extends State<customerRiderPage> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      'RM 5.00',
+                      'RM',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 14, 173, 19),
+                        fontSize: 30,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                        height: 0.00,
+                      ),
+                    ),
+                    Text(
+                      user_booking_charge_fee.toString(),
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 14, 173, 19),
+                        fontSize: 30,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                        height: 0.00,
+                      ),
+                    ),
+                    Text(
+                      '.00',
                       style: TextStyle(
                         color: Color.fromARGB(255, 14, 173, 19),
                         fontSize: 30,

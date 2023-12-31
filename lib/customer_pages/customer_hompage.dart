@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -15,9 +16,43 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
   String userId = supabase.auth.currentUser!.id;
   String request_status = "no request";
 
+  updateData() async {
+    await getRiderDetail(currentUserID);
+    await checkBookingStatus(currentUserID);
+    if (mounted) {
+      setState(() {
+        rider_exist;
+        show_row;
+        delivered;
+        vehicle_picture;
+        vehicle_url;
+        rider_name;
+        rider_vehicleType;
+        rider_plate;
+        rider_model;
+        rider_color;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
+    if (mounted) {
+      //listen to realtime changes on database
+      supabase
+          .channel('public:customer')
+          .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              schema: 'public',
+              table: 'booking',
+              callback: (payload) {
+                print('Change received: ${payload.toString()}');
+                updateData();
+              })
+          .subscribe();
+    }
   }
 
   @override

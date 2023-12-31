@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -34,6 +33,10 @@ class _DeliveryListState extends State<DeliveryList> {
     await getRequestedParcelList();
     await updateRiderStatus(currentUserID, "idle");
     setState(() {});
+  }
+
+  goToViewPage() {
+    Navigator.pushReplacementNamed(context, '/delivery_qrPage');
   }
 
   @override
@@ -146,7 +149,7 @@ class _DeliveryListState extends State<DeliveryList> {
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0x3F000000),
+                                color: Color.fromARGB(62, 229, 188, 188),
                                 blurRadius: 4,
                                 offset: Offset(0, 4),
                                 spreadRadius: 0,
@@ -169,19 +172,39 @@ class _DeliveryListState extends State<DeliveryList> {
                                   ),
                                 ),
                                 Row(
-                                  // mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    for (var i
-                                        in rider_parcel_list_ongoing[index]
-                                            ['booking_parcel'])
-                                      if (i['parcel']['status'] != 'delivered')
-                                        QrImageView(
-                                          data: i['parcel_id'],
-                                          version: QrVersions.auto,
-                                          size: 100.0,
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    // children: [
+                                    //   for (var i
+                                    //       in rider_parcel_list_ongoing[index]
+                                    //           ['booking_parcel'])
+                                    //     if (i['parcel']['status'] != 'delivered')
+                                    //       QrImageView(
+                                    //         data: i['parcel_id'],
+                                    //         version: QrVersions.auto,
+                                    //         size: 100.0,
+                                    //       ),
+                                    // ],
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          updateCurrentBookingList(
+                                              rider_parcel_list_ongoing[index]
+                                                  ['booking_parcel']);
+                                          goToViewPage();
+                                          //           ['booking_parcel']);
+                                        },
+                                        child: Text(
+                                          'View Parcel Qr Code : ',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
                                         ),
-                                  ],
-                                ),
+                                      )
+                                    ]),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -516,45 +539,76 @@ class _DeliveryListState extends State<DeliveryList> {
                                     height: 0.00,
                                   ),
                                 ),
+                                // Row(
+                                //     // mainAxisAlignment: MainAxisAlignment.center,
+                                //     children: [
+                                //       InkWell(
+                                //         onTap: () {
+                                //           updateCurrentBookingList(
+                                //               rider_parcel_list_delivered[index]
+                                //                   ['booking_parcel']);
+                                //           //           );
+                                //           goToViewPage();
+                                //           //           ['booking_parcel']);
+                                //         },
+                                //         child: Text(
+                                //           'View Parcel Qr Code : ',
+                                //           style: TextStyle(
+                                //             color: Colors.blue,
+                                //             fontSize: 17,
+                                //             fontFamily: 'Roboto',
+                                //             fontWeight: FontWeight.w400,
+                                //             height: 0.00,
+                                //           ),
+                                //         ),
+                                //       )
+                                //     ]
+                                //     // children: [
+                                //     //   for (var i
+                                //     //       in rider_parcel_list_delivered[index]
+                                //     //           ['booking_parcel'])
+                                //     //     if (i['parcel']['status'] != 'delivered')
+                                //     //       QrImageView(
+                                //     //         data: i['parcel_id'],
+                                //     //         version: QrVersions.auto,
+                                //     //         size: 100.0,
+                                //     //       ),
+                                //     // ],
+                                //     ),
                                 Row(
-                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    for (var i
-                                        in rider_parcel_list_delivered[index]
-                                            ['booking_parcel'])
-                                      if (i['parcel']['status'] != 'delivered')
-                                        QrImageView(
-                                          data: i['parcel_id'],
-                                          version: QrVersions.auto,
-                                          size: 100.0,
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Track Num. : ',
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
                                         ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Track Num. : ',
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                        fontSize: 17,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
+                                      ],
                                     ),
-                                    // for (var i in rider_parcel_list_delivered[index].value)
-                                    Text(
-                                      rider_parcel_list_delivered[index]
-                                              ['booking_parcel']
-                                          .map((i) => i['parcel_id'])
-                                          .join(', '),
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                        fontSize: 17,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        height: 0.00,
-                                      ),
+                                    Column(
+                                      children: [
+                                        // for (var i in rider_parcel_list_delivered[index].value)
+                                        Text(
+                                          rider_parcel_list_delivered[index]
+                                                  ['booking_parcel']
+                                              .map((i) => i['parcel_id'])
+                                              .join(',\n'),
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

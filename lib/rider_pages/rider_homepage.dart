@@ -23,6 +23,17 @@ class _RiderHomePageState extends State<RiderHomePage> {
         context, '/delivery_homepage', (route) => false);
   }
 
+  void riderDeliveryMode() async {
+    setState(() {
+      riderMode = true;
+    });
+    await getRequestedParcelList();
+    await getRiderParcel(user_rider[0]['rider_id']);
+    updateRiderStatus(user_rider[0]['rider_id'], 'delivering');
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/delivery_homepage', (route) => false);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,8 +43,12 @@ class _RiderHomePageState extends State<RiderHomePage> {
     print(user_rider[0]['rider_id']);
     print(user_rider[0]['status']);
 
+    print(isDeliver);
     // getRiderStatus();
-    if (user_rider[0]['rider_id'] != null &&
+    if (isDeliver == true) {
+      riderMode = true;
+      riderDeliveryMode();
+    } else if (user_rider[0]['rider_id'] != null &&
         user_rider[0]['status'] == "offline") {
       riderMode = false;
     } else {

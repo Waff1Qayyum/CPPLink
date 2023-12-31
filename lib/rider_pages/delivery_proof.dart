@@ -76,7 +76,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
           .update({'status': 'delivered'}).eq('tracking_id', i['parcel_id']);
     }
 
-    await updateRiderStatus(currentUserID, "idle");
+    await updateRiderStatus(user_rider[0]['rider_id'], 'idle');
   }
 
   @override
@@ -168,30 +168,41 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                   /////////////
                                   ////////////
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Track Num. : ',
-                                        style: TextStyle(
-                                          color: Color(0xFF333333),
-                                          fontSize: 17,
-                                          fontFamily: 'Roboto',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0.00,
-                                        ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Track Num. : ',
+                                            style: TextStyle(
+                                              color: Color(0xFF333333),
+                                              fontSize: 17,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.00,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        rider_parcel_list[booking_index]
-                                                ['booking_parcel']
-                                            .map((i) => i['parcel_id'])
-                                            .join(', '),
-                                        style: TextStyle(
-                                          color: Color(0xFF333333),
-                                          fontSize: 17,
-                                          fontFamily: 'Roboto',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0.00,
-                                        ),
-                                      )
+                                      Column(
+                                        children: [
+                                          // for (var i in rider_parcel_list_ongoing[index].value)
+                                          Text(
+                                            rider_parcel_list[booking_index]
+                                                    ['booking_parcel']
+                                                .map((i) => i['parcel_id'])
+                                                .join(',\n'),
+                                            style: TextStyle(
+                                              color: Color(0xFF333333),
+                                              fontSize: 17,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w400,
+                                              height: 0.00,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ],
                                   ),
                                   Row(
@@ -260,7 +271,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                       Text(
                                         rider_parcel_list[booking_index]
                                                 ['address'] ??
-                                            'MA1,KTDI',
+                                           'no address',
                                         style: TextStyle(
                                           color: Color(0xFF333333),
                                           fontSize: 17,

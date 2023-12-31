@@ -134,6 +134,7 @@ var user_parcel = <String>[];
 var show_row; //show button 'My booking' in homepage
 var user_booking_data;
 var user_booking_address;
+var user_booking_charge_fee;
 var selectedValue;
 
 dynamic pass_booking_data;
@@ -206,6 +207,8 @@ Future<void> getData(dynamic id) async {
     }
     //store the parcel address
     user_booking_address = booking_data[0]['address'];
+    user_booking_charge_fee = booking_data[0]['charge_fee'];
+
     pass_booking_data = booking_data;
   } else {
     //if request not exist
@@ -220,7 +223,8 @@ Future<void> getRiderDetail(dynamic id) async {
   //get customer parcel delivery request with 'accepted' or 'request' status
   final booking_data = await supabase
       .from('booking')
-      .select()
+      .select(
+          '*, booking_parcel:booking_parcel_booking_id_fkey(parcel_id), rider_id')
       .eq('customer_id', id)
       .or('booking_status.eq.request, booking_status.eq.accepted');
   //if request exist and already have a rider ID
@@ -257,18 +261,18 @@ Future<void> checkBookingStatus(dynamic id) async {
   for (int i = 0; i < user_booking.length; i++) {
     //CHECK IF BOOKING HAS BEEN DELIVERED
     final delivered_booking = await supabase
-        .from('booking')
+        .from('parcel')
         .select()
-        .eq('customer_id', id)
-        .eq('parcel_id', user_booking[i])
-        .eq('booking_status', 'delivered');
+        .eq('user_id', id)
+        .eq('tracking_id', user_booking[i])
+        .eq('status', 'delivered');
 
 //if the request is delivered
     if (delivered_booking.isNotEmpty && delivered_booking != null) {
       print('THE STATUS FOR PARCEL ID : ' +
           user_booking[i] +
           ' IS ' +
-          delivered_booking[0]['booking_status']);
+          delivered_booking[0]['status']);
       allDelivered = true;
       print('Booking matched and Parcel is delivered!');
       print('delivered : ' + delivered.toString());
@@ -459,7 +463,7 @@ var all_rider_details;
 var user_rider;
 var group_parcel;
 var rider_parcel_list_delivered = [];
-var rider_parcel_list_ongoing = [];
+var rider_parcel_list_ongoing;
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select();
@@ -655,3 +659,37 @@ Future<void> userNameList() async {
 ///////////////////////
 
 final currentUserID = supabase.auth.currentSession!.user.id;
+
+List<String> currentDeliveryList = <String>[];
+updateCurrentBookingList(dynamic list) {
+  currentDeliveryList = <String>[];
+  print(list);
+  // //contain rider ongoing booking list
+  for (var i in list)
+    //   //get parcel that is not delivered
+    if (i['parcel']['status'] != null && i['parcel']['status'] != 'delivered')
+      currentDeliveryList.add((i['parcel_id'].toString()));
+
+  //   //
+  // currentBookingList = list;
+  // print(currentBookingList);
+}
+
+bool isDeliver = false;
+
+Future<void> checkDelivery() async {
+  isDeliver = false;
+  // Assuming supabase is an instance of SupabaseClient
+  var delivery = await supabase
+      .from('booking')
+      .select('booking_status')
+      .eq('rider_id', user_rider[0]['rider_id']);
+
+  // Iterate over the list of results
+  for (var item in delivery) {
+    // Check if 'booking_status' is equal to 'accepted'
+    if (item['booking_status'] == 'accepted') {
+      isDeliver = true;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -34,11 +35,32 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   //   }
   // }
 
-  void setButtonColor(bool x) {
-    if (deliveryExist == false) {
-      enableButton = x;
+  void setButtonColor(bool x) async {
+    await checkDelivery();
+    // print(isDeliver);
+    setState(() {
+      isDeliver;
+    });
+    // print(isDeliver);
+
+    if (isDeliver == true) {
+      setState(() {
+        deliveryExist = true;
+        enableButton = false;
+      });
     } else {
-      enableButton = false;
+      setState(() {
+        enableButton = x;
+      });
+    }
+  }
+
+  updateData() async {
+    await getRequestedParcelList();
+    if (mounted) {
+      setState(() {
+        requested_parcel;
+      });
     }
   }
 
@@ -114,6 +136,21 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
   @override
   void initState() {
     super.initState();
+
+    if (mounted) {
+      //listen to realtime changes on database
+      supabase
+          .channel('public:customer')
+          .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              schema: 'public',
+              table: 'booking',
+              callback: (payload) {
+                print('Change received: ${payload.toString()}');
+                updateData();
+              })
+          .subscribe();
+    }
   }
 
   @override
@@ -271,60 +308,115 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Container(
-                                                    child: Column(children: [
-                                                      ////
-                                                      Text(
-                                                        requested_parcel[index][
-                                                                'booking_parcel']
-                                                            .map((e) => e[
-                                                                    'parcel']
-                                                                ['tracking_id'])
-                                                            .join(', '),
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0xFF333333),
-                                                          fontSize: 17,
-                                                          fontFamily: 'Roboto',
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          height: 0.00,
-                                                        ),
-                                                      ),
-                                                      /////
-                                                      requested_parcel[index]
-                                                                  ['address'] ==
-                                                              null
-                                                          ? Text(
-                                                              'No address',
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF333333),
-                                                                fontSize: 17,
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                height: 0.00,
-                                                              ),
-                                                            )
-                                                          : Text(
-                                                              requested_parcel[
-                                                                      index]
-                                                                  ['address'],
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF333333),
-                                                                fontSize: 17,
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                height: 0.00,
-                                                              ),
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          ////
+                                                          Text(
+                                                            'Parcel ID : ',
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF333333),
+                                                              fontSize: 17,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              height: 0.00,
                                                             ),
-                                                    ]),
+                                                          ),
+                                                          Text(
+                                                            requested_parcel[
+                                                                            index]
+                                                                        [
+                                                                        'booking_parcel'] !=
+                                                                    null
+                                                                ? requested_parcel[
+                                                                            index]
+                                                                        [
+                                                                        'booking_parcel']
+                                                                    .map((e) =>
+                                                                        e['parcel']
+                                                                            [
+                                                                            'tracking_id'])
+                                                                    .join(',\n')
+                                                                : 'Loading...',
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF333333),
+                                                              fontSize: 17,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              height: 0.00,
+                                                            ),
+                                                          ),
+                                                          /////
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                'Address : ',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color(
+                                                                      0xFF333333),
+                                                                  fontSize: 17,
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  height: 0.00,
+                                                                ),
+                                                              ),
+                                                              requested_parcel[
+                                                                              index]
+                                                                          [
+                                                                          'address'] ==
+                                                                      null
+                                                                  ? Text(
+                                                                      'No address',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Color(
+                                                                            0xFF333333),
+                                                                        fontSize:
+                                                                            17,
+                                                                        fontFamily:
+                                                                            'Roboto',
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        height:
+                                                                            0.00,
+                                                                      ),
+                                                                    )
+                                                                  : Text(
+                                                                      requested_parcel[
+                                                                              index]
+                                                                          [
+                                                                          'address'],
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Color(
+                                                                            0xFF333333),
+                                                                        fontSize:
+                                                                            17,
+                                                                        fontFamily:
+                                                                            'Roboto',
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        height:
+                                                                            0.00,
+                                                                      ),
+                                                                    ),
+                                                            ],
+                                                          ),
+                                                        ]),
                                                   ),
                                                   Container(
                                                     child: Row(
@@ -343,8 +435,6 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                                       index;
                                                                   setButtonColor(
                                                                       true);
-                                                                  // enableButton =
-                                                                  //     true;
                                                                 } else {
                                                                   checkedIndex =
                                                                       null;
@@ -416,6 +506,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                           await setRiderBooking();
                           await getRequestedParcelList();
                           await getRiderParcel(rider['rider_id']);
+                          setButtonColor(false);
                           await updateRiderStatus(currentUserID, "delivering");
                           setState(() {});
                           print('Rider set');

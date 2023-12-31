@@ -3,6 +3,7 @@ import 'package:cpplink/admin_pages/admin_updateProfille.dart';
 import 'package:cpplink/customer_pages/customer_quickScan.dart';
 import 'package:cpplink/customer_pages/customer_updateProfile.dart';
 import 'package:cpplink/customer_register.dart';
+import 'package:cpplink/rider_pages/delivery_qrPage.dart';
 import 'package:cpplink/rider_pages/rider_changeProfilePicture.dart';
 import 'package:cpplink/rider_pages/rider_uploadVehicle.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,6 @@ class MyApp extends StatelessWidget {
         '/admin_quickFind': (_) => const AdminQuickFind(),
         '/admin_quickFindResult': (_) => const AdminQuickFindResult(),
 
-
         //customer
         '/customer_home': (_) => const CustomerHomepage(),
         '/customer_profile': (_) => const CustomerProfile(),
@@ -123,6 +123,7 @@ class MyApp extends StatelessWidget {
         '/delivery_homepage': (_) => const DeliveryHomePage(),
         '/delivery_list': (_) => const DeliveryList(),
         '/delivery_proof': (_) => const DeliveryProof(),
+        '/delivery_qrPage': (_) => const QrCodePage(),
 
 //////////////////forgot password//////////////////
         '/forgotPassword': (_) => const ForgotPassword(),

@@ -24,6 +24,48 @@ class customerBookingState extends State<customerBooking> {
   bool newBooking = true;
   List<String> selectedValues = [];
   bool parcel = false;
+  var price;
+
+  //set chargin price
+  setChargePrice() {
+    price = 1;
+    for (int i = 0; i < selectedValues.length; i++) {
+      switch (colleage) {
+        case 'KTDI':
+          price = price + 2;
+          break;
+        case 'KTHO':
+          price = price + 2;
+
+          break;
+        case 'KTR':
+          price = price + 2;
+
+          break;
+        case 'KDSE':
+          price = price + 2;
+
+          break;
+        case 'KDOJ':
+          price = price + 3;
+
+          break;
+        case 'KTC':
+          price = price + 3;
+
+          break;
+        case 'K9':
+          price = price + 3;
+
+          break;
+        case 'K10':
+          price = price + 3;
+
+          break;
+      }
+    }
+    print("TOTAL PRICE : " + price.toString());
+  }
 
   Future<void> bookParcel() async {
     final userId = supabase.auth.currentUser!.id;
@@ -33,11 +75,14 @@ class customerBookingState extends State<customerBooking> {
         .eq('user_id', userId)
         .single();
 
+    setChargePrice();
+
 //insert into booking table
     await supabase.from('booking').insert({
       'customer_id': userId,
       'phone': phone['phone'],
       'address': (colleage + ', ' + block).toString(),
+      'charge_fee' : price,
     });
 //retrieve booking data
     final booking = await supabase
