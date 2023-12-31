@@ -80,7 +80,8 @@ class _DeliveryListSProof extends State<DeliveryProof> {
   }
 
   Future<void> changePage() async {
-    Navigator.of(context).pushReplacementNamed('/delivery_list');
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/delivery_list', (route) => false);
   }
 
   @override
@@ -171,134 +172,143 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (rider_parcel_list_ongoing != null &&
-                                  rider_parcel_list_ongoing.length > 0)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    /////////////
-                                    ////////////
-                                    Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  'Track Num. : ',
-                                                  style: TextStyle(
-                                                    color: Color(0xFF333333),
-                                                    fontSize: 17,
-                                                    fontFamily: 'Roboto',
-                                                    fontWeight: FontWeight.w400,
-                                                    height: 0.00,
-                                                  ),
+                              // if (rider_parcel_list_ongoing != null &&
+                              //     rider_parcel_list_ongoing.length > 0)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  /////////////
+                                  ////////////
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Track Num. : ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF333333),
+                                                  fontSize: 17,
+                                                  fontFamily: 'Roboto',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
                                                 ),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  rider_parcel_list_ongoing[
-                                                              booking_index]
-                                                          ['booking_parcel']
-                                                      .map(
-                                                          (i) => i['parcel_id'])
-                                                      .join(',\n'),
-                                                  style: TextStyle(
-                                                    color: Color(0xFF333333),
-                                                    fontSize: 17,
-                                                    fontFamily: 'Roboto',
-                                                    fontWeight: FontWeight.w400,
-                                                    height: 0.00,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Name : ',
-                                          style: TextStyle(
-                                            color: Color(0xFF333333),
-                                            fontSize: 17,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.00,
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        Text(
-                                          rider_parcel_list_ongoing[
-                                                      booking_index]
-                                                  ['booking_parcel'][0]
-                                              ['parcel']['name'],
-                                          style: TextStyle(
-                                            color: Color(0xFF333333),
-                                            fontSize: 17,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.00,
+                                          Column(
+                                            children: [
+                                              Text(
+                                                rider_parcel_list_ongoing
+                                                        .isEmpty
+                                                    ? 'Loading...'
+                                                    : rider_parcel_list_ongoing[
+                                                                booking_index]
+                                                            ['booking_parcel']
+                                                        .map((i) =>
+                                                            i['parcel_id'])
+                                                        .join(',\n'),
+                                                style: TextStyle(
+                                                  color: Color(0xFF333333),
+                                                  fontSize: 17,
+                                                  fontFamily: 'Roboto',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0.00,
+                                                ),
+                                              )
+                                            ],
                                           ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Name : ',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
                                         ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Phone : ',
-                                          style: TextStyle(
-                                            color: Color(0xFF333333),
-                                            fontSize: 17,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.00,
-                                          ),
+                                      ),
+                                      Text(
+                                        rider_parcel_list_ongoing.isEmpty
+                                            ? 'Loading...'
+                                            : rider_parcel_list_ongoing[
+                                                        booking_index]
+                                                    ['booking_parcel'][0]
+                                                ['parcel']['name'],
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
                                         ),
-                                        Text(
-                                          rider_parcel_list_ongoing[
-                                              booking_index]['phone'],
-                                          style: TextStyle(
-                                            color: Color(0xFF333333),
-                                            fontSize: 17,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.00,
-                                          ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Phone : ',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
                                         ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Address : ',
-                                          style: TextStyle(
-                                            color: Color(0xFF333333),
-                                            fontSize: 17,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.00,
-                                          ),
+                                      ),
+                                      Text(
+                                        rider_parcel_list_ongoing.isEmpty
+                                            ? 'Loading...'
+                                            : rider_parcel_list_ongoing[
+                                                booking_index]['phone'],
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
                                         ),
-                                        Text(
-                                          rider_parcel_list_ongoing[
-                                                  booking_index]['address'] ??
-                                              'MA1,KTDI',
-                                          style: TextStyle(
-                                            color: Color(0xFF333333),
-                                            fontSize: 17,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0.00,
-                                          ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Address : ',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                      Text(
+                                        rider_parcel_list_ongoing.isEmpty
+                                            ? 'Loading...'
+                                            : rider_parcel_list_ongoing[
+                                                    booking_index]['address'] ??
+                                                'MA1,KTDI',
+                                        style: TextStyle(
+                                          color: Color(0xFF333333),
+                                          fontSize: 17,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0.00,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                               SizedBox(width: 10),
                               // Adjust the spacing between columns
                               // Right column with data
