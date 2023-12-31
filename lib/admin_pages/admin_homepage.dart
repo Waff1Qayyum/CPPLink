@@ -116,7 +116,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     ),
                     SizedBox(height: 60.0),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      padding: EdgeInsets.symmetric(horizontal: 30),
                       child: Row(
 
                           //row to put the image+name and notification icon

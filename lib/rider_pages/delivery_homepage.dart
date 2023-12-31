@@ -55,15 +55,6 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
     }
   }
 
-  updateData() async {
-    await getRequestedParcelList();
-    if (mounted) {
-      setState(() {
-        requested_parcel;
-      });
-    }
-  }
-
   Future<void> _showConfirmationDialog(bool newValue) async {
     return showDialog<void>(
       context: context,
@@ -130,6 +121,15 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
       return false;
     } else {
       return true;
+    }
+  }
+
+  updateData() async {
+    await getRequestedParcelList();
+    if (mounted) {
+      setState(() {
+        requested_parcel;
+      });
     }
   }
 
@@ -331,20 +331,13 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                                           ),
                                                           Text(
                                                             requested_parcel[
-                                                                            index]
-                                                                        [
-                                                                        'booking_parcel'] !=
-                                                                    null
-                                                                ? requested_parcel[
-                                                                            index]
-                                                                        [
-                                                                        'booking_parcel']
-                                                                    .map((e) =>
-                                                                        e['parcel']
-                                                                            [
-                                                                            'tracking_id'])
-                                                                    .join(',\n')
-                                                                : 'Loading...',
+                                                                        index][
+                                                                    'booking_parcel']
+                                                                .map((e) => e[
+                                                                        'parcel']
+                                                                    [
+                                                                    'tracking_id'])
+                                                                .join(',\n'),
                                                             style: TextStyle(
                                                               color: Color(
                                                                   0xFF333333),

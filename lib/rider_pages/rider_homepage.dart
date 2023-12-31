@@ -45,10 +45,11 @@ class _RiderHomePageState extends State<RiderHomePage> {
 
     print(isDeliver);
     // getRiderStatus();
-    if (isDeliver == true) {
-      riderMode = true;
-      riderDeliveryMode();
-    } else if (user_rider[0]['rider_id'] != null &&
+    // if (isDeliver == true) {
+    //   riderMode = true;
+    //   riderDeliveryMode();
+    // } else 
+    if (user_rider[0]['rider_id'] != null &&
         user_rider[0]['status'] == "offline") {
       riderMode = false;
     } else {
