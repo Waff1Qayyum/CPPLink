@@ -144,10 +144,11 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
           .onPostgresChanges(
               event: PostgresChangeEvent.all,
               schema: 'public',
-              table: 'booking',
+              table: 'booking_parcel',
               callback: (payload) async {
                 print('Change received: ${payload.toString()}');
                 await updateData();
+                print('test: ${requested_parcel}');
               })
           .subscribe();
     }

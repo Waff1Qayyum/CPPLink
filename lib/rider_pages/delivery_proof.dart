@@ -79,6 +79,15 @@ class _DeliveryListSProof extends State<DeliveryProof> {
     await updateRiderStatus(currentUserID, "idle");
   }
 
+  Future<void> changePage() async {
+    Navigator.of(context).pushReplacementNamed('/delivery_list');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -165,12 +174,12 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  /////////////
-                                  ////////////
-                                  Row(
-                                    children: [
-                                      if (rider_parcel_list_ongoing != null &&
-                                          rider_parcel_list_ongoing.length > 0)
+                                  if (rider_parcel_list_ongoing != null &&
+                                      rider_parcel_list_ongoing.length > 0)
+                                    /////////////
+                                    ////////////
+                                    Row(
+                                      children: [
                                         Row(
                                           children: [
                                             Text(
@@ -199,8 +208,8 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                             )
                                           ],
                                         ),
-                                    ],
-                                  ),
+                                      ],
+                                    ),
                                   Row(
                                     children: [
                                       Text(
@@ -213,18 +222,20 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                           height: 0.00,
                                         ),
                                       ),
-                                      Text(
-                                        rider_parcel_list_ongoing[booking_index]
-                                                ['booking_parcel'][0]['parcel']
-                                            ['name'],
-                                        style: TextStyle(
-                                          color: Color(0xFF333333),
-                                          fontSize: 17,
-                                          fontFamily: 'Roboto',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0.00,
+                                      if (rider_parcel_list_ongoing.isNotEmpty)
+                                        Text(
+                                          rider_parcel_list_ongoing[
+                                                      booking_index]
+                                                  ['booking_parcel'][0]
+                                              ['parcel']['name'],
+                                          style: TextStyle(
+                                            color: Color(0xFF333333),
+                                            fontSize: 17,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                            height: 0.00,
+                                          ),
                                         ),
-                                      ),
                                     ],
                                   ),
                                   Row(
@@ -470,8 +481,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                           await getData(rider['user_id']);
                           await getRiderParcel(rider['rider_id']);
                           print('upload button press');
-                          Navigator.of(context)
-                              .pushReplacementNamed('/delivery_list');
+                          await changePage();
                           Fluttertoast.showToast(
                             msg: "Delivery completed!",
                           );
@@ -532,19 +542,19 @@ class _DeliveryListSProof extends State<DeliveryProof> {
               ],
             ),
             // Loading indicator overlay
-            // if (isLoading)
-            //   Container(
-            //     color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
-            //     child: Center(
-            //       child: Column(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         crossAxisAlignment: CrossAxisAlignment.center,
-            //         children: [
-            //           LottieBuilder.asset('assets/yellow_loading.json'),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
+            if (isLoading)
+              Container(
+                color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LottieBuilder.asset('assets/yellow_loading.json'),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),
