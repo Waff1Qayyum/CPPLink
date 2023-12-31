@@ -169,29 +169,36 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                   ////////////
                                   Row(
                                     children: [
-                                      Text(
-                                        'Track Num. : ',
-                                        style: TextStyle(
-                                          color: Color(0xFF333333),
-                                          fontSize: 17,
-                                          fontFamily: 'Roboto',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0.00,
+                                      if (rider_parcel_list_ongoing != null &&
+                                          rider_parcel_list_ongoing.length > 0)
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Track Num. : ',
+                                              style: TextStyle(
+                                                color: Color(0xFF333333),
+                                                fontSize: 17,
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w400,
+                                                height: 0.00,
+                                              ),
+                                            ),
+                                            Text(
+                                              rider_parcel_list_ongoing[
+                                                          booking_index]
+                                                      ['booking_parcel']
+                                                  .map((i) => i['parcel_id'])
+                                                  .join(', '),
+                                              style: TextStyle(
+                                                color: Color(0xFF333333),
+                                                fontSize: 17,
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w400,
+                                                height: 0.00,
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                      ),
-                                      Text(
-                                        rider_parcel_list_ongoing[booking_index]
-                                                ['booking_parcel']
-                                            .map((i) => i['parcel_id'])
-                                            .join(', '),
-                                        style: TextStyle(
-                                          color: Color(0xFF333333),
-                                          fontSize: 17,
-                                          fontFamily: 'Roboto',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0.00,
-                                        ),
-                                      )
                                     ],
                                   ),
                                   Row(
@@ -525,19 +532,19 @@ class _DeliveryListSProof extends State<DeliveryProof> {
               ],
             ),
             // Loading indicator overlay
-            if (isLoading)
-              Container(
-                color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      LottieBuilder.asset('assets/yellow_loading.json'),
-                    ],
-                  ),
-                ),
-              ),
+            // if (isLoading)
+            //   Container(
+            //     color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+            //     child: Center(
+            //       child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         crossAxisAlignment: CrossAxisAlignment.center,
+            //         children: [
+            //           LottieBuilder.asset('assets/yellow_loading.json'),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
           ],
         ),
       ),

@@ -463,7 +463,7 @@ var all_rider_details;
 var user_rider;
 var group_parcel;
 var rider_parcel_list_delivered = [];
-var rider_parcel_list_ongoing;
+var rider_parcel_list_ongoing = [];
 
 Future<void> getUserList() async {
   user_data = await supabase.from('user').select();
