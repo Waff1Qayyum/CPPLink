@@ -159,7 +159,7 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(248, 162, 41, 1),
+          backgroundColor: Color.fromRGBO(248, 134, 41, 1),
           centerTitle: true,
           title: Text(
             'Rider Homepage',
@@ -616,8 +616,9 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                     GestureDetector(
                       onTap: () {
                         // Add your delete parcel logic here
-                        print("View Profile tapped!");
-                        // You can replace the print statement with the actual logic to delete the parcel.
+
+                        Navigator.pushReplacementNamed(context,
+                            '/delivery_profilePage'); // You can replace the print statement with the actual logic to delete the parcel.
                       },
                       child: Container(
                           width: 294,

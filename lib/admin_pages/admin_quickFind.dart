@@ -87,11 +87,16 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                               facing: CameraFacing.back,
                               torchEnabled: false,
                             ),
-                            onDetect: (capture) {
+                            onDetect: (capture) async {
                               final List<Barcode> barcodes = capture.barcodes;
                               for (var barcode in barcodes) {
                                 _qrResult.text = barcode.rawValue ?? '';
                               }
+                              isLoading = true;
+                              setState(() {});
+                              checkParcelAndredirect(_qrResult.text);
+                              await findParcel(_qrResult.text);
+                              isLoading = false;
                             },
                           ),
                           QRScannerOverlay(

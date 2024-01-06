@@ -84,7 +84,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(248, 162, 41, 1),
+          backgroundColor: Color.fromRGBO(248, 134, 41, 1),
           centerTitle: true,
           title: Text(
             'Complete Delivery',
@@ -276,7 +276,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
                                         Text(
                                           rider_parcel_list_ongoing[
                                                   booking_index]['address'] ??
-                                              'MA1,KTDI',
+                                              'no address',
                                           style: TextStyle(
                                             color: Color(0xFF333333),
                                             fontSize: 17,

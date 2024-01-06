@@ -48,7 +48,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
     // if (isDeliver == true) {
     //   riderMode = true;
     //   riderDeliveryMode();
-    // } else 
+    // } else
     if (user_rider[0]['rider_id'] != null &&
         user_rider[0]['status'] == "offline") {
       riderMode = false;
@@ -271,7 +271,8 @@ class _RiderHomePageState extends State<RiderHomePage> {
                                         Text(
                                           user_name ?? 'Loading..',
                                           style: TextStyle(
-                                            color: Color(0xFFFFD233),
+                                            color:
+                                                Color.fromARGB(255, 7, 7, 131),
                                             fontSize: 22,
                                             fontFamily: 'Lexend',
                                             fontWeight: FontWeight.w700,
@@ -281,13 +282,6 @@ class _RiderHomePageState extends State<RiderHomePage> {
                                       ])
                                 ]),
                               ])),
-                      IconButton(
-                        iconSize: 30.0,
-                        icon: Icon(Icons.notifications, color: Colors.black),
-                        onPressed: () {
-                          // Add your action here
-                        },
-                      ),
                     ]),
                 SizedBox(height: 70),
                 Text(

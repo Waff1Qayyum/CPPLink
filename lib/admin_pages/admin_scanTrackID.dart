@@ -3,18 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 // import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
 
 import '../controller.dart';
 import '../main.dart';
 
-class AdminRegisterParcel extends StatefulWidget {
-  const AdminRegisterParcel({super.key});
+class AdminScanTrackID extends StatefulWidget {
+  const AdminScanTrackID({super.key});
 
   @override
-  State<AdminRegisterParcel> createState() => _AdminRegisterParcelState();
+  State<AdminScanTrackID> createState() => _AdminScanTrackIDState();
 }
 
-class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
+class _AdminScanTrackIDState extends State<AdminScanTrackID> {
   bool isLoading = false;
   bool? phoneValid;
   bool? parcelUnique;
@@ -25,7 +27,6 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
   TextEditingController _customerName = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
   TextEditingController shelfNumber = TextEditingController();
-  // TextEditingController _ = TextEditingController();
   var code;
   final _formKey = GlobalKey<FormState>();
 
@@ -229,53 +230,38 @@ class _AdminRegisterParcelState extends State<AdminRegisterParcel> {
                     child: Column(
                       children: [
                         Align(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/admin_scantrackID');
-                            },
-                            child: Container(
-                              width: 180,
-                              height: 53,
-                              alignment: Alignment.center,
-                              decoration: ShapeDecoration(
-                                color: Colors.blue,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  side: BorderSide(
-                                    width: 1.50,
-                                    color: Colors.blue, // Border color
+                          child: Container(
+                            width: 450,
+                            height: 200,
+                            child: Stack(
+                              children: [
+                                MobileScanner(
+                                  fit: BoxFit.cover,
+                                  controller: MobileScannerController(
+                                    detectionSpeed: DetectionSpeed.noDuplicates,
+                                    facing: CameraFacing.back,
+                                    torchEnabled: false,
                                   ),
+                                  onDetect: (capture) {
+                                    final List<Barcode> barcodes =
+                                        capture.barcodes;
+                                    for (var barcode in barcodes) {
+                                      _trackingNumber.text =
+                                          barcode.rawValue ?? '';
+                                    }
+                                  },
                                 ),
-                                shadows: [
-                                  BoxShadow(
-                                    color: Color(0x3F000000),
-                                    blurRadius: 4,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.qr_code_scanner,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(
-                                      width:
-                                          8), // Adjust the spacing between the icon and text
-                                  Text(
-                                    'Scan Tracking ID',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
+                                QRScannerOverlay(
+                                  scanAreaSize: Size(
+                                      460, 210), // Adjust the size as needed
+                                  overlayColor:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 30),
                         /////////////////
                         ////////////////
                         Align(

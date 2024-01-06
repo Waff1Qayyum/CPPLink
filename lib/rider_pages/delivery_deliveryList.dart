@@ -45,7 +45,7 @@ class _DeliveryListState extends State<DeliveryList> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(248, 162, 41, 1),
+          backgroundColor: Color.fromRGBO(248, 134, 41, 1),
           centerTitle: true,
           title: Text(
             'Deliveries',

@@ -19,6 +19,7 @@ import 'admin_pages/admin_manageParcel.dart';
 import 'admin_pages/admin_manageRider.dart';
 import 'admin_pages/admin_quickFindResult.dart';
 import 'admin_pages/admin_registerParcel.dart';
+import 'admin_pages/admin_scanTrackID.dart';
 import 'admin_pages/admin_updatetParcel.dart';
 import 'customer_pages/customer_bookingPage.dart';
 //////customer/////////
@@ -37,6 +38,7 @@ import 'registerType_page.dart';
 import 'resetPassword.dart';
 import 'rider_pages/delivery_deliveryList.dart';
 import 'rider_pages/delivery_homepage.dart';
+import 'rider_pages/delivery_profiePage.dart';
 import 'rider_pages/delivery_proof.dart';
 ///////////rider////////////
 import 'rider_pages/rider_changeName.dart';
@@ -96,6 +98,7 @@ class MyApp extends StatelessWidget {
         '/admin_manageRider': (_) => const ManageRiderPage(),
         '/admin_quickFind': (_) => const AdminQuickFind(),
         '/admin_quickFindResult': (_) => const AdminQuickFindResult(),
+        '/admin_scantrackID': (_) => const AdminScanTrackID(),
 
         //customer
         '/customer_home': (_) => const CustomerHomepage(),
@@ -124,6 +127,7 @@ class MyApp extends StatelessWidget {
         '/delivery_list': (_) => const DeliveryList(),
         '/delivery_proof': (_) => const DeliveryProof(),
         '/delivery_qrPage': (_) => const QrCodePage(),
+        '/delivery_profilePage': (_) => const DeliveryProfilePage(),
 
 //////////////////forgot password//////////////////
         '/forgotPassword': (_) => const ForgotPassword(),
