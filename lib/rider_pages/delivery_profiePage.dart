@@ -9,6 +9,21 @@ class DeliveryProfilePage extends StatefulWidget {
 }
 
 class _DeliveryProfilePageState extends State<DeliveryProfilePage> {
+  double totalIncome = 0;
+
+  void getIncome() {
+    for (var i in rider_parcel_list_delivered) {
+      if (i['charge_fee'] != null) {
+        totalIncome += i['charge_fee'];
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    getIncome();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,7 +164,7 @@ class _DeliveryProfilePageState extends State<DeliveryProfilePage> {
                             ),
                           ),
                           Text(
-                            '30',
+                            rider_parcel_list_delivered.length.toString(),
                             style: TextStyle(
                               color: Color.fromRGBO(248, 134, 41, 1),
                               fontSize: 50,
@@ -174,7 +189,7 @@ class _DeliveryProfilePageState extends State<DeliveryProfilePage> {
                             ),
                           ),
                           Text(
-                            'RM 60.00',
+                            totalIncome.toStringAsFixed(2),
                             style: TextStyle(
                               color: Color.fromRGBO(248, 134, 41, 1),
                               fontSize: 50,
