@@ -200,13 +200,6 @@ class _CustomerHomepageState extends State<CustomerHomepage> {
                                   ])
                             ]),
                           ])),
-                  IconButton(
-                    iconSize: 30.0,
-                    icon: Icon(Icons.notifications, color: Colors.black),
-                    onPressed: () {
-                      // Add your action here
-                    },
-                  ),
                 ]),
                 /////////////////////////////////
                 show_row

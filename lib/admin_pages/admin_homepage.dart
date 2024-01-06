@@ -120,7 +120,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       child: Row(
 
                           //row to put the image+name and notification icon
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
                                 //padding for all column
@@ -191,14 +191,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                             ])
                                       ]),
                                     ])),
-                            IconButton(
-                              iconSize: 30.0,
-                              icon: Icon(Icons.notifications,
-                                  color: Colors.black),
-                              onPressed: () {
-                                // Add your action here
-                              },
-                            ),
                           ]),
                     ),
                     SizedBox(height: 70),
