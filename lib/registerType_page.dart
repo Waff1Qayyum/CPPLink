@@ -84,7 +84,7 @@ class _RegisterTypePageState extends State<RegisterTypePage> {
             Column(
               children: [
                 SizedBox(
-                  height: 60.0,
+                  height: 20.0,
                 ),
                 Container(
                   height: 42.0,
@@ -104,30 +104,41 @@ class _RegisterTypePageState extends State<RegisterTypePage> {
                     ),
                   )),
                 ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Column(
                   children: [
-                    Text(
-                      'CPP',
-                      style: TextStyle(
-                        color: Color(0xFF050505),
-                        fontSize: 48,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
+                    Container(
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.,
+                        children: [
+                          Text(
+                            'CPP',
+                            style: TextStyle(
+                              color: Color.fromRGBO(250, 195, 44, 1),
+                              fontSize: 48,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                              shadows: [
+                                Shadow(
+                                  color: Color.fromARGB(255, 145, 145, 145),
+                                  offset: Offset(0, 3),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            'Link',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 7, 7, 131),
+                              fontSize: 32,
+                              fontFamily: 'Montagu Slab',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      'Link',
-                      style: TextStyle(
-                        color: Color(0xFFFFD233),
-                        fontSize: 32,
-                        fontFamily: 'Montagu Slab',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
+                    )
                   ],
                 ),
 

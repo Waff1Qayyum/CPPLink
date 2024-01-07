@@ -125,7 +125,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                   'Upload Vehicle Picture',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color(0xFF9B9B9B),
+                    color: Colors.black,
                     fontSize: 17,
                     fontFamily: 'Lexend',
                     fontWeight: FontWeight.w700,
@@ -522,7 +522,7 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                           ),
                                   ),
                                 ),
-                                SizedBox(height: 10),
+                                SizedBox(height: 30),
                                 InkWell(
                                   onTap: isLoading == true
                                       ? null
@@ -593,10 +593,10 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                         },
                                   child: Container(
                                     width: 263,
-                                    height: 53,
+                                    height: 33,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
-                                      color: Color.fromARGB(255, 255, 42, 42),
+                                      color: Color.fromARGB(255, 252, 69, 69),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(20),
                                         side: BorderSide(

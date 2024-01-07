@@ -19,7 +19,7 @@ class _RiderQuickScanState extends State<RiderQuickScan> {
 
   updateListParcel() async {
     await getArrivedParcel(currentUserID);
-    if (user_parcel.isNotEmpty && user_parcel[0] != "") {
+    if (user_parcel.isNotEmpty) {
       dropdownValue = user_parcel[0];
     } else {
       dropdownValue = "";

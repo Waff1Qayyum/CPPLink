@@ -677,45 +677,36 @@ class customerBookingState extends State<customerBooking> {
                                                       ],
                                                     ),
                                                     // if loading show indicator(optional)
-                                                    child: isLoading == true
-                                                        ? CircularProgressIndicator()
-                                                        : Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Icon(
-                                                                Icons.apartment,
-                                                                color: Colors
-                                                                    .white,
-                                                                size: 20,
-                                                              ),
-                                                              SizedBox(
-                                                                  width:
-                                                                      5), // Adjust the spacing as needed
-                                                              Text(
-                                                                colleage,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      255,
-                                                                      255,
-                                                                      255),
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Lexend',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                ),
-                                                              ),
-                                                            ],
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.apartment,
+                                                          color: Colors.white,
+                                                          size: 20,
+                                                        ),
+                                                        SizedBox(
+                                                            width:
+                                                                5), // Adjust the spacing as needed
+                                                        Text(
+                                                          colleage,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: const Color
+                                                                .fromARGB(255,
+                                                                255, 255, 255),
+                                                            fontSize: 15,
+                                                            fontFamily:
+                                                                'Lexend',
+                                                            fontWeight:
+                                                                FontWeight.w400,
                                                           ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -793,45 +784,36 @@ class customerBookingState extends State<customerBooking> {
                                                       ],
                                                     ),
                                                     // if loading show indicator(optional)
-                                                    child: isLoading == true
-                                                        ? CircularProgressIndicator()
-                                                        : Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Icon(
-                                                                Icons.home,
-                                                                color: Colors
-                                                                    .white,
-                                                                size: 20,
-                                                              ),
-                                                              SizedBox(
-                                                                  width:
-                                                                      5), // Adjust the spacing as needed
-                                                              Text(
-                                                                block,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      255,
-                                                                      255,
-                                                                      255),
-                                                                  fontSize: 17,
-                                                                  fontFamily:
-                                                                      'Lexend',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                ),
-                                                              ),
-                                                            ],
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.home,
+                                                          color: Colors.white,
+                                                          size: 20,
+                                                        ),
+                                                        SizedBox(
+                                                            width:
+                                                                5), // Adjust the spacing as needed
+                                                        Text(
+                                                          block,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: const Color
+                                                                .fromARGB(255,
+                                                                255, 255, 255),
+                                                            fontSize: 17,
+                                                            fontFamily:
+                                                                'Lexend',
+                                                            fontWeight:
+                                                                FontWeight.w400,
                                                           ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
