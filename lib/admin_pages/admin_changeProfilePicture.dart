@@ -281,6 +281,11 @@ class AdminChangePictureState extends State<AdminChangePicture> {
                                 onPressed: () async {
                                   getImage();
                                 },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.blue),
+                                ),
                                 child: Text('Upload Photo',
                                     style: TextStyle(
                                       color: Colors.white,

@@ -140,7 +140,7 @@ class _AdminScanTrackIDState extends State<AdminScanTrackID> {
               key: _formKey,
               child: Column(children: [
                 SizedBox(
-                  height: 50.0,
+                  height: 20.0,
                 ),
                 Container(
                   width: 220, // Adjusted width

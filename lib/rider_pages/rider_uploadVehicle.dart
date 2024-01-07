@@ -157,12 +157,18 @@ class _RiderUploadVehicleState extends State<RiderUploadVehicle> {
                                 onPressed: () async {
                                   getImage();
                                 },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.blue),
+                                ),
                                 child: Text('Upload Photo',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
                                       fontFamily: 'Lexend',
                                       fontWeight: FontWeight.w700,
+                                      height: 0,
                                     )),
                               ),
                             ),

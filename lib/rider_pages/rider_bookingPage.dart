@@ -7,14 +7,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class customerBooking extends StatefulWidget {
-  const customerBooking({super.key});
+class RiderBooking extends StatefulWidget {
+  const RiderBooking({super.key});
 
   @override
-  State<customerBooking> createState() => customerBookingState();
+  State<RiderBooking> createState() => RiderBookingState();
 }
 
-class customerBookingState extends State<customerBooking> {
+class RiderBookingState extends State<RiderBooking> {
   String colleage = '';
   String block = '';
 
@@ -185,7 +185,7 @@ class customerBookingState extends State<customerBooking> {
             color: Colors.white, // Icon color
           ),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/customer_home');
+            Navigator.of(context).pushReplacementNamed('/rider_home');
           },
         ),
       ),
@@ -677,9 +677,7 @@ class customerBookingState extends State<customerBooking> {
                                                       ],
                                                     ),
                                                     // if loading show indicator(optional)
-                                                    child: isLoading == true
-                                                        ? CircularProgressIndicator()
-                                                        : Row(
+                                                    child: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .center,
@@ -793,9 +791,7 @@ class customerBookingState extends State<customerBooking> {
                                                       ],
                                                     ),
                                                     // if loading show indicator(optional)
-                                                    child: isLoading == true
-                                                        ? CircularProgressIndicator()
-                                                        : Row(
+                                                    child: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .center,
@@ -879,7 +875,7 @@ class customerBookingState extends State<customerBooking> {
                           parcel == true) {
                         await bookParcel();
                         isLoading = false;
-                        Navigator.pushNamed(context, '/customer_myRider');
+                        Navigator.pushNamed(context, '/rider_myRider');
                       } else {
                         showDialog(
                           context: context,

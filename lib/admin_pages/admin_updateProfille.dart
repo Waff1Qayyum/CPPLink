@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../controller.dart';
-import '../main.dart';
 
 class AdminProfile extends StatefulWidget {
   const AdminProfile({super.key});
@@ -45,33 +44,6 @@ class _AdminProfileState extends State<AdminProfile> {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/admin_home', (route) => false);
             }),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        if (mounted) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
-                        }
-                        supabase.auth.signOut();
-                      },
-                      child: Text(
-                        'Sign Out',
-                        style: TextStyle(
-                          color: Color(0xFFFF0000),
-                          fontSize: 13,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w800,
-                          height: 0,
-                        ),
-                      )),
-                ],
-              )),
-        ],
       ),
       body: ListView(
         children: [

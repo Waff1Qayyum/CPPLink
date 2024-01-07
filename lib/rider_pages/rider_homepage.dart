@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../controller.dart';
 import '../main.dart';
@@ -34,29 +35,29 @@ class _RiderHomePageState extends State<RiderHomePage> {
         context, '/delivery_homepage', (route) => false);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    print(supabase.auth.currentUser!.id);
-    print(user_rider[0]['user_id']);
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   print(supabase.auth.currentUser!.id);
+  //   print(user_rider[0]['user_id']);
 
-    print(user_rider[0]['rider_id']);
-    print(user_rider[0]['status']);
+  //   print(user_rider[0]['rider_id']);
+  //   print(user_rider[0]['status']);
 
-    print(isDeliver);
-    // getRiderStatus();
-    // if (isDeliver == true) {
-    //   riderMode = true;
-    //   riderDeliveryMode();
-    // } else
-    if (user_rider[0]['rider_id'] != null &&
-        user_rider[0]['status'] == "offline") {
-      riderMode = false;
-    } else {
-      riderMode = true;
-      riderModeActive();
-    }
-  }
+  //   print(isDeliver);
+  //   // getRiderStatus();
+  //   // if (isDeliver == true) {
+  //   //   riderMode = true;
+  //   //   riderDeliveryMode();
+  //   // } else
+  //   if (user_rider[0]['rider_id'] != null &&
+  //       user_rider[0]['status'] == "offline") {
+  //     riderMode = false;
+  //   } else {
+  //     riderMode = true;
+  //     riderModeActive();
+  //   }
+  // }
 
   Future<void> _showConfirmationDialog(bool newValue) async {
     return showDialog<void>(
@@ -99,6 +100,59 @@ class _RiderHomePageState extends State<RiderHomePage> {
     );
   }
 
+/////////////////////////
+////////////////////////
+  updateData() async {
+    await getRiderDetail(currentUserID);
+    await checkBookingStatus(currentUserID);
+    if (mounted) {
+      setState(() {
+        rider_exist;
+        show_row;
+        delivered;
+        vehicle_picture;
+        vehicle_url;
+        rider_name;
+        rider_vehicleType;
+        rider_plate;
+        rider_model;
+        rider_color;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (user_rider[0]['rider_id'] != null &&
+        user_rider[0]['status'] == "offline") {
+      riderMode = false;
+    } else {
+      riderMode = true;
+      riderModeActive();
+    }
+
+    if (mounted) {
+      //listen to realtime changes on database
+      supabase
+          .channel('public:customer')
+          .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              schema: 'public',
+              table: 'booking',
+              callback: (payload) {
+                print('Change received: ${payload.toString()}');
+                updateData();
+              })
+          .subscribe();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -108,7 +162,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
           backgroundColor: Color.fromRGBO(250, 195, 44, 1),
           centerTitle: true,
           title: Text(
-            'Rider Homepage',
+            'Customer Homepage',
             style: TextStyle(
               fontFamily: 'roboto',
               fontWeight: FontWeight.bold,
@@ -134,7 +188,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
                             color: Color(0xFFFF0000),
                             fontSize: 13,
                             fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w400,
                             height: 0,
                           ),
                         )),
@@ -283,7 +337,61 @@ class _RiderHomePageState extends State<RiderHomePage> {
                                 ]),
                               ])),
                     ]),
-                SizedBox(height: 70),
+                /////////////////////////////////
+                show_row
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 20, bottom: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                // Your code to handle the tap event
+                                Navigator.of(context)
+                                    .pushNamed('/rider_myRider');
+                              },
+                              child: Container(
+                                width: 246,
+                                height: 53,
+                                alignment: Alignment.center,
+                                decoration: ShapeDecoration(
+                                  color: Colors.green,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    side: BorderSide(
+                                      width: 1.50,
+                                      color: Colors.green, // Border color
+                                    ),
+                                  ),
+                                  shadows: [
+                                    BoxShadow(
+                                      color: Color(0x3F000000),
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  'My Booking',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    fontSize: 15,
+                                    fontFamily: 'Lexend',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(height: 40),
+
+                //////////////////////////////
+                /////////////////////////////
                 Text(
                   'What would you want to do for Today ?',
                   textAlign: TextAlign.center,
@@ -305,7 +413,8 @@ class _RiderHomePageState extends State<RiderHomePage> {
                         children: [
                           InkWell(
                             onTap: () {
-                              // Your code to handle the tap event
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/rider_booking');
                             },
                             child: Container(
                               width: 155,
@@ -338,7 +447,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
                                         255), // Change the icon color
                                   ),
                                   Text(
-                                    'Book Parcel',
+                                    'Book Delivery',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.white,
@@ -356,7 +465,10 @@ class _RiderHomePageState extends State<RiderHomePage> {
                             width: 20,
                           ),
                           InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              await getParcelList();
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/rider_checkParcel');
                               // Your code to handle the tap event
                             },
                             child: Container(
@@ -474,6 +586,8 @@ class _RiderHomePageState extends State<RiderHomePage> {
                         ),
                         InkWell(
                           onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/rider_quickScan');
                             // Your code to handle the tap event
                           },
                           child: Container(
@@ -501,13 +615,13 @@ class _RiderHomePageState extends State<RiderHomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Icon(
-                                  Icons.drive_file_rename_outline,
+                                  Icons.qr_code_scanner,
                                   size: 50, // Adjust the size as needed
                                   color: const Color.fromARGB(255, 255, 255,
                                       255), // Change the icon color
                                 ),
                                 Text(
-                                  'Write Feedback',
+                                  'Quick scan',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,

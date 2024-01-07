@@ -45,33 +45,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
             Navigator.of(context).pushReplacementNamed('/customer_home');
           },
         ),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        if (mounted) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
-                        }
-                        supabase.auth.signOut();
-                      },
-                      child: Text(
-                        'Sign Out',
-                        style: TextStyle(
-                          color: Color(0xFFFF0000),
-                          fontSize: 13,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w800,
-                          height: 0,
-                        ),
-                      )),
-                ],
-              )),
-        ],
       ),
       body: ListView(
         children: [

@@ -1,5 +1,7 @@
+import 'package:cpplink/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../controller.dart';
 
@@ -31,6 +33,26 @@ class _AdminQuickFindResultState extends State<AdminQuickFindResult> {
     shelfNumber.text = shelf_number;
 
     print('all variables initialized.');
+  }
+
+  Future<void> updateParcel() async {
+    try {
+      await supabase.from('parcel').update({
+        'status': "collected",
+      }).match({'tracking_id': tracking_id});
+
+      print('parcel collected !');
+    } catch (error) {
+      // Handle the error appropriately
+
+      // Log the error for debugging purposes
+      print('Error updating parcel: $error');
+
+      // Show a user-friendly error message
+      print('Failed to update parcel. Please try again.');
+
+      // You might want to reset the form or take other corrective actions
+    }
   }
 
   @override
@@ -669,7 +691,6 @@ class _AdminQuickFindResultState extends State<AdminQuickFindResult> {
                                       fontWeight: FontWeight.w400,
                                     ),
                                     controller: shelfNumber,
-
                                     textCapitalization:
                                         TextCapitalization.characters,
                                     textAlignVertical: TextAlignVertical.center,
@@ -710,6 +731,77 @@ class _AdminQuickFindResultState extends State<AdminQuickFindResult> {
                       )),
                   ///////////////////////////////////////
                   /////////////////////////////////////
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  /////////////////////////
+                  /////////////////////////
+                  InkWell(
+                    onTap: isLoading == true
+                        ? null
+                        : () async {
+                            // Your code to handle the tap event
+                            setState(() {
+                              isLoading = true;
+                            });
+                            phone = formatPhone(_phoneNumber.text);
+                            phoneValid = await phone_check(phone!);
+                            nameValid = await name_check(_customerName.text);
+                            if (_formKey.currentState!.validate()) {
+                              await updateParcel();
+                              await getParcelList();
+                              //change snackbar design
+                              Fluttertoast.showToast(
+                                msg: "The parcel has been collected!",
+                              );
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  '/admin_quickFind', (route) => false);
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "The parcel is not found!",
+                              );
+                            }
+                            setState(() {
+                              isLoading = false;
+                            });
+                          },
+                    child: Container(
+                      width: 180,
+                      height: 53,
+                      alignment: Alignment.center,
+                      decoration: ShapeDecoration(
+                        color: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(
+                            width: 1.50,
+                            color: Colors.blue, // Border color
+                          ),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      // if loading show indicator(optional)
+                      child: isLoading == true
+                          ? CircularProgressIndicator()
+                          : Text(
+                              'Collected',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                                fontSize: 15,
+                                fontFamily: 'Lexend',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import '../controller.dart';
 import '../main.dart';
 
-class customerCheckParcel extends StatefulWidget {
-  const customerCheckParcel({super.key});
+class RiderCheckParcel extends StatefulWidget {
+  const RiderCheckParcel({super.key});
 
   @override
-  State<customerCheckParcel> createState() => _customerCheckParcelState();
+  State<RiderCheckParcel> createState() => _RiderCheckParcelState();
 }
 
-class _customerCheckParcelState extends State<customerCheckParcel> {
+class _RiderCheckParcelState extends State<RiderCheckParcel> {
   String parcelStatus = 'All';
   String parcelCategory = 'My Parcel';
   String searchInput = "";
@@ -193,7 +193,7 @@ class _customerCheckParcelState extends State<customerCheckParcel> {
             ),
             onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/customer_home', (route) => false);
+                  context, '/rider_home', (route) => false);
             },
           ),
         ),

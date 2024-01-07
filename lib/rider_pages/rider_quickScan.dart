@@ -5,15 +5,16 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 
-class customerQuickScan extends StatefulWidget {
-  const customerQuickScan({super.key});
+class RiderQuickScan extends StatefulWidget {
+  const RiderQuickScan({super.key});
 
   @override
-  State<customerQuickScan> createState() => _customerQuickScanState();
+  State<RiderQuickScan> createState() => _RiderQuickScanState();
 }
 
-class _customerQuickScanState extends State<customerQuickScan> {
+class _RiderQuickScanState extends State<RiderQuickScan> {
   TextEditingController qrController = TextEditingController();
+
   String? dropdownValue = "";
 
   updateListParcel() async {
@@ -73,7 +74,7 @@ class _customerQuickScanState extends State<customerQuickScan> {
           ),
           onPressed: () {
             // Navigator.of(context).pushReplacementNamed('/');
-            Navigator.of(context).pushReplacementNamed('/customer_home');
+            Navigator.of(context).pushReplacementNamed('/rider_home');
           },
         ),
       ),

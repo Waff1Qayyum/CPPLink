@@ -8,6 +8,13 @@ Widget buildListTileForColleague(
     case 'KTDI':
       listTiles = [
         ListTile(
+          title: Text('MA1'),
+          onTap: () {
+            updateBlock('M05');
+            Navigator.pop(context);
+          },
+        ),
+        ListTile(
           title: Text('M01'),
           onTap: () {
             updateBlock('M01');
@@ -47,37 +54,37 @@ Widget buildListTileForColleague(
     case 'KTHO':
       listTiles = [
         ListTile(
-          title: Text('K01'),
+          title: Text('L01'),
           onTap: () {
-            updateBlock('K01');
+            updateBlock('L01');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K02'),
+          title: Text('L02'),
           onTap: () {
-            updateBlock('K02');
+            updateBlock('L02');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K03'),
+          title: Text('L03'),
           onTap: () {
-            updateBlock('K03');
+            updateBlock('L03');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K04'),
+          title: Text('L04'),
           onTap: () {
-            updateBlock('K04');
+            updateBlock('L04');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K05'),
+          title: Text('L05'),
           onTap: () {
-            updateBlock('K05');
+            updateBlock('L05');
             Navigator.pop(context);
           },
         )
@@ -125,37 +132,37 @@ Widget buildListTileForColleague(
     case 'KDSE':
       listTiles = [
         ListTile(
-          title: Text('K01'),
+          title: Text('WA1'),
           onTap: () {
-            updateBlock('K01');
+            updateBlock('WA1');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K02'),
+          title: Text('WA2'),
           onTap: () {
-            updateBlock('K02');
+            updateBlock('WA2');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K03'),
+          title: Text('WA3'),
           onTap: () {
-            updateBlock('K03');
+            updateBlock('WA3');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K04'),
+          title: Text('W1'),
           onTap: () {
-            updateBlock('K04');
+            updateBlock('W1');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K05'),
+          title: Text('W2'),
           onTap: () {
-            updateBlock('K05');
+            updateBlock('W2');
             Navigator.pop(context);
           },
         )
@@ -164,118 +171,97 @@ Widget buildListTileForColleague(
     case 'KDOJ':
       listTiles = [
         ListTile(
-          title: Text('K01'),
+          title: Text('XB1'),
           onTap: () {
-            updateBlock('K01');
+            updateBlock('XB1');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K02'),
+          title: Text('XB2'),
           onTap: () {
-            updateBlock('K02');
+            updateBlock('XB2');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K03'),
+          title: Text('XC1'),
           onTap: () {
-            updateBlock('K03');
+            updateBlock('XC1');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K04'),
+          title: Text('XC2'),
           onTap: () {
-            updateBlock('K04');
+            updateBlock('XC2');
             Navigator.pop(context);
           },
         ),
-        ListTile(
-          title: Text('K05'),
-          onTap: () {
-            updateBlock('K05');
-            Navigator.pop(context);
-          },
-        )
       ];
       break;
     case 'KTC':
       listTiles = [
         ListTile(
-          title: Text('K01'),
+          title: Text('S01'),
           onTap: () {
-            updateBlock('K01');
+            updateBlock('S01');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K02'),
+          title: Text('S02'),
           onTap: () {
-            updateBlock('K02');
+            updateBlock('S02');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K03'),
+          title: Text('S03'),
           onTap: () {
-            updateBlock('K03');
+            updateBlock('S03');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K04'),
+          title: Text('S04'),
           onTap: () {
-            updateBlock('K04');
+            updateBlock('S04');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K05'),
+          title: Text('S05'),
           onTap: () {
-            updateBlock('K05');
+            updateBlock('S05');
             Navigator.pop(context);
           },
         )
       ];
       break;
-    case 'K9':
+    case 'K9&K10':
       listTiles = [
         ListTile(
-          title: Text('K01'),
+          title: Text('UA1'),
           onTap: () {
-            updateBlock('K01');
+            updateBlock('UA1');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K02'),
+          title: Text('UA2'),
           onTap: () {
-            updateBlock('K02');
+            updateBlock('UA2');
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: Text('K03'),
+          title: Text('K10'),
           onTap: () {
-            updateBlock('K03');
+            updateBlock('K10');
             Navigator.pop(context);
           },
         ),
-        ListTile(
-          title: Text('K04'),
-          onTap: () {
-            updateBlock('K04');
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: Text('K05'),
-          onTap: () {
-            updateBlock('K05');
-            Navigator.pop(context);
-          },
-        )
       ];
       break;
     // Add more cases as needed

@@ -76,8 +76,8 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                         )),
                     SizedBox(height: 20),
                     Container(
-                      width: 310,
-                      height: 310,
+                      width: 270,
+                      height: 270,
                       child: Stack(
                         children: [
                           MobileScanner(
@@ -101,7 +101,7 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                           ),
                           QRScannerOverlay(
                             scanAreaSize:
-                                Size(340, 340), // Adjust the size as needed
+                                Size(310, 310), // Adjust the size as needed
                             overlayColor:
                                 const Color.fromARGB(255, 255, 255, 255),
                           ),

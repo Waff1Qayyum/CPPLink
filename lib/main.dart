@@ -40,12 +40,16 @@ import 'rider_pages/delivery_deliveryList.dart';
 import 'rider_pages/delivery_homepage.dart';
 import 'rider_pages/delivery_profiePage.dart';
 import 'rider_pages/delivery_proof.dart';
+import 'rider_pages/rider_bookingPage.dart';
 ///////////rider////////////
 import 'rider_pages/rider_changeName.dart';
 import 'rider_pages/rider_changePassword.dart';
 import 'rider_pages/rider_changePhoneNumber.dart';
 import 'rider_pages/rider_changeVehicle.dart';
+import 'rider_pages/rider_checkParcel.dart';
 import 'rider_pages/rider_homepage.dart';
+import 'rider_pages/rider_quickScan.dart';
+import 'rider_pages/rider_riderPage.dart';
 import 'rider_pages/rider_updateProfile.dart';
 import 'splash.dart';
 
@@ -118,11 +122,15 @@ class MyApp extends StatelessWidget {
         '/rider_changePw': (_) => const RiderChangePassword(),
         '/rider_changePFP': (_) => const RiderChangePicture(),
         '/rider_changePhone': (_) => const RiderChangePhone(),
-
         '/rider_profile': (_) => const RiderChangeProfile(),
         '/rider_changeVehicle': (_) => const RiderChangeVehicle(),
         '/rider_vehicle': (_) => const RiderUploadVehicle(),
+        '/rider_booking': (_) => const RiderBooking(),
+        '/rider_myRider': (_) => const RiderRiderPage(),
+        '/rider_checkParcel': (_) => const RiderCheckParcel(),
+        '/rider_quickScan': (_) => const RiderQuickScan(),
 
+//////////////////delivery mode//////////////////////
         '/delivery_homepage': (_) => const DeliveryHomePage(),
         '/delivery_list': (_) => const DeliveryList(),
         '/delivery_proof': (_) => const DeliveryProof(),
