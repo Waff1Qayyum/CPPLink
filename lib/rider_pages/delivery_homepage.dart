@@ -496,12 +496,12 @@ class _DeliveryHomePageState extends State<DeliveryHomePage> {
                                         Text('You can only deliver one parcel'),
                                   ));
                         } else {
+                          await updateRiderStatus(user_rider[0]['rider_id'], "delivering");
                           await getRequestedParcelList();
                           await setRiderBooking();
                           await getRequestedParcelList();
                           await getRiderParcel(rider['rider_id']);
                           setButtonColor(false);
-                          await updateRiderStatus(currentUserID, "delivering");
                           setState(() {});
                           print('Rider set');
                           Fluttertoast.showToast(

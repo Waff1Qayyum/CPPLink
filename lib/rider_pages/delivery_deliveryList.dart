@@ -31,7 +31,7 @@ class _DeliveryListState extends State<DeliveryList> {
 
     await getRiderParcel(rider['rider_id']);
     await getRequestedParcelList();
-    await updateRiderStatus(currentUserID, "idle");
+    await updateRiderStatus(user_rider[0]['rider_id'], "idle");
     setState(() {});
   }
 

@@ -76,7 +76,7 @@ class _DeliveryListSProof extends State<DeliveryProof> {
           .update({'status': 'delivered'}).eq('tracking_id', i['parcel_id']);
     }
 
-    await updateRiderStatus(currentUserID, "idle");
+    await updateRiderStatus(user_rider[0]['rider_id'], "idle");
   }
 
   Future<void> changePage() async {
