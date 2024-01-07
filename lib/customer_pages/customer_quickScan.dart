@@ -14,15 +14,12 @@ class customerQuickScan extends StatefulWidget {
 
 class _customerQuickScanState extends State<customerQuickScan> {
   TextEditingController qrController = TextEditingController();
-  String? dropdownValue = "";
+  var dropdownValue = dropdownValues;
 
-  updateListParcel() async {
+  triggerUpdateListParcel() async {
     await getArrivedParcel(currentUserID);
-    if (user_parcel.isNotEmpty) {
-      dropdownValue = user_parcel[0];
-    } else {
-      dropdownValue = "";
-    }
+    await updateListParcel();
+
     if (mounted) {
       setState(() {
         user_parcel;
@@ -32,7 +29,6 @@ class _customerQuickScanState extends State<customerQuickScan> {
 
   @override
   void initState() {
-    updateListParcel();
     super.initState();
 
     if (mounted) {
@@ -45,7 +41,7 @@ class _customerQuickScanState extends State<customerQuickScan> {
               table: 'parcel',
               callback: (payload) {
                 print('Change received: ${payload.toString()}');
-                updateListParcel();
+                triggerUpdateListParcel();
               })
           .subscribe();
     }
@@ -123,11 +119,10 @@ class _customerQuickScanState extends State<customerQuickScan> {
                                     width: 200,
                                     color: const Color.fromARGB(
                                         255, 214, 214, 214),
-                                    child: Expanded(
-                                        child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
                                           Text(
                                             "No Tracking Number",
                                             style: TextStyle(
@@ -139,7 +134,7 @@ class _customerQuickScanState extends State<customerQuickScan> {
                                             ),
                                             textAlign: TextAlign.center,
                                           )
-                                        ]))),
+                                        ])),
                               )
                       ]),
                       SizedBox(

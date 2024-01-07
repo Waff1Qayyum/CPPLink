@@ -1,6 +1,7 @@
 import 'package:cpplink/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+
 import 'main.dart';
 
 class SplashPage extends StatefulWidget {
@@ -43,10 +44,12 @@ class _SplashPageState extends State<SplashPage> {
         await getData(userID);
         await getRiderStatus(); //for checking rider status
         await checkDelivery();
+        await updateListParcel();
         Navigator.of(context).pushReplacementNamed('/rider_home');
       } else if (checkCustomer.isNotEmpty) {
         print('User is a customer');
         await getData(userID);
+        await updateListParcel();
         Navigator.of(context).pushReplacementNamed('/customer_home');
       }
     } else {

@@ -308,6 +308,16 @@ Future<void> getArrivedParcel(dynamic id) async {
   }
 }
 
+var dropdownValues;
+Future<void> updateListParcel() async {
+  await getArrivedParcel(currentUserID);
+  if (user_parcel.isNotEmpty) {
+    dropdownValues = user_parcel[0];
+  } else {
+    dropdownValues = "";
+  }
+}
+
 Future<void> getVehiclePicture(dynamic id) async {
   final data = await supabase
       .from('rider')
