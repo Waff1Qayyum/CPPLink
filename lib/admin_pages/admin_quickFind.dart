@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
@@ -18,15 +19,19 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
 
   checkParcelAndredirect(String parcel_id) async {
     await findParcel(parcel_id);
-    if (tracking_id != "" &&
-        customerName != "" &&
-        customerNumber != "" &&
-        dateArrived != "" &&
-        status != "" &&
-        shelf_number != "") {
-      print("parcel id is not found");
+    // if (tracking_id != "" &&
+    //     customerName != "" &&
+    //     customerNumber != "" &&
+    //     dateArrived != "" &&
+    //     status != "" &&
+    //     shelf_number != "") {
+    if (findParcelstatus) {
+      print("parcel id is found");
       Navigator.of(context).pushReplacementNamed('/admin_quickFindResult');
     } else {
+      Fluttertoast.showToast(
+        msg: "The parcel ID do not exist!",
+      );
       print("parcel id is not found");
     }
   }
@@ -95,7 +100,7 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                               isLoading = true;
                               setState(() {});
                               checkParcelAndredirect(_qrResult.text);
-                              await findParcel(_qrResult.text);
+                              // await findParcel(_qrResult.text);
                               isLoading = false;
                             },
                           ),
@@ -144,7 +149,7 @@ class _AdminQuickFindState extends State<AdminQuickFind> {
                             isLoading = true;
                             setState(() {});
                             checkParcelAndredirect(value);
-                            await findParcel(value);
+                            // await findParcel(value);
                             isLoading = false;
                           },
                         ),

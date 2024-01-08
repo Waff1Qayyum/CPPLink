@@ -394,6 +394,7 @@ Future<void> getAdminData(dynamic id) async {
 ///////////////////
 ///////////////////
 //selected parcel
+bool findParcelstatus = false;
 var tracking_id;
 var customerName;
 var customerNumber;
@@ -420,6 +421,7 @@ Future<void> findParcel(dynamic searchParcel) async {
       shelf_number = parcelData['shelf_number'];
 
       print('my track id is $tracking_id and the status is $status');
+      findParcelstatus = true;
     } else {
       tracking_id = "";
       customerName = "";
