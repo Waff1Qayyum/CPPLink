@@ -482,7 +482,7 @@ Future<void> getUserList() async {
 }
 
 Future<void> getParcelList() async {
-  parcel_data = await supabase.from('parcel').select();
+  parcel_data = await supabase.from('parcel').select().order('created_at');
 }
 
 Future<void> getRequestedParcelList() async {
