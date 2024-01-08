@@ -501,6 +501,8 @@ Future<void> getRiderParcel(dynamic id) async {
       .select('*, booking_parcel(*, parcel(*))')
       .eq('rider_id', id);
 
+  rider_parcel_list = rider_parcel_list.reversed.toList();
+
   rider_parcel_list.map((e) {
     if (e['booking_status'] == 'delivered') {
       rider_parcel_list_delivered.add(e);
