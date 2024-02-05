@@ -1,0 +1,58 @@
+.content{
+	margin: 1rem;
+	font-family: "Orelega One";
+    font-weight: 1000;
+    color: #43466D;
+}
+
+.detail{
+	width: 100%;
+	padding: 1rem;
+	border-radius: 21px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    background-color: #b8b8d2;
+    box-sizing: border-box;
+    margin: 1rem 0;
+}
+
+.category{
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.submission{
+    background-color: #EDEDED;
+    height: 225px;
+    width: 225px;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    border-radius: 21px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.submission label{
+	width: 95%;
+    height: 12%;
+    position: absolute;
+    bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #A6CF00;
+    border-radius: 1rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.submission i{
+	font-size: 5rem;
+}

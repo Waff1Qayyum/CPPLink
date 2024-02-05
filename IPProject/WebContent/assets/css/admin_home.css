@@ -1,0 +1,31 @@
+.content{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 1rem;
+	font-family: "Orelega One";
+    font-weight: 1000;
+    color: #43466D;
+}
+
+.content img{
+	width: 35%;
+}
+
+.content h3{
+	font-size: 1.2rem;
+	margin: 1rem 0;
+}
+
+.category{
+	width: 70%;
+}
+
+.category input{
+	width: 100%;
+	height: 30px;
+	background-color: #CCE17B;
+	border-radius: 0.5rem;
+  	border: 1px solid rgba(0, 0, 0, 0.315);
+}

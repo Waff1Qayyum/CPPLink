@@ -1,0 +1,39 @@
+.content{
+	margin: 1rem;
+	font-family: "Orelega One";
+    font-weight: 1000;
+    color: #43466D;
+}
+
+.content h3{
+	font-size: 1.2rem;
+	margin: 1rem 0;
+}
+
+.content img{
+	width: 35%;
+	display: block;
+	margin: 0 auto;
+}
+
+.user{
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	gap: 1rem;
+}
+
+.user a{
+	width: 33%;
+	height: 2rem;
+	background-color: #CCE17B;
+	border-radius: 0.3rem;
+	padding: 0.5rem;
+	box-sizing: border-box;
+	color: #43466D;
+}
+
+.user a:hover{
+	background-color: #9faf61;
+	transition-duration : 0.2s;
+}
